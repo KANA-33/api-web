@@ -1,0 +1,36 @@
+{
+  "name": "commercial-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "rsbuild dev",
+    "build": "rsbuild build",
+    "lint": "oxlint .",
+    "format": "oxfmt --write .",
+    "provenance": "node scripts/provenance-check.mjs",
+    "typecheck": "tsc --noEmit",
+    "verify": "bun run provenance && bun run typecheck && bun run lint && bun run build"
+  },
+  "dependencies": {
+    "@rsbuild/core": "^1.3.22",
+    "@rsbuild/plugin-react": "^1.3.2",
+    "@tailwindcss/postcss": "^4.1.10",
+    "@tanstack/react-router": "^1.121.21",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.5.4",
+    "tailwindcss": "^4.1.10",
+    "zustand": "^5.0.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "oxfmt": "^0.56.0",
+    "oxlint": "^1.71.0",
+    "typescript": "^5.8.3"
+  }
+}
