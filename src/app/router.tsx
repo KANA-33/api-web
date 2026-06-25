@@ -15,8 +15,8 @@ import { AdminChannelsPage } from "@pages/admin/admin-channels-page";
 import { AdminBillingPage } from "@pages/admin/admin-billing-page";
 import { AdminLogsPage } from "@pages/admin/admin-logs-page";
 import { AdminModelsPage } from "@pages/admin/admin-models-page";
-import { AdminPlaceholderPage } from "@pages/admin/admin-placeholder-page";
 import { AdminRedemptionsPage } from "@pages/admin/admin-redemptions-page";
+import { AdminSettingsPage } from "@pages/admin/admin-settings-page";
 import { AdminUsersPage } from "@pages/admin/admin-users-page";
 import { ApiKeysPage } from "@pages/api-keys/api-keys-page";
 import { ErrorPage } from "@pages/error/error-page";
@@ -29,7 +29,6 @@ import { PlaygroundPage } from "@pages/playground/playground-page";
 import { ProfilePage } from "@pages/profile/profile-page";
 import { WalletPage } from "@pages/wallet/wallet-page";
 import { NotFoundPage } from "@pages/not-found/not-found-page";
-import { Settings2 } from "lucide-react";
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,
@@ -178,13 +177,7 @@ const adminBillingRoute = createRoute({
 const adminSettingsRoute = createRoute({
   getParentRoute: () => adminRoute,
   path: "/admin/settings",
-  component: () => (
-    <AdminPlaceholderPage
-      description="Site, authentication, content, security, billing, and operations settings."
-      icon={Settings2}
-      title="Settings"
-    />
-  ),
+  component: AdminSettingsPage,
 });
 
 const routeTree = rootRoute.addChildren([

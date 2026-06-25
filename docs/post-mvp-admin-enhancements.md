@@ -195,6 +195,12 @@ Maintenance rule:
 - Permission: Root-only
 - Notes: SSRF protection, sensitive words, and request limits.
 
+### Structured Console Content Editors
+
+- Owner: `/admin/settings`
+- Permission: Root-only
+- Notes: Replace raw JSON textareas for API info, announcements, FAQ, and Uptime Kuma groups with add/edit/reorder item editors and schema-specific previews.
+
 ### Performance And Operations Tools
 
 - Owner: `/admin/settings/operations`
