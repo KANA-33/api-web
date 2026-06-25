@@ -12,9 +12,11 @@ import { AdminShell } from "@widgets/admin-shell/admin-shell";
 import { AppShell } from "@widgets/app-shell/app-shell";
 import { AdminOverviewPage } from "@pages/admin/admin-overview-page";
 import { AdminChannelsPage } from "@pages/admin/admin-channels-page";
+import { AdminBillingPage } from "@pages/admin/admin-billing-page";
 import { AdminLogsPage } from "@pages/admin/admin-logs-page";
 import { AdminModelsPage } from "@pages/admin/admin-models-page";
 import { AdminPlaceholderPage } from "@pages/admin/admin-placeholder-page";
+import { AdminRedemptionsPage } from "@pages/admin/admin-redemptions-page";
 import { AdminUsersPage } from "@pages/admin/admin-users-page";
 import { ApiKeysPage } from "@pages/api-keys/api-keys-page";
 import { ErrorPage } from "@pages/error/error-page";
@@ -27,7 +29,7 @@ import { PlaygroundPage } from "@pages/playground/playground-page";
 import { ProfilePage } from "@pages/profile/profile-page";
 import { WalletPage } from "@pages/wallet/wallet-page";
 import { NotFoundPage } from "@pages/not-found/not-found-page";
-import { CreditCard, KeyRound, Settings2 } from "lucide-react";
+import { Settings2 } from "lucide-react";
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,
@@ -164,25 +166,13 @@ const adminLogsRoute = createRoute({
 const adminRedemptionsRoute = createRoute({
   getParentRoute: () => adminRoute,
   path: "/admin/redemptions",
-  component: () => (
-    <AdminPlaceholderPage
-      description="Redemption code issuance, search, edits, cleanup, and controlled quota delivery."
-      icon={KeyRound}
-      title="Redemptions"
-    />
-  ),
+  component: AdminRedemptionsPage,
 });
 
 const adminBillingRoute = createRoute({
   getParentRoute: () => adminRoute,
   path: "/admin/billing",
-  component: () => (
-    <AdminPlaceholderPage
-      description="Top-up records, manual completion, billing display, and commercial controls."
-      icon={CreditCard}
-      title="Billing"
-    />
-  ),
+  component: AdminBillingPage,
 });
 
 const adminSettingsRoute = createRoute({

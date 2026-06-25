@@ -175,18 +175,6 @@ Maintenance rule:
 - Permission: Root-only preferred
 - Notes: EPay, Stripe, Creem, Waffo, and Waffo Pancake settings.
 
-### Manual Top-Up Completion
-
-- Owner: `/admin/billing`
-- Permission: Admin
-- Notes: Complete top-up records through the backend admin endpoint.
-
-### Redemption Batch Generation
-
-- Owner: `/admin/redemptions`
-- Permission: Admin
-- Notes: Batch generation by quota, count, and expiration.
-
 ## Settings / Operations
 
 ### Unified Sensitive Confirmation Dialog
