@@ -1,8 +1,18 @@
 import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { BarChart3, Code2, CreditCard, KeyRound, ListTree, PenLine, UserRound } from "lucide-react";
+import {
+  BarChart3,
+  Code2,
+  CreditCard,
+  KeyRound,
+  LayoutDashboard,
+  ListTree,
+  PenLine,
+  UserRound,
+} from "lucide-react";
 import { useAuthStore } from "@features/auth/store";
 import { usePlatformStore } from "@features/platform/store";
 import { cn } from "@shared/lib/cn";
+import { isAdminUser } from "@shared/lib/roles";
 import { Button } from "@shared/ui/button";
 
 const navigation = [
@@ -74,6 +84,15 @@ export function AppShell() {
             <span className="max-w-40 truncate text-sm text-[#6d6256]">
               {user?.display_name || user?.username}
             </span>
+            {isAdminUser(user) && (
+              <Link
+                className="inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-[#4b4640] transition-colors hover:bg-[#e8dece]"
+                to="/admin"
+              >
+                <LayoutDashboard className="size-4" />
+                Admin
+              </Link>
+            )}
             <Button className="h-9 px-3" onClick={handleSignOut} variant="ghost">
               Sign out
             </Button>

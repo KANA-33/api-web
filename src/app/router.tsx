@@ -7,7 +7,11 @@ import {
 } from "@tanstack/react-router";
 import { ensureAuthenticated } from "@features/auth/store";
 import { usePlatformStore } from "@features/platform/store";
+import { isAdminUser } from "@shared/lib/roles";
+import { AdminShell } from "@widgets/admin-shell/admin-shell";
 import { AppShell } from "@widgets/app-shell/app-shell";
+import { AdminOverviewPage } from "@pages/admin/admin-overview-page";
+import { AdminPlaceholderPage } from "@pages/admin/admin-placeholder-page";
 import { ApiKeysPage } from "@pages/api-keys/api-keys-page";
 import { ErrorPage } from "@pages/error/error-page";
 import { LoginPage } from "@pages/login/login-page";
@@ -19,6 +23,7 @@ import { PlaygroundPage } from "@pages/playground/playground-page";
 import { ProfilePage } from "@pages/profile/profile-page";
 import { WalletPage } from "@pages/wallet/wallet-page";
 import { NotFoundPage } from "@pages/not-found/not-found-page";
+import { Activity, Boxes, CreditCard, KeyRound, Logs, Settings2, UsersRound } from "lucide-react";
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,
@@ -39,6 +44,25 @@ const appRoute = createRoute({
     await usePlatformStore.getState().load();
   },
   component: AppShell,
+});
+
+const adminRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  id: "admin",
+  beforeLoad: async () => {
+    const user = await ensureAuthenticated();
+
+    if (!user) {
+      throw redirect({ to: "/login" });
+    }
+
+    if (!isAdminUser(user)) {
+      throw redirect({ to: "/overview" });
+    }
+
+    await usePlatformStore.getState().load();
+  },
+  component: AdminShell,
 });
 
 const indexRoute = createRoute({
@@ -103,9 +127,109 @@ const profileRoute = createRoute({
   component: ProfilePage,
 });
 
+const adminIndexRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/admin",
+  component: AdminOverviewPage,
+});
+
+const adminUsersRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/admin/users",
+  component: () => (
+    <AdminPlaceholderPage
+      description="Admin account operations for users, roles, quota, and security bindings."
+      icon={UsersRound}
+      title="Users"
+    />
+  ),
+});
+
+const adminChannelsRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/admin/channels",
+  component: () => (
+    <AdminPlaceholderPage
+      description="Provider channel operations, tests, balances, tags, and routing health."
+      icon={Activity}
+      title="Channels"
+    />
+  ),
+});
+
+const adminModelsRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/admin/models",
+  component: () => (
+    <AdminPlaceholderPage
+      description="Model metadata, vendors, missing models, sync previews, and deployment surfaces."
+      icon={Boxes}
+      title="Models"
+    />
+  ),
+});
+
+const adminLogsRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/admin/logs",
+  component: () => (
+    <AdminPlaceholderPage
+      description="Platform traffic audit, usage statistics, drawing logs, and task records."
+      icon={Logs}
+      title="Logs"
+    />
+  ),
+});
+
+const adminRedemptionsRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/admin/redemptions",
+  component: () => (
+    <AdminPlaceholderPage
+      description="Redemption code issuance, search, edits, cleanup, and controlled quota delivery."
+      icon={KeyRound}
+      title="Redemptions"
+    />
+  ),
+});
+
+const adminBillingRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/admin/billing",
+  component: () => (
+    <AdminPlaceholderPage
+      description="Top-up records, manual completion, billing display, and commercial controls."
+      icon={CreditCard}
+      title="Billing"
+    />
+  ),
+});
+
+const adminSettingsRoute = createRoute({
+  getParentRoute: () => adminRoute,
+  path: "/admin/settings",
+  component: () => (
+    <AdminPlaceholderPage
+      description="Site, authentication, content, security, billing, and operations settings."
+      icon={Settings2}
+      title="Settings"
+    />
+  ),
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   loginRoute,
+  adminRoute.addChildren([
+    adminIndexRoute,
+    adminUsersRoute,
+    adminChannelsRoute,
+    adminModelsRoute,
+    adminLogsRoute,
+    adminRedemptionsRoute,
+    adminBillingRoute,
+    adminSettingsRoute,
+  ]),
   appRoute.addChildren([
     overviewRoute,
     modelsRoute,
