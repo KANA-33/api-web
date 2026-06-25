@@ -11,6 +11,7 @@ import { isAdminUser } from "@shared/lib/roles";
 import { AdminShell } from "@widgets/admin-shell/admin-shell";
 import { AppShell } from "@widgets/app-shell/app-shell";
 import { AdminOverviewPage } from "@pages/admin/admin-overview-page";
+import { AdminChannelsPage } from "@pages/admin/admin-channels-page";
 import { AdminPlaceholderPage } from "@pages/admin/admin-placeholder-page";
 import { AdminUsersPage } from "@pages/admin/admin-users-page";
 import { ApiKeysPage } from "@pages/api-keys/api-keys-page";
@@ -24,7 +25,7 @@ import { PlaygroundPage } from "@pages/playground/playground-page";
 import { ProfilePage } from "@pages/profile/profile-page";
 import { WalletPage } from "@pages/wallet/wallet-page";
 import { NotFoundPage } from "@pages/not-found/not-found-page";
-import { Activity, Boxes, CreditCard, KeyRound, Logs, Settings2 } from "lucide-react";
+import { Boxes, CreditCard, KeyRound, Logs, Settings2 } from "lucide-react";
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,
@@ -143,13 +144,7 @@ const adminUsersRoute = createRoute({
 const adminChannelsRoute = createRoute({
   getParentRoute: () => adminRoute,
   path: "/admin/channels",
-  component: () => (
-    <AdminPlaceholderPage
-      description="Provider channel operations, tests, balances, tags, and routing health."
-      icon={Activity}
-      title="Channels"
-    />
-  ),
+  component: AdminChannelsPage,
 });
 
 const adminModelsRoute = createRoute({
