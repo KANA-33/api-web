@@ -12,6 +12,7 @@ import { AdminShell } from "@widgets/admin-shell/admin-shell";
 import { AppShell } from "@widgets/app-shell/app-shell";
 import { AdminOverviewPage } from "@pages/admin/admin-overview-page";
 import { AdminChannelsPage } from "@pages/admin/admin-channels-page";
+import { AdminLogsPage } from "@pages/admin/admin-logs-page";
 import { AdminModelsPage } from "@pages/admin/admin-models-page";
 import { AdminPlaceholderPage } from "@pages/admin/admin-placeholder-page";
 import { AdminUsersPage } from "@pages/admin/admin-users-page";
@@ -26,7 +27,7 @@ import { PlaygroundPage } from "@pages/playground/playground-page";
 import { ProfilePage } from "@pages/profile/profile-page";
 import { WalletPage } from "@pages/wallet/wallet-page";
 import { NotFoundPage } from "@pages/not-found/not-found-page";
-import { CreditCard, KeyRound, Logs, Settings2 } from "lucide-react";
+import { CreditCard, KeyRound, Settings2 } from "lucide-react";
 
 const rootRoute = createRootRoute({
   component: () => <Outlet />,
@@ -157,13 +158,7 @@ const adminModelsRoute = createRoute({
 const adminLogsRoute = createRoute({
   getParentRoute: () => adminRoute,
   path: "/admin/logs",
-  component: () => (
-    <AdminPlaceholderPage
-      description="Platform traffic audit, usage statistics, drawing logs, and task records."
-      icon={Logs}
-      title="Logs"
-    />
-  ),
+  component: AdminLogsPage,
 });
 
 const adminRedemptionsRoute = createRoute({

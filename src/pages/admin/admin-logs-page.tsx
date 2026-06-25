@@ -1,0 +1,566 @@
+import { useState, type FormEvent } from "react";
+import { Activity, Brush, ClipboardList, FileSearch, RefreshCw } from "lucide-react";
+import * as adminLogsApi from "@features/admin/logs/api";
+import type { AdminDrawingLog, AdminTaskLog } from "@features/admin/logs/api";
+import { usePlatformStore } from "@features/platform/store";
+import type { UsageLogRecord } from "@shared/api/contracts";
+import { cn } from "@shared/lib/cn";
+import { formatQuota, formatRawNumber } from "@shared/lib/quota-format";
+import { useAsyncData } from "@shared/lib/use-async-data";
+import { Button } from "@shared/ui/button";
+import { Card } from "@shared/ui/card";
+import { PageTitle } from "@shared/ui/page-title";
+import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
+
+const pageSize = 20;
+
+const tabs = [
+  { id: "usage", label: "Usage logs", icon: Activity },
+  { id: "drawing", label: "Drawing logs", icon: Brush },
+  { id: "task", label: "Task logs", icon: ClipboardList },
+] as const;
+
+type LogTabId = (typeof tabs)[number]["id"];
+
+interface LogFilters {
+  action: string;
+  channelId: string;
+  endDate: string;
+  group: string;
+  keyword: string;
+  modelName: string;
+  platform: string;
+  requestId: string;
+  startDate: string;
+  status: string;
+  type: string;
+  username: string;
+}
+
+const emptyFilters: LogFilters = {
+  action: "",
+  channelId: "",
+  endDate: "",
+  group: "",
+  keyword: "",
+  modelName: "",
+  platform: "",
+  requestId: "",
+  startDate: "",
+  status: "",
+  type: "",
+  username: "",
+};
+
+function dateToTimestamp(value: string, endOfDay = false) {
+  if (!value) {
+    return undefined;
+  }
+
+  const date = new Date(`${value}T${endOfDay ? "23:59:59" : "00:00:00"}`);
+  return Math.floor(date.getTime() / 1000);
+}
+
+function formatTime(timestamp?: number) {
+  if (!timestamp) {
+    return "Unknown";
+  }
+
+  return new Date(timestamp * 1000).toLocaleString();
+}
+
+function getLogTypeLabel(type?: number) {
+  switch (type) {
+    case 1:
+      return "Top-up";
+    case 2:
+      return "Consume";
+    case 3:
+      return "Manage";
+    case 4:
+      return "System";
+    case 5:
+      return "Error";
+    case 6:
+      return "Refund";
+    case 7:
+      return "Login";
+    default:
+      return "All";
+  }
+}
+
+function renderUsageTable(
+  items: UsageLogRecord[],
+  platformStatus: ReturnType<typeof usePlatformStore.getState>["status"],
+) {
+  return (
+    <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
+      <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+        <tr>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Request</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">User</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Model</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Tokens</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Channel</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((item) => (
+          <tr key={`${item.request_id || item.id}-${item.created_at}`}>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              <div className="font-medium">{getLogTypeLabel(item.type)}</div>
+              <div className="mt-1 max-w-80 truncate text-xs text-[#7c6e5e]">
+                {item.content || item.request_id || "No detail"}
+              </div>
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              <div>{item.username || `User #${item.user_id}`}</div>
+              <div className="mt-1 text-xs text-[#7c6e5e]">{item.group || "default"}</div>
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4 font-mono text-xs">
+              {item.model_name || "N/A"}
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              {formatQuota(item.quota, platformStatus)}
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              <div>{formatRawNumber(item.prompt_tokens + item.completion_tokens)}</div>
+              <div className="mt-1 text-xs text-[#7c6e5e]">{item.use_time}ms</div>
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              <div>{item.channel_name || `#${item.channel}`}</div>
+              <div className="mt-1 text-xs text-[#7c6e5e]">{item.token_name || "No token"}</div>
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">{formatTime(item.created_at)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+function renderDrawingTable(
+  items: AdminDrawingLog[],
+  platformStatus: ReturnType<typeof usePlatformStore.getState>["status"],
+) {
+  return (
+    <table className="w-full min-w-[1080px] border-collapse text-left text-sm">
+      <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+        <tr>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Task</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Prompt</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Channel</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Submitted</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((item) => (
+          <tr key={`${item.id}-${item.mj_id}`}>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              <div className="font-medium">{item.action || "Draw"}</div>
+              <div className="mt-1 font-mono text-xs text-[#7c6e5e]">
+                {item.mj_id || `#${item.id}`}
+              </div>
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              <div className="max-w-96 truncate">
+                {item.prompt || item.prompt_en || "No prompt"}
+              </div>
+              {item.fail_reason && (
+                <div className="mt-1 text-xs text-[#8a4d3d]">{item.fail_reason}</div>
+              )}
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              <div>{item.status || "Unknown"}</div>
+              <div className="mt-1 text-xs text-[#7c6e5e]">{item.progress || "0%"}</div>
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              {formatQuota(item.quota, platformStatus)}
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">#{item.channel_id}</td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">{formatTime(item.submit_time)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+function renderTaskTable(
+  items: AdminTaskLog[],
+  platformStatus: ReturnType<typeof usePlatformStore.getState>["status"],
+) {
+  return (
+    <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
+      <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+        <tr>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Task</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">User</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Action</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Channel</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Submitted</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((item) => (
+          <tr key={`${item.id}-${item.task_id}`}>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              <div className="font-mono text-xs font-medium">{item.task_id || `#${item.id}`}</div>
+              <div className="mt-1 text-xs text-[#7c6e5e]">
+                {item.platform || "Unknown platform"}
+              </div>
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              <div>{item.username || `User #${item.user_id}`}</div>
+              <div className="mt-1 text-xs text-[#7c6e5e]">{item.group || "default"}</div>
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">{item.action || "N/A"}</td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              <div>{item.status || "Unknown"}</div>
+              <div className="mt-1 text-xs text-[#7c6e5e]">{item.progress || "0%"}</div>
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">
+              {formatQuota(item.quota, platformStatus)}
+            </td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">#{item.channel_id}</td>
+            <td className="border-b border-[#eadfce] py-4 pr-4">{formatTime(item.submit_time)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+export function AdminLogsPage() {
+  const platformStatus = usePlatformStore((state) => state.status);
+  const [activeTab, setActiveTab] = useState<LogTabId>("usage");
+  const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState<LogFilters>(emptyFilters);
+  const [appliedFilters, setAppliedFilters] = useState<LogFilters>(emptyFilters);
+
+  const start_timestamp = dateToTimestamp(appliedFilters.startDate);
+  const end_timestamp = dateToTimestamp(appliedFilters.endDate, true);
+
+  const { data, error, loading, reload } = useAsyncData(async () => {
+    const pageQuery = { p: page, page_size: pageSize };
+
+    if (activeTab === "drawing") {
+      const response = await adminLogsApi.getDrawingLogs({
+        ...pageQuery,
+        channel_id: appliedFilters.channelId || undefined,
+        end_timestamp,
+        mj_id: appliedFilters.keyword || undefined,
+        start_timestamp,
+      });
+      return response.data;
+    }
+
+    if (activeTab === "task") {
+      const response = await adminLogsApi.getTaskLogs({
+        ...pageQuery,
+        action: appliedFilters.action || undefined,
+        channel_id: appliedFilters.channelId || undefined,
+        end_timestamp,
+        platform: appliedFilters.platform || undefined,
+        start_timestamp,
+        status: appliedFilters.status || undefined,
+        task_id: appliedFilters.keyword || undefined,
+      });
+      return response.data;
+    }
+
+    const response = await adminLogsApi.getUsageLogs({
+      ...pageQuery,
+      channel: appliedFilters.channelId ? Number(appliedFilters.channelId) : undefined,
+      end_timestamp,
+      group: appliedFilters.group || undefined,
+      model_name: appliedFilters.modelName || undefined,
+      request_id: appliedFilters.requestId || undefined,
+      start_timestamp,
+      token_name: appliedFilters.keyword || undefined,
+      type: appliedFilters.type ? Number(appliedFilters.type) : undefined,
+      username: appliedFilters.username || undefined,
+    });
+    return response.data;
+  }, [activeTab, page, appliedFilters]);
+
+  const {
+    data: stat,
+    error: statError,
+    loading: statLoading,
+    reload: reloadStat,
+  } = useAsyncData(async () => {
+    const response = await adminLogsApi.getUsageStat({
+      channel: appliedFilters.channelId ? Number(appliedFilters.channelId) : undefined,
+      end_timestamp,
+      group: appliedFilters.group || undefined,
+      model_name: appliedFilters.modelName || undefined,
+      start_timestamp,
+      token_name: appliedFilters.keyword || undefined,
+      type: appliedFilters.type ? Number(appliedFilters.type) : undefined,
+      username: appliedFilters.username || undefined,
+    });
+    return response.data;
+  }, [appliedFilters]);
+
+  function changeTab(tab: LogTabId) {
+    setActiveTab(tab);
+    setPage(1);
+  }
+
+  function applyFilters(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setPage(1);
+    setAppliedFilters(filters);
+  }
+
+  function clearFilters() {
+    setFilters(emptyFilters);
+    setAppliedFilters(emptyFilters);
+    setPage(1);
+  }
+
+  const totalPages = Math.max(1, Math.ceil((data?.total ?? 0) / pageSize));
+
+  return (
+    <div className="space-y-7">
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <PageTitle
+          description="Inspect usage, drawing, and asynchronous task records across the whole platform."
+          title="Logs"
+        />
+        <Button
+          className="gap-2"
+          onClick={() => {
+            void reload();
+            void reloadStat();
+          }}
+          variant="secondary"
+        >
+          <RefreshCw className="size-4" />
+          Refresh
+        </Button>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        {[
+          {
+            label: "Usage quota",
+            value: statLoading ? "..." : formatQuota(stat?.quota, platformStatus),
+          },
+          { label: "RPM", value: statLoading ? "..." : formatRawNumber(stat?.rpm) },
+          { label: "TPM", value: statLoading ? "..." : formatRawNumber(stat?.tpm) },
+        ].map((item) => (
+          <Card className="min-h-28" key={item.label}>
+            <p className="text-sm text-[#837462]">{item.label}</p>
+            <strong className="mt-3 block text-3xl font-semibold">{item.value}</strong>
+          </Card>
+        ))}
+      </div>
+      {statError && <p className="text-sm text-[#8a4d3d]">{statError}</p>}
+
+      <Card>
+        <div className="flex flex-wrap gap-2">
+          {tabs.map((tab) => {
+            const Icon = tab.icon;
+            return (
+              <button
+                className={cn(
+                  "inline-flex h-10 items-center gap-2 rounded-md px-4 text-sm transition-colors",
+                  activeTab === tab.id
+                    ? "bg-[#2f3533] text-[#f8f1e7]"
+                    : "bg-[#efe5d6] text-[#62584d] hover:bg-[#e5d8c5]",
+                )}
+                key={tab.id}
+                onClick={() => changeTab(tab.id)}
+                type="button"
+              >
+                <Icon className="size-4" />
+                {tab.label}
+              </button>
+            );
+          })}
+        </div>
+
+        <form className="mt-6 grid gap-3 lg:grid-cols-6" onSubmit={applyFilters}>
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            onChange={(event) => setFilters((value) => ({ ...value, keyword: event.target.value }))}
+            placeholder={
+              activeTab === "usage" ? "Token name" : activeTab === "drawing" ? "MJ ID" : "Task ID"
+            }
+            value={filters.keyword}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            disabled={activeTab !== "usage"}
+            onChange={(event) =>
+              setFilters((value) => ({ ...value, username: event.target.value }))
+            }
+            placeholder="Username"
+            value={filters.username}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            disabled={activeTab !== "usage"}
+            onChange={(event) =>
+              setFilters((value) => ({ ...value, modelName: event.target.value }))
+            }
+            placeholder="Model"
+            value={filters.modelName}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            onChange={(event) =>
+              setFilters((value) => ({ ...value, channelId: event.target.value }))
+            }
+            placeholder="Channel ID"
+            type="number"
+            value={filters.channelId}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            onChange={(event) =>
+              setFilters((value) => ({ ...value, startDate: event.target.value }))
+            }
+            type="date"
+            value={filters.startDate}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            onChange={(event) => setFilters((value) => ({ ...value, endDate: event.target.value }))}
+            type="date"
+            value={filters.endDate}
+          />
+
+          <select
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            disabled={activeTab !== "usage"}
+            onChange={(event) => setFilters((value) => ({ ...value, type: event.target.value }))}
+            value={filters.type}
+          >
+            <option value="">Any log type</option>
+            <option value={1}>Top-up</option>
+            <option value={2}>Consume</option>
+            <option value={3}>Manage</option>
+            <option value={4}>System</option>
+            <option value={5}>Error</option>
+            <option value={6}>Refund</option>
+            <option value={7}>Login</option>
+          </select>
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            disabled={activeTab !== "usage"}
+            onChange={(event) => setFilters((value) => ({ ...value, group: event.target.value }))}
+            placeholder="Group"
+            value={filters.group}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            disabled={activeTab !== "usage"}
+            onChange={(event) =>
+              setFilters((value) => ({ ...value, requestId: event.target.value }))
+            }
+            placeholder="Request ID"
+            value={filters.requestId}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            disabled={activeTab !== "task"}
+            onChange={(event) =>
+              setFilters((value) => ({ ...value, platform: event.target.value }))
+            }
+            placeholder="Platform"
+            value={filters.platform}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            disabled={activeTab !== "task"}
+            onChange={(event) => setFilters((value) => ({ ...value, action: event.target.value }))}
+            placeholder="Action"
+            value={filters.action}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            disabled={activeTab !== "task"}
+            onChange={(event) => setFilters((value) => ({ ...value, status: event.target.value }))}
+            placeholder="Task status"
+            value={filters.status}
+          />
+          <div className="flex gap-2 lg:col-span-6">
+            <Button type="submit">Apply filters</Button>
+            <Button onClick={clearFilters} type="button" variant="secondary">
+              Clear
+            </Button>
+          </div>
+        </form>
+      </Card>
+
+      {loading && <LoadingBlock title="Loading logs" />}
+
+      {error && (
+        <ErrorBlock
+          actionLabel="Retry"
+          description={error}
+          onAction={() => void reload()}
+          title="Logs unavailable"
+        />
+      )}
+
+      {!loading && !error && data?.items.length === 0 && (
+        <EmptyBlock description="No records match the current filters." title="No log records" />
+      )}
+
+      {!loading && !error && data && data.items.length > 0 && (
+        <Card>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="text-xl font-semibold">
+                {tabs.find((tab) => tab.id === activeTab)?.label}
+              </h2>
+              <p className="mt-2 text-sm text-[#655b50]">
+                Showing {data.items.length} of {data.total} records.
+              </p>
+            </div>
+            <FileSearch className="size-6 text-[#8b765e]" />
+          </div>
+
+          <div className="mt-6 overflow-x-auto">
+            {activeTab === "usage" &&
+              renderUsageTable(data.items as UsageLogRecord[], platformStatus)}
+            {activeTab === "drawing" &&
+              renderDrawingTable(data.items as AdminDrawingLog[], platformStatus)}
+            {activeTab === "task" && renderTaskTable(data.items as AdminTaskLog[], platformStatus)}
+          </div>
+
+          <div className="mt-5 flex items-center justify-between text-sm text-[#655b50]">
+            <Button
+              disabled={page <= 1}
+              onClick={() => setPage((value) => Math.max(1, value - 1))}
+              variant="secondary"
+            >
+              Previous
+            </Button>
+            <span>
+              Page {page} of {totalPages}
+            </span>
+            <Button
+              disabled={page >= totalPages}
+              onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+              variant="secondary"
+            >
+              Next
+            </Button>
+          </div>
+        </Card>
+      )}
+    </div>
+  );
+}

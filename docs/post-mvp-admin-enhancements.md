@@ -155,6 +155,12 @@ Maintenance rule:
 - Permission: Admin
 - Notes: Show channel affinity cache statistics.
 
+### Admin Data Dashboard And Quota Flow
+
+- Owner: `/admin/logs` or a future `/admin/data`
+- Permission: Admin
+- Notes: Use `/api/data/`, `/api/data/users`, and `/api/data/flow` to show platform-wide quota dates, user quota dates, and flow data. Deferred from Phase 5 to keep the logs MVP focused.
+
 ## Billing
 
 ### Subscription Plan Management
