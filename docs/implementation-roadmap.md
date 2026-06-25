@@ -188,3 +188,47 @@ Progress:
 - Platform status preload added before entering the authenticated shell.
 - Playground navigation is hidden when backend self-use mode is disabled.
 - Integration QA guide added.
+
+## Phase 8: Admin MVP
+
+Status: In Build
+
+- Add a clean-room admin shell and route guard.
+- Implement admin users, channels, models, logs, redemptions, billing, and
+  root-only settings from documented backend protocols.
+- Keep high-sensitivity operations deferred until stronger confirmation and
+  audit surfaces exist.
+- Add an admin overview entry page and smoke-test checklist.
+
+Exit criteria:
+
+- Admin pages route correctly for admin/root users.
+- Ordinary users cannot access admin routes.
+- Core admin pages load against a compatible backend.
+- Deferred high-risk items are listed in `docs/post-mvp-admin-enhancements.md`.
+
+Progress:
+
+- Admin shell and role guard implemented.
+- Users, channels, models, logs, redemptions, billing, and settings pages
+  implemented.
+- Admin overview now links to all MVP modules and shows lightweight status
+  metrics.
+- Admin smoke-test checklist added in `docs/admin-mvp-smoke-test.md`.
+
+## Phase 9: MVP Verification
+
+Status: In Build
+
+- Align documentation with the implemented Admin MVP.
+- Run quality gates: provenance, typecheck, lint, and build.
+- Use `docs/integration-qa.md` and `docs/admin-mvp-smoke-test.md` for backend
+  verification.
+- Fix protocol mismatches discovered during real backend testing.
+
+Exit criteria:
+
+- Documentation, implemented routes, and smoke-test scope agree.
+- Automated checks pass.
+- Any backend mismatch is either fixed or added to Post-MVP with owner and
+  risk notes.

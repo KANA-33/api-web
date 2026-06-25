@@ -47,6 +47,17 @@ Check:
 12. Open `/playground` and run a non-streaming request.
 13. Sign out and confirm protected routes redirect to `/login`.
 
+## Admin Smoke Test
+
+Use `docs/admin-mvp-smoke-test.md` with an admin account and a root account.
+
+- Normal users should be redirected away from `/admin`.
+- Admin users should reach users, channels, models, logs, redemptions, and
+  billing.
+- Root users should reach settings.
+- Non-root admins should see the settings root-access notice.
+- Run destructive actions only against disposable test data.
+
 ## Module Visibility
 
 The app shell reads `/api/status` before entering the authenticated shell.
@@ -63,3 +74,5 @@ The app shell reads `/api/status` before entering the authenticated shell.
 - OAuth login buttons.
 - Registration and password reset pages.
 - Streaming Playground responses.
+- High-sensitivity admin operations such as payment gateway configuration,
+  secret reveal, security editors, and audit tooling.

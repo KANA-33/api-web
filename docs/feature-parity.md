@@ -47,11 +47,19 @@ frontend implementation details.
 
 ## Admin Strategy
 
-| Area                     | Decision                 | Status   | Notes                                                          |
-| ------------------------ | ------------------------ | -------- | -------------------------------------------------------------- |
-| Existing AGPL admin UI   | Keep separate deployment | Planned  | Safest unless commercial license is obtained                   |
-| Commercial admin rewrite | Optional later phase     | Deferred | Requires full clean-room product specification                 |
-| Shared auth with admin   | Protocol Extracted       | Pending  | Same backend session, but commercial admin UI remains deferred |
+| Area                       | Decision                 | Status   | Notes                                                       |
+| -------------------------- | ------------------------ | -------- | ----------------------------------------------------------- |
+| Existing AGPL admin UI     | Keep separate deployment | Deferred | Can remain available separately while commercial UI matures |
+| Commercial admin rewrite   | Clean-room MVP           | In Build | Independent admin surface implemented from backend protocol |
+| Shared auth with admin     | Session based            | In Build | Same backend session and `New-Api-User` header              |
+| Admin users                | MVP coverage             | In Build | List, search, create, edit, delete, role/status/quota ops   |
+| Admin channels             | MVP coverage             | In Build | List, search, create, edit, delete, test, balance, copy     |
+| Admin models               | MVP coverage             | In Build | List, search, create, edit, delete, status, missing models  |
+| Admin logs                 | MVP coverage             | In Build | Usage, drawing, task logs, filters, usage stats             |
+| Admin redemptions          | MVP coverage             | In Build | List, search, batch generate, edit, status, cleanup         |
+| Admin billing              | MVP coverage             | In Build | Top-up list/search and manual completion                    |
+| Admin settings             | Root-only MVP            | In Build | Low-risk options and raw JSON console content editing       |
+| High-sensitivity admin ops | Post-MVP                 | Deferred | Payment gateways, secrets, security editors, audit tooling  |
 
 ## Commercial Release Gate
 
@@ -62,3 +70,4 @@ frontend implementation details.
 | Dependency review      | All third-party packages listed with license                                                   | Planned  |
 | Feature parity review  | Required rows in this matrix marked Verified                                                   | Planned  |
 | Build verification     | `typecheck`, `build`, and `lint` pass                                                          | In Build |
+| Admin smoke test       | `docs/admin-mvp-smoke-test.md` completed against target backend                                | Planned  |

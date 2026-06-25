@@ -20,6 +20,7 @@ AGPL frontend.
 | Logs             | Extracted | Backend router/controller/OpenAPI | Usage, drawing, and task logs          |
 | Models           | Extracted | Backend router/controller/OpenAPI | User model names are available         |
 | Platform Notices | Extracted | Backend router/controller/OpenAPI | Status endpoint includes panel content |
+| Admin MVP        | Extracted | Backend router/controller         | Users, channels, models, logs, billing |
 
 Detailed route inventory lives in `docs/backend-endpoint-inventory.md`.
 
@@ -646,3 +647,94 @@ interface PlaygroundChatRequest {
 - Error Response: `{ error: { message, type, code } }`
 - Notes: This route is intended for the web playground and uses the current
   user session. Direct `/v1/chat/completions` remains API-key based.
+
+## Admin MVP
+
+Admin dashboard requests use the same session transport and `New-Api-User`
+header as ordinary dashboard requests. Admin routes require backend admin
+authorization. Root-only routes require root authorization.
+
+### Admin Users
+
+- Methods and Paths:
+  - `GET /api/user/`
+  - `GET /api/user/search`
+  - `POST /api/user/`
+  - `PUT /api/user/`
+  - `DELETE /api/user/:id`
+  - `POST /api/user/manage`
+- Auth: admin session
+- Query: `PageQuery`; search accepts `keyword`, `group`, `role`, `status`
+- Notes: manage actions include enable, disable, promote, demote, delete, and
+  quota adjustment modes.
+
+### Admin Channels
+
+- Methods and Paths:
+  - `GET /api/channel/`
+  - `GET /api/channel/search`
+  - `POST /api/channel/`
+  - `PUT /api/channel/`
+  - `DELETE /api/channel/:id`
+  - `POST /api/channel/copy/:id`
+  - `GET /api/channel/test/:id`
+  - `GET /api/channel/update_balance/:id`
+- Auth: admin session
+- Query: `PageQuery`; search accepts keyword, group, model, status, type, and
+  sort options where backend supports them.
+- Notes: secret reveal and multi-key management remain Post-MVP.
+
+### Admin Models
+
+- Methods and Paths:
+  - `GET /api/models/`
+  - `GET /api/models/search`
+  - `POST /api/models/`
+  - `PUT /api/models/`
+  - `DELETE /api/models/:id`
+  - `GET /api/models/missing`
+  - `GET /api/vendors/`
+- Auth: admin session
+- Notes: status-only updates use `PUT /api/models/?status_only=true`.
+  Vendor CRUD and deployment management remain Post-MVP.
+
+### Admin Logs
+
+- Methods and Paths:
+  - `GET /api/log/`
+  - `GET /api/log/stat`
+  - `GET /api/mj/`
+  - `GET /api/task/`
+- Auth: admin session
+- Notes: `/api/log/search` is deprecated for this frontend; filters are sent to
+  `GET /api/log/`.
+
+### Admin Redemptions
+
+- Methods and Paths:
+  - `GET /api/redemption/`
+  - `GET /api/redemption/search`
+  - `POST /api/redemption/`
+  - `PUT /api/redemption/`
+  - `DELETE /api/redemption/:id`
+  - `DELETE /api/redemption/invalid`
+- Auth: admin session
+- Notes: create supports `name`, raw `quota`, `count`, and `expired_time`.
+  Status-only updates use `PUT /api/redemption/?status_only=true`.
+
+### Admin Billing
+
+- Methods and Paths:
+  - `GET /api/user/topup`
+  - `POST /api/user/topup/complete`
+- Auth: admin session
+- Notes: manual completion uses body `{ trade_no: string }`.
+
+### Admin Settings
+
+- Methods and Paths:
+  - `GET /api/option/`
+  - `PUT /api/option/`
+- Auth: root session
+- Notes: sensitive keys are not returned by `GET /api/option/`. The MVP edits
+  low-risk option values and backend-validated console JSON fields only.

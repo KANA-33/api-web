@@ -222,3 +222,43 @@ handling.
 | Check in        | POST   | `/api/user/checkin`                     | User session | May require Turnstile      |
 | OAuth bindings  | GET    | `/api/user/oauth/bindings`              | User session | Account connections        |
 | Unbind OAuth    | DELETE | `/api/user/oauth/bindings/:provider_id` | User session | Account connection removal |
+
+## Admin MVP
+
+| Capability                 | Method | Path                              | Auth          | Notes                                     |
+| -------------------------- | ------ | --------------------------------- | ------------- | ----------------------------------------- |
+| Admin user list            | GET    | `/api/user/`                      | Admin session | Paginated                                 |
+| Admin user search          | GET    | `/api/user/search`                | Admin session | Keyword, group, role, status filters      |
+| Admin user create          | POST   | `/api/user/`                      | Admin session | Creates one account                       |
+| Admin user update          | PUT    | `/api/user/`                      | Admin session | Updates profile, group, role, status      |
+| Admin user delete          | DELETE | `/api/user/:id`                   | Admin session | Deletes one user                          |
+| Admin user manage          | POST   | `/api/user/manage`                | Admin session | Quota and role/status helper actions      |
+| Channel list               | GET    | `/api/channel/`                   | Admin session | Paginated                                 |
+| Channel search             | GET    | `/api/channel/search`             | Admin session | Keyword, model, group, status, type       |
+| Channel create             | POST   | `/api/channel/`                   | Admin session | Single-channel MVP                        |
+| Channel update             | PUT    | `/api/channel/`                   | Admin session | Updates one channel                       |
+| Channel delete             | DELETE | `/api/channel/:id`                | Admin session | Deletes one channel                       |
+| Channel copy               | POST   | `/api/channel/copy/:id`           | Admin session | Duplicates one channel                    |
+| Channel test               | GET    | `/api/channel/test/:id`           | Admin session | Optional model query                      |
+| Channel balance            | GET    | `/api/channel/update_balance/:id` | Admin session | Provider balance refresh                  |
+| Admin model list           | GET    | `/api/models/`                    | Admin session | Paginated                                 |
+| Admin model search         | GET    | `/api/models/search`              | Admin session | Keyword and vendor filters                |
+| Admin model create         | POST   | `/api/models/`                    | Admin session | Creates metadata record                   |
+| Admin model update         | PUT    | `/api/models/`                    | Admin session | Status-only query supported               |
+| Admin model delete         | DELETE | `/api/models/:id`                 | Admin session | Deletes one model                         |
+| Missing models             | GET    | `/api/models/missing`             | Admin session | Review upstream-visible missing names     |
+| Vendor list                | GET    | `/api/vendors/`                   | Admin session | Used for model assignment                 |
+| Admin usage logs           | GET    | `/api/log/`                       | Admin session | Filtered list; no deprecated search route |
+| Admin usage stats          | GET    | `/api/log/stat`                   | Admin session | Quota, RPM, TPM                           |
+| Admin drawing logs         | GET    | `/api/mj/`                        | Admin session | Paginated image task records              |
+| Admin task logs            | GET    | `/api/task/`                      | Admin session | Paginated async task records              |
+| Redemption list            | GET    | `/api/redemption/`                | Admin session | Paginated                                 |
+| Redemption search          | GET    | `/api/redemption/search`          | Admin session | Keyword or exact id behavior              |
+| Redemption create          | POST   | `/api/redemption/`                | Admin session | Supports count, quota, expiration         |
+| Redemption update          | PUT    | `/api/redemption/`                | Admin session | Status-only query supported               |
+| Redemption delete          | DELETE | `/api/redemption/:id`             | Admin session | Deletes one code                          |
+| Redemption invalid cleanup | DELETE | `/api/redemption/invalid`         | Admin session | Removes used, disabled, expired codes     |
+| Admin top-up records       | GET    | `/api/user/topup`                 | Admin session | Paginated, optional keyword               |
+| Manual top-up completion   | POST   | `/api/user/topup/complete`        | Admin session | Body `{ trade_no: string }`               |
+| Root option list           | GET    | `/api/option/`                    | Root session  | Sensitive keys omitted by backend         |
+| Root option update         | PUT    | `/api/option/`                    | Root session  | Body `{ key, value }`                     |

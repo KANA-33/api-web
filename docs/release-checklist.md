@@ -22,6 +22,10 @@ Use this checklist for every commercial frontend release.
 - [ ] Usage, drawing, and task logs load with filters and pagination.
 - [ ] Model list and model detail routes work.
 - [ ] Playground can run a non-streaming request.
+- [ ] Admin smoke test in `docs/admin-mvp-smoke-test.md` passes for admin and
+      root accounts.
+- [ ] Ordinary users are redirected away from `/admin`.
+- [ ] High-sensitivity admin features remain deferred or protected.
 
 ## Clean-Room Verification
 
