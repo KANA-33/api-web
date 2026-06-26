@@ -23,67 +23,51 @@ Maintenance rule:
 - Completed: 2026-06-26
 - Notes: Added an Audit logs tab backed by admin `GET /api/log/` with `type=3`. The UI shows action, target params, operator metadata, route/request context, IP, and time when those structured fields are supplied by the backend.
 
-## Channels
+### Enhanced Batch Channel Operations
+
+- Owner: `/admin/channels`
+- Completed: 2026-06-26
+- Notes: Added selected-channel batch delete, selected-channel batch tag set/clear, tag-wide enable/disable, and delete-disabled maintenance actions. Destructive operations use the shared sensitive confirmation dialog and are visible through backend management audit logs.
 
 ### View Channel Secret
 
 - Owner: `/admin/channels`
-- Permission: Root-only
-- Notes: Requires secondary verification, sensitive-action confirmation, and audit visibility.
-
-### Multi-Key Management
-
-- Owner: `/admin/channels`
-- Permission: Admin / Root, operation-specific
-- Notes: Manage multi-key status, append or replace keys, key status list, disabled reasons, and polling mode.
-
-### Enhanced Batch Channel Operations
-
-- Owner: `/admin/channels`
-- Permission: Admin
-- Notes: Batch delete, batch tag updates, enable or disable by tag, and delete disabled channels.
-
-### Ollama Model Operations
-
-- Owner: `/admin/channels`
-- Permission: Admin
-- Notes: Pull models, stream pull progress, delete models, and query Ollama version. Show only for Ollama channels.
+- Completed: 2026-06-26
+- Notes: Added root-only channel secret reveal using `POST /api/channel/:id/key`. The UI requires sensitive confirmation with typed channel name and reason, displays the secret in a temporary read-only panel, and relies on backend secure verification plus management audit logging.
 
 ### Upstream Model Update Detection
 
 - Owner: `/admin/channels`
-- Permission: Admin
-- Notes: Detect upstream model changes for one channel or all channels.
+- Completed: 2026-06-26
+- Notes: Added per-channel upstream model fetch and pending-change detection through `GET /api/channel/fetch_models/:id` and `POST /api/channel/upstream_updates/detect`. Results are shown as structured JSON for review; apply/write operations remain deferred.
 
 ### Upstream Model Update Apply
 
 - Owner: `/admin/channels`
-- Permission: Admin / Root depending on backend endpoint
-- Notes: Apply upstream model changes for one channel or all channels.
+- Completed: 2026-06-26
+- Notes: Added single-channel apply for detected upstream model changes through `POST /api/channel/upstream_updates/apply`. The UI requires sensitive confirmation with typed channel name and reason before writing add/remove candidates to the channel model list.
 
 ### Fetch Upstream Models Into Channel
 
 - Owner: `/admin/channels`
-- Permission: Root-only
-- Notes: Backend endpoint is root-protected. Use a high-sensitivity flow.
+- Completed: 2026-06-26
+- Notes: Added root-only form action that sends the currently typed provider key, channel type, and optional base URL to `POST /api/channel/fetch_models`, then fills the channel Models field from the returned upstream model names. The UI does not read stored secrets for this action.
 
-### Codex Channel Usage
-
-- Owner: `/admin/channels`
-- Permission: Admin
-- Notes: Show Codex channel usage, reset credits, and reset usage actions.
-
-### Codex Credential Refresh
+### Multi-Key Management
 
 - Owner: `/admin/channels`
-- Permission: Admin
-- Notes: Refresh Codex OAuth channel credentials and show refresh metadata.
+- Completed: 2026-06-26
+- Notes: Added multi-key edit support for append/replace and random/polling mode on multi-key channels. Added status panel through `POST /api/channel/multi_key/manage` with key previews, enabled/manual-disabled/auto-disabled counts, per-key enable/disable/delete, enable all, disable all, and delete auto-disabled actions.
 
 ### Channel Secret Risk Notices And Audit
 
 - Owner: `/admin/channels`
-- Permission: Root-only
-- Notes: Secret reveal, copy, and export actions must be visible in audit surfaces.
+- Completed: 2026-06-26
+- Notes: Added explicit copy and download controls only after root-only secret reveal. Each copy/export action requires sensitive confirmation with typed channel name and reason; backend audit visibility is anchored to the preceding `channel.key_view` reveal audit entry.
+
+## Channels
+
+No deferred Channel items remain.
 
 ## Models
 

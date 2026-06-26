@@ -676,13 +676,38 @@ authorization. Root-only routes require root authorization.
   - `POST /api/channel/`
   - `PUT /api/channel/`
   - `DELETE /api/channel/:id`
+  - `POST /api/channel/batch`
+  - `DELETE /api/channel/disabled`
+  - `POST /api/channel/tag/enabled`
+  - `POST /api/channel/tag/disabled`
+  - `POST /api/channel/batch/tag`
+  - `POST /api/channel/:id/key`
+  - `GET /api/channel/fetch_models/:id`
+  - `POST /api/channel/fetch_models`
+  - `POST /api/channel/upstream_updates/detect`
+  - `POST /api/channel/upstream_updates/apply`
+  - `POST /api/channel/multi_key/manage`
   - `POST /api/channel/copy/:id`
   - `GET /api/channel/test/:id`
   - `GET /api/channel/update_balance/:id`
 - Auth: admin session
 - Query: `PageQuery`; search accepts keyword, group, model, status, type, and
   sort options where backend supports them.
-- Notes: secret reveal and multi-key management remain Post-MVP.
+- Notes: `POST /api/channel/batch` accepts `{ ids: number[] }`.
+  `POST /api/channel/batch/tag` accepts `{ ids: number[], tag?: string | null }`.
+  Tag-wide status endpoints accept `{ tag: string }`. `POST /api/channel/:id/key`
+  is root-only and may require backend secure verification; success returns
+  `ApiEnvelope<{ key: string }>`. `GET /api/channel/fetch_models/:id` returns
+  `ApiEnvelope<string[]>`; root-only `POST /api/channel/fetch_models` accepts
+  `{ base_url?: string, type: number, key: string }` and returns
+  `ApiEnvelope<string[]>`. Single-channel upstream detection accepts
+  `{ id: number }` and returns pending add/remove model candidates. Single-channel
+  upstream apply accepts `{ id, add_models, remove_models, ignore_models }` and
+  returns added, removed, ignored, remaining, and current model-list fields.
+  Multi-key channel updates can pass
+  `key_mode: "append" | "replace"` and `multi_key_mode: "random" | "polling"`
+  with the normal channel update body. `POST /api/channel/multi_key/manage`
+  accepts `{ channel_id, action, key_index?, page?, page_size?, status? }`.
 
 ### Admin Models
 

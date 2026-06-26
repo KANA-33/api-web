@@ -225,41 +225,52 @@ handling.
 
 ## Admin MVP
 
-| Capability                 | Method | Path                              | Auth          | Notes                                                             |
-| -------------------------- | ------ | --------------------------------- | ------------- | ----------------------------------------------------------------- |
-| Admin user list            | GET    | `/api/user/`                      | Admin session | Paginated                                                         |
-| Admin user search          | GET    | `/api/user/search`                | Admin session | Keyword, group, role, status filters                              |
-| Admin user create          | POST   | `/api/user/`                      | Admin session | Creates one account                                               |
-| Admin user update          | PUT    | `/api/user/`                      | Admin session | Updates profile, group, role, status                              |
-| Admin user delete          | DELETE | `/api/user/:id`                   | Admin session | Deletes one user                                                  |
-| Admin user manage          | POST   | `/api/user/manage`                | Admin session | Quota and role/status helper actions                              |
-| Channel list               | GET    | `/api/channel/`                   | Admin session | Paginated                                                         |
-| Channel search             | GET    | `/api/channel/search`             | Admin session | Keyword, model, group, status, type                               |
-| Channel create             | POST   | `/api/channel/`                   | Admin session | Single-channel MVP                                                |
-| Channel update             | PUT    | `/api/channel/`                   | Admin session | Updates one channel                                               |
-| Channel delete             | DELETE | `/api/channel/:id`                | Admin session | Deletes one channel                                               |
-| Channel copy               | POST   | `/api/channel/copy/:id`           | Admin session | Duplicates one channel                                            |
-| Channel test               | GET    | `/api/channel/test/:id`           | Admin session | Optional model query                                              |
-| Channel balance            | GET    | `/api/channel/update_balance/:id` | Admin session | Provider balance refresh                                          |
-| Admin model list           | GET    | `/api/models/`                    | Admin session | Paginated                                                         |
-| Admin model search         | GET    | `/api/models/search`              | Admin session | Keyword and vendor filters                                        |
-| Admin model create         | POST   | `/api/models/`                    | Admin session | Creates metadata record                                           |
-| Admin model update         | PUT    | `/api/models/`                    | Admin session | Status-only query supported                                       |
-| Admin model delete         | DELETE | `/api/models/:id`                 | Admin session | Deletes one model                                                 |
-| Missing models             | GET    | `/api/models/missing`             | Admin session | Review upstream-visible missing names                             |
-| Vendor list                | GET    | `/api/vendors/`                   | Admin session | Used for model assignment                                         |
-| Admin usage logs           | GET    | `/api/log/`                       | Admin session | Filtered list; no deprecated search route                         |
-| Admin usage stats          | GET    | `/api/log/stat`                   | Admin session | Quota, RPM, TPM                                                   |
-| Admin audit logs           | GET    | `/api/log/`                       | Admin session | Query with `type=3`; parse structured `other` fields when present |
-| Admin drawing logs         | GET    | `/api/mj/`                        | Admin session | Paginated image task records                                      |
-| Admin task logs            | GET    | `/api/task/`                      | Admin session | Paginated async task records                                      |
-| Redemption list            | GET    | `/api/redemption/`                | Admin session | Paginated                                                         |
-| Redemption search          | GET    | `/api/redemption/search`          | Admin session | Keyword or exact id behavior                                      |
-| Redemption create          | POST   | `/api/redemption/`                | Admin session | Supports count, quota, expiration                                 |
-| Redemption update          | PUT    | `/api/redemption/`                | Admin session | Status-only query supported                                       |
-| Redemption delete          | DELETE | `/api/redemption/:id`             | Admin session | Deletes one code                                                  |
-| Redemption invalid cleanup | DELETE | `/api/redemption/invalid`         | Admin session | Removes used, disabled, expired codes                             |
-| Admin top-up records       | GET    | `/api/user/topup`                 | Admin session | Paginated, optional keyword                                       |
-| Manual top-up completion   | POST   | `/api/user/topup/complete`        | Admin session | Body `{ trade_no: string }`                                       |
-| Root option list           | GET    | `/api/option/`                    | Root session  | Sensitive keys omitted by backend                                 |
-| Root option update         | PUT    | `/api/option/`                    | Root session  | Body `{ key, value }`                                             |
+| Capability                    | Method | Path                                   | Auth          | Notes                                                                 |
+| ----------------------------- | ------ | -------------------------------------- | ------------- | --------------------------------------------------------------------- |
+| Admin user list               | GET    | `/api/user/`                           | Admin session | Paginated                                                             |
+| Admin user search             | GET    | `/api/user/search`                     | Admin session | Keyword, group, role, status filters                                  |
+| Admin user create             | POST   | `/api/user/`                           | Admin session | Creates one account                                                   |
+| Admin user update             | PUT    | `/api/user/`                           | Admin session | Updates profile, group, role, status                                  |
+| Admin user delete             | DELETE | `/api/user/:id`                        | Admin session | Deletes one user                                                      |
+| Admin user manage             | POST   | `/api/user/manage`                     | Admin session | Quota and role/status helper actions                                  |
+| Channel list                  | GET    | `/api/channel/`                        | Admin session | Paginated                                                             |
+| Channel search                | GET    | `/api/channel/search`                  | Admin session | Keyword, model, group, status, type                                   |
+| Channel create                | POST   | `/api/channel/`                        | Admin session | Single-channel MVP                                                    |
+| Channel update                | PUT    | `/api/channel/`                        | Admin session | Updates one channel                                                   |
+| Channel delete                | DELETE | `/api/channel/:id`                     | Admin session | Deletes one channel                                                   |
+| Channel secret reveal         | POST   | `/api/channel/:id/key`                 | Root session  | Secure verification may be required; returns `{ key: string }`        |
+| Fetch upstream models         | GET    | `/api/channel/fetch_models/:id`        | Admin session | Returns upstream-visible model names                                  |
+| Fetch models from form input  | POST   | `/api/channel/fetch_models`            | Root session  | Body `{ base_url?, type, key }`; returns upstream model names         |
+| Detect upstream model updates | POST   | `/api/channel/upstream_updates/detect` | Admin session | Body `{ id: number }`; returns pending add/remove model candidates    |
+| Apply upstream model updates  | POST   | `/api/channel/upstream_updates/apply`  | Admin session | Body `{ id, add_models, remove_models, ignore_models }`               |
+| Multi-key manage              | POST   | `/api/channel/multi_key/manage`        | Admin session | Body `{ channel_id, action, key_index?, page?, page_size?, status? }` |
+| Channel batch delete          | POST   | `/api/channel/batch`                   | Admin session | Body `{ ids: number[] }`                                              |
+| Delete disabled channels      | DELETE | `/api/channel/disabled`                | Admin session | Removes all disabled channels                                         |
+| Enable channels by tag        | POST   | `/api/channel/tag/enabled`             | Admin session | Body `{ tag: string }`                                                |
+| Disable channels by tag       | POST   | `/api/channel/tag/disabled`            | Admin session | Body `{ tag: string }`                                                |
+| Batch set channel tag         | POST   | `/api/channel/batch/tag`               | Admin session | Body `{ ids: number[], tag?: string \| null }`                        |
+| Channel copy                  | POST   | `/api/channel/copy/:id`                | Admin session | Duplicates one channel                                                |
+| Channel test                  | GET    | `/api/channel/test/:id`                | Admin session | Optional model query                                                  |
+| Channel balance               | GET    | `/api/channel/update_balance/:id`      | Admin session | Provider balance refresh                                              |
+| Admin model list              | GET    | `/api/models/`                         | Admin session | Paginated                                                             |
+| Admin model search            | GET    | `/api/models/search`                   | Admin session | Keyword and vendor filters                                            |
+| Admin model create            | POST   | `/api/models/`                         | Admin session | Creates metadata record                                               |
+| Admin model update            | PUT    | `/api/models/`                         | Admin session | Status-only query supported                                           |
+| Admin model delete            | DELETE | `/api/models/:id`                      | Admin session | Deletes one model                                                     |
+| Missing models                | GET    | `/api/models/missing`                  | Admin session | Review upstream-visible missing names                                 |
+| Vendor list                   | GET    | `/api/vendors/`                        | Admin session | Used for model assignment                                             |
+| Admin usage logs              | GET    | `/api/log/`                            | Admin session | Filtered list; no deprecated search route                             |
+| Admin usage stats             | GET    | `/api/log/stat`                        | Admin session | Quota, RPM, TPM                                                       |
+| Admin audit logs              | GET    | `/api/log/`                            | Admin session | Query with `type=3`; parse structured `other` fields when present     |
+| Admin drawing logs            | GET    | `/api/mj/`                             | Admin session | Paginated image task records                                          |
+| Admin task logs               | GET    | `/api/task/`                           | Admin session | Paginated async task records                                          |
+| Redemption list               | GET    | `/api/redemption/`                     | Admin session | Paginated                                                             |
+| Redemption search             | GET    | `/api/redemption/search`               | Admin session | Keyword or exact id behavior                                          |
+| Redemption create             | POST   | `/api/redemption/`                     | Admin session | Supports count, quota, expiration                                     |
+| Redemption update             | PUT    | `/api/redemption/`                     | Admin session | Status-only query supported                                           |
+| Redemption delete             | DELETE | `/api/redemption/:id`                  | Admin session | Deletes one code                                                      |
+| Redemption invalid cleanup    | DELETE | `/api/redemption/invalid`              | Admin session | Removes used, disabled, expired codes                                 |
+| Admin top-up records          | GET    | `/api/user/topup`                      | Admin session | Paginated, optional keyword                                           |
+| Manual top-up completion      | POST   | `/api/user/topup/complete`             | Admin session | Body `{ trade_no: string }`                                           |
+| Root option list              | GET    | `/api/option/`                         | Root session  | Sensitive keys omitted by backend                                     |
+| Root option update            | PUT    | `/api/option/`                         | Root session  | Body `{ key, value }`                                                 |
