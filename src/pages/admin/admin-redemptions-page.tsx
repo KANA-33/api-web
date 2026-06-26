@@ -8,6 +8,7 @@ import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
 import { PageTitle } from "@shared/ui/page-title";
+import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 
 const REDEMPTION_STATUS_ENABLED = 1;
@@ -88,6 +89,7 @@ function toForm(redemption: AdminRedemption): RedemptionFormState {
 }
 
 export function AdminRedemptionsPage() {
+  const confirmSensitive = useSensitiveConfirmation();
   const platformStatus = usePlatformStore((state) => state.status);
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
@@ -192,15 +194,32 @@ export function AdminRedemptionsPage() {
       return;
     }
 
+    const nextStatus =
+      redemption.status === REDEMPTION_STATUS_ENABLED
+        ? REDEMPTION_STATUS_DISABLED
+        : REDEMPTION_STATUS_ENABLED;
+    const result = await confirmSensitive({
+      actionLabel: nextStatus === REDEMPTION_STATUS_ENABLED ? "Enable code" : "Disable code",
+      description:
+        nextStatus === REDEMPTION_STATUS_ENABLED
+          ? `This allows redemption code "${redemption.name}" to be used.`
+          : `This prevents redemption code "${redemption.name}" from being used.`,
+      intent: nextStatus === REDEMPTION_STATUS_ENABLED ? "warning" : "danger",
+      reasonLabel: "Reason for audit context",
+      title:
+        nextStatus === REDEMPTION_STATUS_ENABLED
+          ? "Enable redemption code"
+          : "Disable redemption code",
+    });
+
+    if (!result.confirmed) {
+      return;
+    }
+
     setActionMessage(null);
 
     try {
-      await redemptionsApi.updateRedemptionStatus(
-        redemption.id,
-        redemption.status === REDEMPTION_STATUS_ENABLED
-          ? REDEMPTION_STATUS_DISABLED
-          : REDEMPTION_STATUS_ENABLED,
-      );
+      await redemptionsApi.updateRedemptionStatus(redemption.id, nextStatus);
       setActionMessage("Redemption status updated.");
       await reload();
     } catch (caught) {
@@ -209,7 +228,15 @@ export function AdminRedemptionsPage() {
   }
 
   async function handleDelete(redemption: AdminRedemption) {
-    if (!window.confirm(`Delete redemption code "${redemption.name}"?`)) {
+    const result = await confirmSensitive({
+      actionLabel: "Delete code",
+      confirmText: redemption.name,
+      description: `This deletes redemption code "${redemption.name}" and removes it from future administration.`,
+      reasonLabel: "Reason for audit context",
+      title: "Delete redemption code",
+    });
+
+    if (!result.confirmed) {
       return;
     }
 
@@ -225,7 +252,16 @@ export function AdminRedemptionsPage() {
   }
 
   async function handleDeleteInvalid() {
-    if (!window.confirm("Delete all used, disabled, and expired redemption codes?")) {
+    const result = await confirmSensitive({
+      actionLabel: "Clean invalid codes",
+      confirmText: "CLEAN",
+      description:
+        "This removes all used, disabled, and expired redemption codes. This is intended for maintenance cleanup and cannot be scoped from this screen.",
+      reasonLabel: "Reason for audit context",
+      title: "Clean invalid redemption codes",
+    });
+
+    if (!result.confirmed) {
       return;
     }
 

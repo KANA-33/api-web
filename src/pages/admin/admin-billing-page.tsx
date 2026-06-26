@@ -8,6 +8,7 @@ import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
 import { PageTitle } from "@shared/ui/page-title";
+import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 
 const pageSize = 20;
@@ -33,6 +34,7 @@ function isCompleted(record: BillingRecord) {
 }
 
 export function AdminBillingPage() {
+  const confirmSensitive = useSensitiveConfirmation();
   const platformStatus = usePlatformStore((state) => state.status);
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
@@ -65,7 +67,15 @@ export function AdminBillingPage() {
       return;
     }
 
-    if (!window.confirm(`Mark top-up "${normalizedTradeNo}" as complete?`)) {
+    const result = await confirmSensitive({
+      actionLabel: "Complete top-up",
+      confirmText: normalizedTradeNo,
+      description: `This marks top-up "${normalizedTradeNo}" as complete and may credit the user's balance. Only use this after payment has been verified.`,
+      reasonLabel: "Reason for audit context",
+      title: "Complete top-up manually",
+    });
+
+    if (!result.confirmed) {
       return;
     }
 

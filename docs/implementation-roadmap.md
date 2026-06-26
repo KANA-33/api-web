@@ -191,7 +191,7 @@ Progress:
 
 ## Phase 8: Admin MVP
 
-Status: In Build
+Status: Verified
 
 - Add a clean-room admin shell and route guard.
 - Implement admin users, channels, models, logs, redemptions, billing, and
@@ -215,10 +215,12 @@ Progress:
 - Admin overview now links to all MVP modules and shows lightweight status
   metrics.
 - Admin smoke-test checklist added in `docs/admin-mvp-smoke-test.md`.
+- Admin smoke test completed against the target backend with no reported
+  issues on 2026-06-25.
 
 ## Phase 9: MVP Verification
 
-Status: In Build
+Status: Verified
 
 - Align documentation with the implemented Admin MVP.
 - Run quality gates: provenance, typecheck, lint, and build.
@@ -232,3 +234,10 @@ Exit criteria:
 - Automated checks pass.
 - Any backend mismatch is either fixed or added to Post-MVP with owner and
   risk notes.
+
+Progress:
+
+- Admin MVP documentation aligned with implemented routes and backend protocol.
+- `bun run verify` passed, including provenance, typecheck, lint, and build.
+- Admin smoke test completed against the target backend with no reported
+  protocol, permission, search, or field mismatch.

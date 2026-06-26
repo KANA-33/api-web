@@ -15,6 +15,7 @@ import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
 import { PageTitle } from "@shared/ui/page-title";
+import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 
 const MODEL_STATUS_ENABLED = 1;
@@ -103,6 +104,7 @@ function toPayload(form: ModelFormState, existing?: AdminModel): Partial<AdminMo
 }
 
 export function AdminModelsPage() {
+  const confirmSensitive = useSensitiveConfirmation();
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
   const [vendor, setVendor] = useState("");
@@ -206,13 +208,27 @@ export function AdminModelsPage() {
   }
 
   async function handleStatus(model: AdminModel) {
+    const nextStatus =
+      model.status === MODEL_STATUS_ENABLED ? MODEL_STATUS_DISABLED : MODEL_STATUS_ENABLED;
+    const result = await confirmSensitive({
+      actionLabel: nextStatus === MODEL_STATUS_ENABLED ? "Enable model" : "Disable model",
+      description:
+        nextStatus === MODEL_STATUS_ENABLED
+          ? `This makes "${model.model_name}" available according to backend routing rules.`
+          : `This hides "${model.model_name}" from model availability and routing metadata.`,
+      intent: nextStatus === MODEL_STATUS_ENABLED ? "warning" : "danger",
+      reasonLabel: "Reason for audit context",
+      title: nextStatus === MODEL_STATUS_ENABLED ? "Enable model" : "Disable model",
+    });
+
+    if (!result.confirmed) {
+      return;
+    }
+
     setActionMessage(null);
 
     try {
-      await modelsApi.updateModelStatus(
-        model.id,
-        model.status === MODEL_STATUS_ENABLED ? MODEL_STATUS_DISABLED : MODEL_STATUS_ENABLED,
-      );
+      await modelsApi.updateModelStatus(model.id, nextStatus);
       setActionMessage("Model status updated.");
       await reload();
     } catch (caught) {
@@ -221,7 +237,15 @@ export function AdminModelsPage() {
   }
 
   async function handleDelete(model: AdminModel) {
-    if (!window.confirm(`Delete model "${model.model_name}"?`)) {
+    const result = await confirmSensitive({
+      actionLabel: "Delete model",
+      confirmText: model.model_name,
+      description: `This removes model metadata for "${model.model_name}". It can affect model discovery and matching behavior.`,
+      reasonLabel: "Reason for audit context",
+      title: "Delete model",
+    });
+
+    if (!result.confirmed) {
       return;
     }
 

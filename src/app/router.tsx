@@ -8,6 +8,7 @@ import {
 import { ensureAuthenticated } from "@features/auth/store";
 import { usePlatformStore } from "@features/platform/store";
 import { isAdminUser } from "@shared/lib/roles";
+import { SensitiveConfirmationProvider } from "@shared/ui/sensitive-confirmation";
 import { AdminShell } from "@widgets/admin-shell/admin-shell";
 import { AppShell } from "@widgets/app-shell/app-shell";
 import { AdminOverviewPage } from "@pages/admin/admin-overview-page";
@@ -31,7 +32,11 @@ import { WalletPage } from "@pages/wallet/wallet-page";
 import { NotFoundPage } from "@pages/not-found/not-found-page";
 
 const rootRoute = createRootRoute({
-  component: () => <Outlet />,
+  component: () => (
+    <SensitiveConfirmationProvider>
+      <Outlet />
+    </SensitiveConfirmationProvider>
+  ),
   errorComponent: ({ error }) => <ErrorPage error={error} />,
   notFoundComponent: NotFoundPage,
 });

@@ -5,10 +5,10 @@ Use this checklist for every commercial frontend release.
 ## Build Verification
 
 - [ ] `bun install --frozen-lockfile` succeeds.
-- [ ] `bun run provenance` succeeds.
-- [ ] `bun run typecheck` succeeds.
-- [ ] `bun run lint` succeeds.
-- [ ] `bun run build` succeeds.
+- [x] `bun run provenance` succeeds.
+- [x] `bun run typecheck` succeeds.
+- [x] `bun run lint` succeeds.
+- [x] `bun run build` succeeds.
 
 ## Runtime Verification
 
@@ -22,10 +22,10 @@ Use this checklist for every commercial frontend release.
 - [ ] Usage, drawing, and task logs load with filters and pagination.
 - [ ] Model list and model detail routes work.
 - [ ] Playground can run a non-streaming request.
-- [ ] Admin smoke test in `docs/admin-mvp-smoke-test.md` passes for admin and
+- [x] Admin smoke test in `docs/admin-mvp-smoke-test.md` passes for admin and
       root accounts.
-- [ ] Ordinary users are redirected away from `/admin`.
-- [ ] High-sensitivity admin features remain deferred or protected.
+- [x] Ordinary users are redirected away from `/admin`.
+- [x] High-sensitivity admin features remain deferred or protected.
 
 ## Clean-Room Verification
 

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { Activity, Brush, ClipboardList, FileSearch, RefreshCw } from "lucide-react";
+import { Activity, Brush, ClipboardList, FileSearch, RefreshCw, ShieldCheck } from "lucide-react";
 import * as adminLogsApi from "@features/admin/logs/api";
 import type { AdminDrawingLog, AdminTaskLog } from "@features/admin/logs/api";
 import { usePlatformStore } from "@features/platform/store";
@@ -16,6 +16,7 @@ const pageSize = 20;
 
 const tabs = [
   { id: "usage", label: "Usage logs", icon: Activity },
+  { id: "audit", label: "Audit logs", icon: ShieldCheck },
   { id: "drawing", label: "Drawing logs", icon: Brush },
   { id: "task", label: "Task logs", icon: ClipboardList },
 ] as const;
@@ -67,6 +68,36 @@ function formatTime(timestamp?: number) {
   }
 
   return new Date(timestamp * 1000).toLocaleString();
+}
+
+function parseJsonObject(value?: string) {
+  if (!value) {
+    return {};
+  }
+
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    return typeof parsed === "object" && parsed !== null ? (parsed as Record<string, unknown>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function formatAuditValue(value: unknown): string {
+  if (value === null || value === undefined || value === "") {
+    return "None";
+  }
+
+  if (typeof value === "object") {
+    return JSON.stringify(value);
+  }
+
+  return String(value);
+}
+
+function getNestedObject(source: Record<string, unknown>, key: string) {
+  const value = source[key];
+  return typeof value === "object" && value !== null ? (value as Record<string, unknown>) : {};
 }
 
 function getLogTypeLabel(type?: number) {
@@ -137,6 +168,66 @@ function renderUsageTable(
             <td className="border-b border-[#eadfce] py-4 pr-4">{formatTime(item.created_at)}</td>
           </tr>
         ))}
+      </tbody>
+    </table>
+  );
+}
+
+function renderAuditTable(items: UsageLogRecord[]) {
+  return (
+    <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
+      <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+        <tr>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Action</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Target</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Operator</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Route</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">IP</th>
+          <th className="border-b border-[#ddcfbd] py-3 pr-4">Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {items.map((item) => {
+          const other = parseJsonObject(item.other);
+          const op = getNestedObject(other, "op");
+          const params = getNestedObject(op, "params");
+          const adminInfo = getNestedObject(other, "admin_info");
+          const auditInfo = getNestedObject(other, "audit_info");
+          const action = formatAuditValue(op.action);
+          const route = [auditInfo.method, auditInfo.path].filter(Boolean).join(" ");
+
+          return (
+            <tr key={`${item.id}-${item.created_at}-${item.request_id}`}>
+              <td className="border-b border-[#eadfce] py-4 pr-4">
+                <div className="font-medium text-[#2d2926]">{action}</div>
+                <div className="mt-1 max-w-96 truncate text-xs text-[#7c6e5e]">
+                  {item.content || "No content"}
+                </div>
+              </td>
+              <td className="border-b border-[#eadfce] py-4 pr-4">
+                <div>{item.username || `User #${item.user_id}`}</div>
+                <div className="mt-1 max-w-80 truncate font-mono text-xs text-[#7c6e5e]">
+                  {Object.keys(params).length > 0 ? JSON.stringify(params) : "No params"}
+                </div>
+              </td>
+              <td className="border-b border-[#eadfce] py-4 pr-4">
+                <div>{formatAuditValue(adminInfo.admin_username)}</div>
+                <div className="mt-1 text-xs text-[#7c6e5e]">
+                  Role {formatAuditValue(adminInfo.admin_role)} ·{" "}
+                  {formatAuditValue(adminInfo.auth_method)}
+                </div>
+              </td>
+              <td className="border-b border-[#eadfce] py-4 pr-4">
+                <div className="font-mono text-xs">{route || "Handler audit"}</div>
+                <div className="mt-1 max-w-80 truncate font-mono text-xs text-[#7c6e5e]">
+                  {item.request_id || "No request id"}
+                </div>
+              </td>
+              <td className="border-b border-[#eadfce] py-4 pr-4">{item.ip || "Hidden"}</td>
+              <td className="border-b border-[#eadfce] py-4 pr-4">{formatTime(item.created_at)}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
@@ -281,11 +372,12 @@ export function AdminLogsPage() {
       channel: appliedFilters.channelId ? Number(appliedFilters.channelId) : undefined,
       end_timestamp,
       group: appliedFilters.group || undefined,
-      model_name: appliedFilters.modelName || undefined,
+      model_name: activeTab === "usage" ? appliedFilters.modelName || undefined : undefined,
       request_id: appliedFilters.requestId || undefined,
       start_timestamp,
-      token_name: appliedFilters.keyword || undefined,
-      type: appliedFilters.type ? Number(appliedFilters.type) : undefined,
+      token_name: activeTab === "usage" ? appliedFilters.keyword || undefined : undefined,
+      type:
+        activeTab === "audit" ? 3 : appliedFilters.type ? Number(appliedFilters.type) : undefined,
       username: appliedFilters.username || undefined,
     });
     return response.data;
@@ -301,14 +393,15 @@ export function AdminLogsPage() {
       channel: appliedFilters.channelId ? Number(appliedFilters.channelId) : undefined,
       end_timestamp,
       group: appliedFilters.group || undefined,
-      model_name: appliedFilters.modelName || undefined,
+      model_name: activeTab === "usage" ? appliedFilters.modelName || undefined : undefined,
       start_timestamp,
-      token_name: appliedFilters.keyword || undefined,
-      type: appliedFilters.type ? Number(appliedFilters.type) : undefined,
+      token_name: activeTab === "usage" ? appliedFilters.keyword || undefined : undefined,
+      type:
+        activeTab === "audit" ? 3 : appliedFilters.type ? Number(appliedFilters.type) : undefined,
       username: appliedFilters.username || undefined,
     });
     return response.data;
-  }, [appliedFilters]);
+  }, [activeTab, appliedFilters]);
 
   function changeTab(tab: LogTabId) {
     setActiveTab(tab);
@@ -392,15 +485,22 @@ export function AdminLogsPage() {
         <form className="mt-6 grid gap-3 lg:grid-cols-6" onSubmit={applyFilters}>
           <input
             className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            disabled={activeTab === "audit"}
             onChange={(event) => setFilters((value) => ({ ...value, keyword: event.target.value }))}
             placeholder={
-              activeTab === "usage" ? "Token name" : activeTab === "drawing" ? "MJ ID" : "Task ID"
+              activeTab === "usage"
+                ? "Token name"
+                : activeTab === "audit"
+                  ? "Use Request ID below"
+                  : activeTab === "drawing"
+                    ? "MJ ID"
+                    : "Task ID"
             }
             value={filters.keyword}
           />
           <input
             className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
-            disabled={activeTab !== "usage"}
+            disabled={activeTab !== "usage" && activeTab !== "audit"}
             onChange={(event) =>
               setFilters((value) => ({ ...value, username: event.target.value }))
             }
@@ -457,14 +557,14 @@ export function AdminLogsPage() {
           </select>
           <input
             className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
-            disabled={activeTab !== "usage"}
+            disabled={activeTab !== "usage" && activeTab !== "audit"}
             onChange={(event) => setFilters((value) => ({ ...value, group: event.target.value }))}
             placeholder="Group"
             value={filters.group}
           />
           <input
             className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
-            disabled={activeTab !== "usage"}
+            disabled={activeTab !== "usage" && activeTab !== "audit"}
             onChange={(event) =>
               setFilters((value) => ({ ...value, requestId: event.target.value }))
             }
@@ -535,6 +635,7 @@ export function AdminLogsPage() {
           <div className="mt-6 overflow-x-auto">
             {activeTab === "usage" &&
               renderUsageTable(data.items as UsageLogRecord[], platformStatus)}
+            {activeTab === "audit" && renderAuditTable(data.items as UsageLogRecord[])}
             {activeTab === "drawing" &&
               renderDrawingTable(data.items as AdminDrawingLog[], platformStatus)}
             {activeTab === "task" && renderTaskTable(data.items as AdminTaskLog[], platformStatus)}

@@ -8,6 +8,7 @@ import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
 import { PageTitle } from "@shared/ui/page-title";
+import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 
 interface ApiKeyFormState {
@@ -55,6 +56,7 @@ function toSearchPattern(value: string) {
 }
 
 export function ApiKeysPage() {
+  const confirmSensitive = useSensitiveConfirmation();
   const platformStatus = usePlatformStore((state) => state.status);
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
@@ -138,16 +140,23 @@ export function ApiKeysPage() {
     }
   }
 
-  async function handleDelete(id: number) {
-    const confirmed = window.confirm("Delete this API key? This cannot be undone.");
-    if (!confirmed) {
+  async function handleDelete(key: ApiKeyRecord) {
+    const result = await confirmSensitive({
+      actionLabel: "Delete API key",
+      confirmText: key.name,
+      description: `This permanently deletes API key "${key.name}". Applications using this credential will stop working immediately.`,
+      reasonLabel: "Reason for audit context",
+      title: "Delete API key",
+    });
+
+    if (!result.confirmed) {
       return;
     }
 
     setActionMessage(null);
 
     try {
-      await apiKeysApi.deleteApiKey(id);
+      await apiKeysApi.deleteApiKey(key.id);
       setActionMessage("API key deleted.");
       await reload();
     } catch (caught) {
@@ -369,7 +378,7 @@ export function ApiKeysPage() {
                         <button
                           aria-label="Delete key"
                           className="rounded-md p-2 text-[#7a4a3b] hover:bg-[#f0dfd2]"
-                          onClick={() => void handleDelete(key.id)}
+                          onClick={() => void handleDelete(key)}
                           type="button"
                         >
                           <Trash2 className="size-4" />

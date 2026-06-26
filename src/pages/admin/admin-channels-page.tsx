@@ -7,6 +7,7 @@ import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
 import { PageTitle } from "@shared/ui/page-title";
+import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 
 const CHANNEL_STATUS_ENABLED = 1;
@@ -121,6 +122,7 @@ function toChannelPayload(form: ChannelFormState, existing?: AdminChannel): Part
 }
 
 export function AdminChannelsPage() {
+  const confirmSensitive = useSensitiveConfirmation();
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
   const [group, setGroup] = useState("");
@@ -228,7 +230,15 @@ export function AdminChannelsPage() {
   }
 
   async function handleDelete(channel: AdminChannel) {
-    if (!window.confirm(`Delete channel "${channel.name}"?`)) {
+    const result = await confirmSensitive({
+      actionLabel: "Delete channel",
+      confirmText: channel.name,
+      description: `This removes channel "${channel.name}" from routing. Requests depending on this channel may fail or move to another provider.`,
+      reasonLabel: "Reason for audit context",
+      title: "Delete channel",
+    });
+
+    if (!result.confirmed) {
       return;
     }
 
@@ -244,15 +254,31 @@ export function AdminChannelsPage() {
   }
 
   async function handleStatus(channel: AdminChannel) {
+    const nextStatus =
+      channel.status === CHANNEL_STATUS_ENABLED
+        ? CHANNEL_STATUS_MANUAL_DISABLED
+        : CHANNEL_STATUS_ENABLED;
+    const result = await confirmSensitive({
+      actionLabel: nextStatus === CHANNEL_STATUS_ENABLED ? "Enable channel" : "Disable channel",
+      description:
+        nextStatus === CHANNEL_STATUS_ENABLED
+          ? `This allows "${channel.name}" to receive routed requests again.`
+          : `This stops "${channel.name}" from receiving routed requests.`,
+      intent: nextStatus === CHANNEL_STATUS_ENABLED ? "warning" : "danger",
+      reasonLabel: "Reason for audit context",
+      title: nextStatus === CHANNEL_STATUS_ENABLED ? "Enable channel" : "Disable channel",
+    });
+
+    if (!result.confirmed) {
+      return;
+    }
+
     setActionMessage(null);
 
     try {
       await channelsApi.updateChannel({
         ...channel,
-        status:
-          channel.status === CHANNEL_STATUS_ENABLED
-            ? CHANNEL_STATUS_MANUAL_DISABLED
-            : CHANNEL_STATUS_ENABLED,
+        status: nextStatus,
       });
       setActionMessage("Channel status updated.");
       await reload();

@@ -9,6 +9,20 @@ Maintenance rule:
 - Include route ownership, permission level, and implementation notes.
 - Do not track clean-room implementation details copied from new-api source. Only track protocol-compatible product behavior.
 
+## Completed Post-MVP Foundations
+
+### Unified Sensitive Confirmation Dialog
+
+- Owner: `shared/ui/sensitive-confirmation.tsx`
+- Completed: 2026-06-26
+- Notes: Replaced browser-native confirmations for current high-risk user/API-key/admin delete, disable, quota, cleanup, and manual top-up completion flows. Future audit-log integration can use the collected reason text.
+
+### Management Audit Log
+
+- Owner: `/admin/logs`
+- Completed: 2026-06-26
+- Notes: Added an Audit logs tab backed by admin `GET /api/log/` with `type=3`. The UI shows action, target params, operator metadata, route/request context, IP, and time when those structured fields are supplied by the backend.
+
 ## Channels
 
 ### View Channel Secret
@@ -137,12 +151,6 @@ Maintenance rule:
 
 ## Logs / Audit
 
-### Management Audit Log
-
-- Owner: `/admin/logs`
-- Permission: Admin / Root
-- Notes: Show high-sensitivity operations such as secret reveal, deletion, and role changes.
-
 ### Log Cleanup System Task
 
 - Owner: `/admin/logs`
@@ -176,12 +184,6 @@ Maintenance rule:
 - Notes: EPay, Stripe, Creem, Waffo, and Waffo Pancake settings.
 
 ## Settings / Operations
-
-### Unified Sensitive Confirmation Dialog
-
-- Owner: `shared/ui` or `shared/admin`
-- Permission: Caller-defined
-- Notes: Require confirmation text, show impact scope, and collect a reason when needed.
 
 ### Root-Only Permission Isolation
 

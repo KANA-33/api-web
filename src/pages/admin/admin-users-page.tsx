@@ -19,6 +19,7 @@ import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
 import { PageTitle } from "@shared/ui/page-title";
+import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 
 const ROLE_COMMON = 1;
@@ -93,6 +94,7 @@ function toUpdateRequest(user: AdminUser, form: UserFormState): usersApi.UpdateU
 }
 
 export function AdminUsersPage() {
+  const confirmSensitive = useSensitiveConfirmation();
   const platformStatus = usePlatformStore((state) => state.status);
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState("");
@@ -202,17 +204,55 @@ export function AdminUsersPage() {
   }
 
   async function handleManage(user: AdminUser, action: usersApi.ManageUserAction) {
-    const labels: Partial<Record<usersApi.ManageUserAction, string>> = {
-      delete: "Delete this user?",
-      demote: "Demote this admin to a common user?",
-      disable: "Disable this user?",
-      enable: "Enable this user?",
-      promote: "Promote this user to admin?",
+    const confirmations: Partial<
+      Record<
+        usersApi.ManageUserAction,
+        {
+          actionLabel: string;
+          confirmText?: string;
+          description: string;
+          title: string;
+        }
+      >
+    > = {
+      delete: {
+        actionLabel: "Delete user",
+        confirmText: user.username,
+        description: `This permanently removes user "${user.username}" and can affect their API keys, logs, and billing history visibility.`,
+        title: "Delete user",
+      },
+      demote: {
+        actionLabel: "Demote user",
+        description: `This removes admin permissions from "${user.username}".`,
+        title: "Demote admin",
+      },
+      disable: {
+        actionLabel: "Disable user",
+        description: `This prevents "${user.username}" from using the platform until re-enabled.`,
+        title: "Disable user",
+      },
+      enable: {
+        actionLabel: "Enable user",
+        description: `This restores platform access for "${user.username}".`,
+        title: "Enable user",
+      },
+      promote: {
+        actionLabel: "Promote user",
+        description: `This grants admin permissions to "${user.username}".`,
+        title: "Promote to admin",
+      },
     };
-    const message = labels[action];
+    const confirmation = confirmations[action];
 
-    if (message && !window.confirm(message)) {
-      return;
+    if (confirmation) {
+      const result = await confirmSensitive({
+        ...confirmation,
+        reasonLabel: "Reason for audit context",
+      });
+
+      if (!result.confirmed) {
+        return;
+      }
     }
 
     setActionMessage(null);
@@ -240,6 +280,17 @@ export function AdminUsersPage() {
     const value = Number(quotaValue);
     if (!Number.isFinite(value) || value < 0) {
       setActionMessage("Enter a valid quota value.");
+      return;
+    }
+
+    const result = await confirmSensitive({
+      actionLabel: "Update quota",
+      description: `This will ${quotaMode} ${value} raw quota unit(s) for "${quotaUser.username}". Balance changes can affect active API usage immediately.`,
+      reasonLabel: "Reason for audit context",
+      title: "Update user quota",
+    });
+
+    if (!result.confirmed) {
       return;
     }
 
