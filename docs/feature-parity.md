@@ -55,7 +55,7 @@ frontend implementation details.
 | Admin users                | Post-MVP users phase     | Verified | User CRUD, role/status/quota ops, OAuth bindings, binding cleanup, passkey, 2FA, subscriptions |
 | Admin channels             | MVP coverage             | Verified | List, search, create, edit, delete, test, balance, copy                                        |
 | Admin models               | Post-MVP models phase    | Verified | Model CRUD, official sync, conflict triage, vendor CRUD, prefills, deployments                 |
-| Admin logs                 | MVP coverage             | Verified | Usage, drawing, task logs, filters, usage stats                                                |
+| Admin logs                 | Post-MVP logs complete   | Verified | Usage, audit, drawing, task logs, filters, usage stats, admin quota and flow data              |
 | Admin redemptions          | MVP coverage             | Verified | List, search, batch generate, edit, status, cleanup                                            |
 | Admin billing              | MVP coverage             | Verified | Top-up list/search and manual completion                                                       |
 | Admin settings             | Root-only MVP            | Verified | Low-risk options and raw JSON console content editing                                          |

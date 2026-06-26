@@ -293,6 +293,9 @@ handling.
 | Admin usage logs              | GET      | `/api/log/`                                                 | Admin session | Filtered list; no deprecated search route                             |
 | Admin usage stats             | GET      | `/api/log/stat`                                             | Admin session | Quota, RPM, TPM                                                       |
 | Admin audit logs              | GET      | `/api/log/`                                                 | Admin session | Query with `type=3`; parse structured `other` fields when present     |
+| Admin quota data              | GET      | `/api/data/`                                                | Admin session | Query `start_timestamp`, `end_timestamp`, optional `username`         |
+| Admin user quota data         | GET      | `/api/data/users`                                           | Admin session | Query `start_timestamp`, `end_timestamp`, optional `username`         |
+| Admin flow quota data         | GET      | `/api/data/flow`                                            | Admin session | Query `start_timestamp`, `end_timestamp`, optional `username`         |
 | Admin drawing logs            | GET      | `/api/mj/`                                                  | Admin session | Paginated image task records                                          |
 | Admin task logs               | GET      | `/api/task/`                                                | Admin session | Paginated async task records                                          |
 | Redemption list               | GET      | `/api/redemption/`                                          | Admin session | Paginated                                                             |

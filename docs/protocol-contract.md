@@ -797,13 +797,17 @@ location_ids, container_config, registry_config }`. Update accepts mutable
 - Methods and Paths:
   - `GET /api/log/`
   - `GET /api/log/stat`
+  - `GET /api/data/`
+  - `GET /api/data/users`
+  - `GET /api/data/flow`
   - `GET /api/mj/`
   - `GET /api/task/`
 - Auth: admin session
 - Notes: `/api/log/search` is deprecated for this frontend; filters are sent to
   `GET /api/log/`. Management audit logs are admin usage logs queried with
   `type=3`; structured audit context may be present in `other.op`,
-  `other.admin_info`, and `other.audit_info`.
+  `other.admin_info`, and `other.audit_info`. Admin data dashboard routes use
+  `start_timestamp`, `end_timestamp`, and optional `username`.
 
 ### Admin Redemptions
 

@@ -84,6 +84,42 @@ export interface AdminTaskLogsQuery extends PageQuery {
   task_id?: string;
 }
 
+export interface QuotaDataPoint {
+  channel_id?: number;
+  count: number;
+  created_at?: number;
+  id?: number;
+  model_name?: string;
+  node_name?: string;
+  quota: number;
+  token_id?: number;
+  token_used: number;
+  use_group?: string;
+  user_id?: number;
+  username?: string;
+}
+
+export interface FlowQuotaDataPoint {
+  channel_id?: number;
+  channel_name?: string;
+  count: number;
+  model_name: string;
+  node_name?: string;
+  quota: number;
+  token_id?: number;
+  token_name?: string;
+  token_used: number;
+  use_group: string;
+  user_id?: number;
+  username?: string;
+}
+
+export interface AdminDataQuery {
+  end_timestamp: number;
+  start_timestamp: number;
+  username?: string;
+}
+
 export function getUsageLogs(query?: AdminUsageLogsQuery) {
   return apiClient<ApiEnvelope<PageInfo<UsageLogRecord>>>({
     path: "/api/log/",
@@ -108,6 +144,27 @@ export function getDrawingLogs(query?: AdminDrawingLogsQuery) {
 export function getTaskLogs(query?: AdminTaskLogsQuery) {
   return apiClient<ApiEnvelope<PageInfo<AdminTaskLog>>>({
     path: "/api/task/",
+    query,
+  });
+}
+
+export function getAdminQuotaData(query: AdminDataQuery) {
+  return apiClient<ApiEnvelope<QuotaDataPoint[]>>({
+    path: "/api/data/",
+    query,
+  });
+}
+
+export function getAdminQuotaDataByUser(query: AdminDataQuery) {
+  return apiClient<ApiEnvelope<QuotaDataPoint[]>>({
+    path: "/api/data/users",
+    query,
+  });
+}
+
+export function getAdminFlowQuotaData(query: AdminDataQuery) {
+  return apiClient<ApiEnvelope<FlowQuotaDataPoint[]>>({
+    path: "/api/data/flow",
     query,
   });
 }

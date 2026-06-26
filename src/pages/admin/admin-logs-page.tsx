@@ -1,7 +1,21 @@
-import { useState, type FormEvent } from "react";
-import { Activity, Brush, ClipboardList, FileSearch, RefreshCw, ShieldCheck } from "lucide-react";
+import { useMemo, useState, type FormEvent } from "react";
+import {
+  Activity,
+  Brush,
+  ClipboardList,
+  Database,
+  FileSearch,
+  Gauge,
+  RefreshCw,
+  ShieldCheck,
+} from "lucide-react";
 import * as adminLogsApi from "@features/admin/logs/api";
-import type { AdminDrawingLog, AdminTaskLog } from "@features/admin/logs/api";
+import type {
+  AdminDrawingLog,
+  AdminTaskLog,
+  FlowQuotaDataPoint,
+  QuotaDataPoint,
+} from "@features/admin/logs/api";
 import { usePlatformStore } from "@features/platform/store";
 import type { UsageLogRecord } from "@shared/api/contracts";
 import { cn } from "@shared/lib/cn";
@@ -52,6 +66,17 @@ const emptyFilters: LogFilters = {
   type: "",
   username: "",
 };
+
+function getDefaultDataRange() {
+  const end = new Date();
+  const start = new Date();
+  start.setDate(end.getDate() - 6);
+
+  return {
+    endDate: end.toISOString().slice(0, 10),
+    startDate: start.toISOString().slice(0, 10),
+  };
+}
 
 function dateToTimestamp(value: string, endOfDay = false) {
   if (!value) {
@@ -335,6 +360,16 @@ export function AdminLogsPage() {
   const [page, setPage] = useState(1);
   const [filters, setFilters] = useState<LogFilters>(emptyFilters);
   const [appliedFilters, setAppliedFilters] = useState<LogFilters>(emptyFilters);
+  const defaultDataRange = useMemo(() => getDefaultDataRange(), []);
+  const [dataMode, setDataMode] = useState<"flow" | "model" | "user">("model");
+  const [dataStartDate, setDataStartDate] = useState(defaultDataRange.startDate);
+  const [dataEndDate, setDataEndDate] = useState(defaultDataRange.endDate);
+  const [dataUsername, setDataUsername] = useState("");
+  const [dataQuery, setDataQuery] = useState({
+    endDate: defaultDataRange.endDate,
+    startDate: defaultDataRange.startDate,
+    username: "",
+  });
 
   const start_timestamp = dateToTimestamp(appliedFilters.startDate);
   const end_timestamp = dateToTimestamp(appliedFilters.endDate, true);
@@ -403,6 +438,45 @@ export function AdminLogsPage() {
     return response.data;
   }, [activeTab, appliedFilters]);
 
+  const {
+    data: quotaData,
+    error: quotaDataError,
+    loading: quotaDataLoading,
+    reload: reloadQuotaData,
+  } = useAsyncData(async () => {
+    const start = dateToTimestamp(dataQuery.startDate);
+    const end = dateToTimestamp(dataQuery.endDate, true);
+    if (!start || !end) {
+      return [];
+    }
+
+    const query = {
+      end_timestamp: end,
+      start_timestamp: start,
+      username: dataQuery.username || undefined,
+    };
+    const response =
+      dataMode === "flow"
+        ? await adminLogsApi.getAdminFlowQuotaData(query)
+        : dataMode === "user"
+          ? await adminLogsApi.getAdminQuotaDataByUser(query)
+          : await adminLogsApi.getAdminQuotaData(query);
+
+    return response.data;
+  }, [dataMode, dataQuery]);
+
+  const quotaSummary = useMemo(() => {
+    const rows = quotaData ?? [];
+    return rows.reduce(
+      (summary, row) => ({
+        count: summary.count + Number(row.count ?? 0),
+        quota: summary.quota + Number(row.quota ?? 0),
+        tokenUsed: summary.tokenUsed + Number(row.token_used ?? 0),
+      }),
+      { count: 0, quota: 0, tokenUsed: 0 },
+    );
+  }, [quotaData]);
+
   function changeTab(tab: LogTabId) {
     setActiveTab(tab);
     setPage(1);
@@ -420,7 +494,17 @@ export function AdminLogsPage() {
     setPage(1);
   }
 
+  function applyDataQuery(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setDataQuery({
+      endDate: dataEndDate,
+      startDate: dataStartDate,
+      username: dataUsername.trim(),
+    });
+  }
+
   const totalPages = Math.max(1, Math.ceil((data?.total ?? 0) / pageSize));
+  const quotaRows = (quotaData ?? []).slice(0, 8);
 
   return (
     <div className="space-y-7">
@@ -434,6 +518,7 @@ export function AdminLogsPage() {
           onClick={() => {
             void reload();
             void reloadStat();
+            void reloadQuotaData();
           }}
           variant="secondary"
         >
@@ -458,6 +543,138 @@ export function AdminLogsPage() {
         ))}
       </div>
       {statError && <p className="text-sm text-[#8a4d3d]">{statError}</p>}
+
+      <Card>
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <div className="flex items-center gap-2 text-sm font-medium text-[#655b50]">
+              <Database className="size-4" />
+              Admin data dashboard
+            </div>
+            <h2 className="mt-3 text-xl font-semibold">Quota and flow</h2>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {[
+              { id: "model", label: "By model" },
+              { id: "user", label: "By user" },
+              { id: "flow", label: "Flow" },
+            ].map((item) => (
+              <button
+                className={cn(
+                  "h-10 rounded-md px-4 text-sm transition-colors",
+                  dataMode === item.id
+                    ? "bg-[#2f3533] text-[#f8f1e7]"
+                    : "bg-[#efe5d6] text-[#62584d] hover:bg-[#e5d8c5]",
+                )}
+                key={item.id}
+                onClick={() => setDataMode(item.id as "flow" | "model" | "user")}
+                type="button"
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <form className="mt-5 grid gap-3 lg:grid-cols-[1fr_1fr_1fr_auto]" onSubmit={applyDataQuery}>
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            onChange={(event) => setDataStartDate(event.target.value)}
+            type="date"
+            value={dataStartDate}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            onChange={(event) => setDataEndDate(event.target.value)}
+            type="date"
+            value={dataEndDate}
+          />
+          <input
+            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            onChange={(event) => setDataUsername(event.target.value)}
+            placeholder="Username filter"
+            value={dataUsername}
+          />
+          <Button className="gap-2" type="submit">
+            <Gauge className="size-4" />
+            Apply
+          </Button>
+        </form>
+        <div className="mt-5 grid gap-4 md:grid-cols-3">
+          <div className="rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4">
+            <p className="text-sm text-[#837462]">Quota</p>
+            <strong className="mt-2 block text-2xl">
+              {formatQuota(quotaSummary.quota, platformStatus)}
+            </strong>
+          </div>
+          <div className="rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4">
+            <p className="text-sm text-[#837462]">Tokens</p>
+            <strong className="mt-2 block text-2xl">
+              {formatRawNumber(quotaSummary.tokenUsed)}
+            </strong>
+          </div>
+          <div className="rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4">
+            <p className="text-sm text-[#837462]">Requests</p>
+            <strong className="mt-2 block text-2xl">{formatRawNumber(quotaSummary.count)}</strong>
+          </div>
+        </div>
+        {quotaDataError && <p className="mt-4 text-sm text-[#8a4d3d]">{quotaDataError}</p>}
+        {quotaDataLoading ? (
+          <p className="mt-5 text-sm text-[#655b50]">Loading data dashboard...</p>
+        ) : (
+          <div className="mt-5 overflow-x-auto">
+            <table className="w-full min-w-[860px] border-collapse text-left text-sm">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+                <tr>
+                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Dimension</th>
+                  <th className="border-b border-[#ddcfbd] py-3 pr-4">User</th>
+                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Group</th>
+                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
+                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Tokens</th>
+                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Requests</th>
+                </tr>
+              </thead>
+              <tbody>
+                {quotaRows.map((row: FlowQuotaDataPoint | QuotaDataPoint, index) => (
+                  <tr key={`${row.model_name ?? row.username ?? row.use_group ?? "row"}-${index}`}>
+                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <div>{row.model_name || row.node_name || "N/A"}</div>
+                      <div className="mt-1 text-xs text-[#7c6e5e]">
+                        {"channel_name" in row && row.channel_name
+                          ? row.channel_name
+                          : row.channel_id
+                            ? `Channel #${row.channel_id}`
+                            : "Platform"}
+                      </div>
+                    </td>
+                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                      {row.username || (row.user_id ? `User #${row.user_id}` : "All users")}
+                    </td>
+                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                      {row.use_group || "default"}
+                    </td>
+                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                      {formatQuota(row.quota, platformStatus)}
+                    </td>
+                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                      {formatRawNumber(row.token_used)}
+                    </td>
+                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                      {formatRawNumber(row.count)}
+                    </td>
+                  </tr>
+                ))}
+                {quotaRows.length === 0 && (
+                  <tr>
+                    <td className="py-5 text-sm text-[#655b50]" colSpan={6}>
+                      No data for the selected range.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </Card>
 
       <Card>
         <div className="flex flex-wrap gap-2">

@@ -131,6 +131,12 @@ Maintenance rule:
 - Completed: 2026-06-26
 - Notes: Added user subscription panel backed by admin subscription routes. Admins can view subscription records, bind a plan without payment, invalidate a subscription, and hard-delete a subscription.
 
+### Admin Data Dashboard And Quota Flow
+
+- Owner: `/admin/logs`
+- Completed: 2026-06-26
+- Notes: Added admin quota and flow inspection backed by `/api/data/`, `/api/data/users`, and `/api/data/flow`, with date and username filters.
+
 ## Channels
 
 No deferred Channel items remain.
@@ -145,23 +151,7 @@ No deferred Users items remain.
 
 ## Logs / Audit
 
-### Log Cleanup System Task
-
-- Owner: `/admin/logs`
-- Permission: Root-only
-- Notes: Use the system task endpoint and show task progress.
-
-### Channel Affinity Usage Cache
-
-- Owner: `/admin/logs` or `/admin/channels`
-- Permission: Admin
-- Notes: Show channel affinity cache statistics.
-
-### Admin Data Dashboard And Quota Flow
-
-- Owner: `/admin/logs` or a future `/admin/data`
-- Permission: Admin
-- Notes: Use `/api/data/`, `/api/data/users`, and `/api/data/flow` to show platform-wide quota dates, user quota dates, and flow data. Deferred from Phase 5 to keep the logs MVP focused.
+No deferred Logs / Audit items remain. Log cleanup and channel affinity panels are intentionally not part of the current commercial admin UI.
 
 ## Billing
 
