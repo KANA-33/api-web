@@ -717,11 +717,60 @@ authorization. Root-only routes require root authorization.
   - `POST /api/models/`
   - `PUT /api/models/`
   - `DELETE /api/models/:id`
+  - `GET /api/models/sync_upstream/preview`
+  - `POST /api/models/sync_upstream`
   - `GET /api/models/missing`
   - `GET /api/vendors/`
+  - `POST /api/vendors/`
+  - `PUT /api/vendors/`
+  - `DELETE /api/vendors/:id`
+  - `GET /api/prefill_group/`
+  - `POST /api/prefill_group/`
+  - `PUT /api/prefill_group/`
+  - `DELETE /api/prefill_group/:id`
 - Auth: admin session
-- Notes: status-only updates use `PUT /api/models/?status_only=true`.
-  Vendor CRUD and deployment management remain Post-MVP.
+- Notes: model status-only updates use `PUT /api/models/?status_only=true`.
+  Vendor status-only updates use `PUT /api/vendors/?status_only=true`.
+  Upstream sync preview accepts optional `locale` query and returns
+  `{ missing, conflicts, source }`; conflicts contain `model_name` and field
+  differences with `{ field, local, upstream }`. Upstream sync accepts
+  `{ locale?, overwrite?: { model_name, fields }[] }` and returns created,
+  updated, skipped, and source metadata. Prefill groups accept
+  `{ id?, name, type, items, description? }`; `GET /api/prefill_group/` accepts
+  optional `type` query and returns an array. Model conflict resolution may use
+  the official sync endpoint or existing model writes.
+
+### Admin Model Deployments
+
+- Methods and Paths:
+  - `GET /api/deployments/settings`
+  - `POST /api/deployments/settings/test-connection`
+  - `GET /api/deployments/`
+  - `GET /api/deployments/search`
+  - `GET /api/deployments/:id`
+  - `POST /api/deployments/`
+  - `PUT /api/deployments/:id`
+  - `PUT /api/deployments/:id/name`
+  - `POST /api/deployments/:id/extend`
+  - `DELETE /api/deployments/:id`
+  - `GET /api/deployments/:id/logs`
+  - `GET /api/deployments/:id/containers`
+  - `GET /api/deployments/:id/containers/:container_id`
+  - `GET /api/deployments/hardware-types`
+  - `GET /api/deployments/locations`
+  - `GET /api/deployments/available-replicas`
+  - `POST /api/deployments/price-estimation`
+  - `GET /api/deployments/check-name`
+- Auth: admin session
+- Notes: deployment provider is currently `io.net`. Settings response includes
+  `{ provider, enabled, configured, can_connect }`. List/search return paginated
+  deployment records and optional status counts. Create accepts
+  `{ resource_private_name, duration_hours, gpus_per_container, hardware_id,
+location_ids, container_config, registry_config }`. Update accepts mutable
+  container configuration such as env variables, image URL, entrypoint,
+  traffic port, args, and registry credentials. Extend accepts
+  `{ duration_hours }`. Logs require `container_id` query and optional level,
+  stream, cursor, limit, follow, start_time, and end_time.
 
 ### Admin Logs
 

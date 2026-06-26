@@ -47,19 +47,19 @@ frontend implementation details.
 
 ## Admin Strategy
 
-| Area                       | Decision                 | Status   | Notes                                                       |
-| -------------------------- | ------------------------ | -------- | ----------------------------------------------------------- |
-| Existing AGPL admin UI     | Keep separate deployment | Deferred | Can remain available separately while commercial UI matures |
-| Commercial admin rewrite   | Clean-room MVP           | Verified | Independent admin surface implemented from backend protocol |
-| Shared auth with admin     | Session based            | Verified | Same backend session and `New-Api-User` header              |
-| Admin users                | MVP coverage             | Verified | List, search, create, edit, delete, role/status/quota ops   |
-| Admin channels             | MVP coverage             | Verified | List, search, create, edit, delete, test, balance, copy     |
-| Admin models               | MVP coverage             | Verified | List, search, create, edit, delete, status, missing models  |
-| Admin logs                 | MVP coverage             | Verified | Usage, drawing, task logs, filters, usage stats             |
-| Admin redemptions          | MVP coverage             | Verified | List, search, batch generate, edit, status, cleanup         |
-| Admin billing              | MVP coverage             | Verified | Top-up list/search and manual completion                    |
-| Admin settings             | Root-only MVP            | Verified | Low-risk options and raw JSON console content editing       |
-| High-sensitivity admin ops | Post-MVP                 | Deferred | Payment gateways, secrets, security editors, audit tooling  |
+| Area                       | Decision                 | Status   | Notes                                                                          |
+| -------------------------- | ------------------------ | -------- | ------------------------------------------------------------------------------ |
+| Existing AGPL admin UI     | Keep separate deployment | Deferred | Can remain available separately while commercial UI matures                    |
+| Commercial admin rewrite   | Clean-room MVP           | Verified | Independent admin surface implemented from backend protocol                    |
+| Shared auth with admin     | Session based            | Verified | Same backend session and `New-Api-User` header                                 |
+| Admin users                | MVP coverage             | Verified | List, search, create, edit, delete, role/status/quota ops                      |
+| Admin channels             | MVP coverage             | Verified | List, search, create, edit, delete, test, balance, copy                        |
+| Admin models               | Post-MVP models phase    | Verified | Model CRUD, official sync, conflict triage, vendor CRUD, prefills, deployments |
+| Admin logs                 | MVP coverage             | Verified | Usage, drawing, task logs, filters, usage stats                                |
+| Admin redemptions          | MVP coverage             | Verified | List, search, batch generate, edit, status, cleanup                            |
+| Admin billing              | MVP coverage             | Verified | Top-up list/search and manual completion                                       |
+| Admin settings             | Root-only MVP            | Verified | Low-risk options and raw JSON console content editing                          |
+| High-sensitivity admin ops | Post-MVP                 | Deferred | Payment gateways, secrets, security editors, audit tooling                     |
 
 ## Commercial Release Gate
 

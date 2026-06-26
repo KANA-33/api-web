@@ -65,41 +65,49 @@ Maintenance rule:
 - Completed: 2026-06-26
 - Notes: Added explicit copy and download controls only after root-only secret reveal. Each copy/export action requires sensitive confirmation with typed channel name and reason; backend audit visibility is anchored to the preceding `channel.key_view` reveal audit entry.
 
+### Vendor CRUD
+
+- Owner: `/admin/models`
+- Completed: 2026-06-26
+- Notes: Added same-page vendor management backed by `GET/POST/PUT/DELETE /api/vendors`. Admins can create, edit, enable/disable, delete, and refresh vendors used by model assignment and filtering.
+
+### Upstream Model Sync Preview
+
+- Owner: `/admin/models`
+- Completed: 2026-06-26
+- Notes: Added a read-only sync preview panel that combines missing model references from `GET /api/models/missing` with current page matching metadata such as `matched_count` and `matched_models`. Missing entries can open the create-model form without writing automatically.
+
+### Upstream Model Conflict Resolution
+
+- Owner: `/admin/models`
+- Completed: 2026-06-26
+- Notes: Added conflict triage inside the model sync preview using only confirmed model protocols. Missing references are grouped into uncovered items and items covered by existing matching rules; admins can create exact metadata via `POST /api/models/` or edit the covering rule via `PUT /api/models/`.
+
+### Official Upstream Model Sync
+
+- Owner: `/admin/models`
+- Completed: 2026-06-26
+- Notes: Added official upstream preview/apply flow backed by `GET /api/models/sync_upstream/preview` and `POST /api/models/sync_upstream`. Admins can select locale, review missing models, select exact conflict fields to overwrite, and apply only selected updates.
+
+### Model Deployment Management
+
+- Owner: `/admin/models`
+- Completed: 2026-06-26
+- Notes: Added io.net deployment management backed by `/api/deployments`. Admins can inspect settings, list/search deployments, create deployments from the documented JSON DTO, rename, extend, request termination, and inspect containers.
+
+### Prefill Groups Management
+
+- Owner: `/admin/models`
+- Completed: 2026-06-26
+- Notes: Added CRUD for model, tag, and endpoint prefill groups backed by `GET/POST/PUT/DELETE /api/prefill_group`.
+
 ## Channels
 
 No deferred Channel items remain.
 
 ## Models
 
-### Vendor CRUD
-
-- Owner: `/admin/models`
-- Permission: Admin
-- Notes: Vendor list, create, edit, delete, and status management.
-
-### Upstream Model Sync Preview
-
-- Owner: `/admin/models`
-- Permission: Admin
-- Notes: Display missing models and conflicts before applying sync.
-
-### Upstream Model Conflict Resolution
-
-- Owner: `/admin/models`
-- Permission: Admin
-- Notes: Select fields to overwrite and confirm writes.
-
-### Model Deployment Management
-
-- Owner: `/admin/models`
-- Permission: Admin
-- Notes: Deployments, containers, logs, extend, rename, update, and delete flows.
-
-### Prefill Groups Management
-
-- Owner: `/admin/models`
-- Permission: Admin
-- Notes: CRUD for model, tag, and endpoint prefill groups.
+No deferred Models items remain.
 
 ## Users
 

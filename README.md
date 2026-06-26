@@ -30,7 +30,8 @@ status codes, and documented behavior.
   batch actions, tag actions, upstream model fetch/detect/apply, root-only secret
   reveal, and multi-key management.
 - Model management: list, search, create, edit, delete, status update, missing
-  model review, and vendor selection.
+  model review, sync preview, official upstream sync, vendor CRUD, prefill group
+  CRUD, and io.net deployment operations.
 - Logs: usage logs, drawing logs, task logs, audit logs, and usage statistics.
 - Redemptions: list, search, batch generation, edit, status update, delete, and
   invalid-code cleanup.
