@@ -1,10 +1,11 @@
 @import "tailwindcss";
 
 :root {
-  color: #171717;
-  background: #fbf9f9;
+  color: #181614;
+  background: #f7f4f0;
   font-family:
-    Inter,
+    "Aptos",
+    "Segoe UI Variable",
     ui-sans-serif,
     system-ui,
     -apple-system,
@@ -16,7 +17,24 @@
 body {
   min-width: 320px;
   margin: 0;
-  background: #fbf9f9;
+  background:
+    radial-gradient(circle at 12% 0%, rgb(255 255 255 / 0.76), transparent 28rem),
+    radial-gradient(circle at 88% 8%, rgb(222 214 204 / 0.34), transparent 24rem),
+    linear-gradient(180deg, #faf8f4 0%, #f3efea 100%);
+  color: #181614;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  content: "";
+  background-image: radial-gradient(rgb(82 72 63 / 0.1) 0.6px, transparent 0.6px);
+  background-size: 18px 18px;
+  mask-image: linear-gradient(to bottom, rgb(0 0 0 / 0.56), transparent 74%);
 }
 
 * {
@@ -37,23 +55,29 @@ textarea {
 input,
 textarea,
 select {
-  color: #171717;
+  color: #181614;
 }
 
 input,
 textarea,
 select {
-  border-color: #d8d2d2;
-  background-color: #fffdfd;
+  border-color: #d7cec6;
+  background-color: #fffdf8;
 }
 
 input:focus,
 textarea:focus,
 select:focus {
-  border-color: #000000;
+  border-color: #4a433d;
+  outline: 3px solid rgb(74 67 61 / 0.12);
+  outline-offset: 1px;
 }
 
 ::placeholder {
   color: #6c6a67;
   opacity: 1;
+}
+
+html {
+  scroll-behavior: smooth;
 }

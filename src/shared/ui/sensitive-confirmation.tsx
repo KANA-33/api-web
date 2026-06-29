@@ -65,17 +65,17 @@ export function SensitiveConfirmationProvider({ children }: { children: ReactNod
         <div
           aria-labelledby="sensitive-confirmation-title"
           aria-modal="true"
-          className="fixed inset-0 z-50 grid place-items-center bg-[#1e1a16]/45 px-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 grid place-items-center bg-[#1e1a16]/42 px-4 backdrop-blur-md"
           role="dialog"
         >
-          <div className="w-full max-w-lg rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-5 text-[#171717] shadow-[0_24px_80px_rgb(49_41_31_/_0.22)]">
+          <div className="w-full max-w-lg rounded-2xl border border-[#ddd4ca]/88 bg-[#fffaf4]/94 p-5 text-[#181614] shadow-[0_28px_90px_rgb(49_41_31_/_0.22)] backdrop-blur-xl">
             <div className="flex items-start justify-between gap-4">
               <div className="flex gap-3">
                 <span
                   className={
                     danger
-                      ? "grid size-10 shrink-0 place-items-center rounded-[2px] border border-[#d8d2d2] bg-[#f3f1f1] text-[#7f1d1d]"
-                      : "grid size-10 shrink-0 place-items-center rounded-[2px] border border-[#d8d2d2] bg-[#efeded] text-[#5f5958]"
+                      ? "grid size-10 shrink-0 place-items-center rounded-xl border border-[#d9c9bd] bg-[#f5eee7] text-[#7f1d1d]"
+                      : "grid size-10 shrink-0 place-items-center rounded-xl border border-[#ddd4ca] bg-[#eee8e1] text-[#74695f]"
                   }
                 >
                   <AlertTriangle className="size-5" />
@@ -84,12 +84,12 @@ export function SensitiveConfirmationProvider({ children }: { children: ReactNod
                   <h2 className="text-lg font-semibold" id="sensitive-confirmation-title">
                     {pending.title}
                   </h2>
-                  <p className="mt-2 text-sm leading-6 text-[#5f5958]">{pending.description}</p>
+                  <p className="mt-2 text-sm leading-6 text-[#74695f]">{pending.description}</p>
                 </div>
               </div>
               <button
                 aria-label="Cancel sensitive action"
-                className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
+                className="rounded-lg p-2 text-[#4a433d] transition-colors hover:bg-[#eee8e1]"
                 onClick={() => close({ confirmed: false })}
                 type="button"
               >
@@ -103,7 +103,7 @@ export function SensitiveConfirmationProvider({ children }: { children: ReactNod
                 continue
                 <input
                   autoFocus
-                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 font-mono outline-none focus:border-[#000000]"
+                  className="h-11 rounded-lg border border-[#d7cec6] bg-[#fffdf8] px-3 font-mono outline-none focus:border-[#4a433d]"
                   onChange={(event) => setTypedText(event.target.value)}
                   value={typedText}
                 />
@@ -114,7 +114,7 @@ export function SensitiveConfirmationProvider({ children }: { children: ReactNod
               <label className="mt-4 grid gap-2 text-sm font-medium">
                 {pending.reasonLabel ?? "Reason"}
                 <textarea
-                  className="min-h-24 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 py-2 outline-none focus:border-[#000000]"
+                  className="min-h-24 rounded-lg border border-[#d7cec6] bg-[#fffdf8] px-3 py-2 outline-none focus:border-[#4a433d]"
                   onChange={(event) => setReason(event.target.value)}
                   value={reason}
                 />
@@ -129,7 +129,7 @@ export function SensitiveConfirmationProvider({ children }: { children: ReactNod
                 className={
                   danger
                     ? "bg-[#7f1d1d] text-[#fffdfd] hover:bg-[#641313]"
-                    : "bg-[#000000] text-[#fffdfd] hover:bg-[#303031]"
+                    : "bg-[#211d19] text-[#fffdfd] hover:bg-[#332d27]"
                 }
                 disabled={!canConfirm}
                 onClick={() => close({ confirmed: true, reason: reason.trim() || undefined })}

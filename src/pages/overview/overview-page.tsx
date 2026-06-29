@@ -68,29 +68,29 @@ export function OverviewPage() {
   ].filter((item): item is string => Boolean(item));
 
   return (
-    <div className="space-y-8 pb-20 lg:pb-0">
+    <div className="space-y-9 pb-24 lg:pb-0">
       <PageTitle
         description="A calm command surface for balance, usage, platform notices, and the next actions that matter."
         title="Overview"
       />
 
-      <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-        <Card className="min-h-64">
+      <div className="grid gap-5 lg:grid-cols-[0.92fr_1.08fr]">
+        <Card className="min-h-64 overflow-hidden bg-[#211d19] text-[#fffaf3] shadow-[0_24px_60px_rgb(54_42_31_/_0.18)]">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-sm text-[#6c6a67]">Remaining quota</p>
-              <strong className="mt-4 block text-5xl font-semibold text-[#171717]">
+              <p className="text-sm text-[#d8cec3]">Remaining quota</p>
+              <strong className="mt-4 block text-5xl font-semibold tracking-[-0.03em] text-[#fffaf3]">
                 {formatQuota(remainingQuota, data.status)}
               </strong>
             </div>
-            <WalletCards className="size-7 text-[#000000]" />
+            <WalletCards className="size-7 text-[#d8cec3]" />
           </div>
-          <p className="mt-8 max-w-sm text-sm leading-6 text-[#5f5958]">
+          <p className="mt-8 max-w-sm text-sm leading-6 text-[#d8cec3]">
             Used quota: {formatQuota(user?.used_quota, data.status)}. Request count:{" "}
             {formatRawNumber(user?.request_count)}.
           </p>
           <Link
-            className="mt-8 inline-flex h-10 items-center justify-center rounded-[2px] border border-[#d4cece] bg-[#efeded] px-4 text-sm font-medium text-[#171717] transition-colors hover:bg-[#e3e2e2]"
+            className="mt-8 inline-flex h-10 items-center justify-center rounded-lg border border-[#fffaf3]/24 bg-[#fffaf3]/10 px-4 text-sm font-medium text-[#fffaf3] transition-all hover:bg-[#fffaf3]/16 active:translate-y-px"
             to="/wallet"
           >
             Manage wallet
@@ -108,9 +108,11 @@ export function OverviewPage() {
             { label: "TPM", value: formatRawNumber(data.summary.tpm), note: "Tokens per minute" },
           ].map((metric) => (
             <Card className="min-h-40" key={metric.label}>
-              <p className="text-sm text-[#6c6a67]">{metric.label}</p>
-              <strong className="mt-4 block text-3xl font-semibold">{metric.value}</strong>
-              <span className="mt-5 block text-xs uppercase tracking-[0.2em] text-[#6c6a67]">
+              <p className="text-sm text-[#74695f]">{metric.label}</p>
+              <strong className="mt-4 block text-3xl font-semibold tracking-[-0.02em]">
+                {metric.value}
+              </strong>
+              <span className="mt-5 block text-xs uppercase tracking-[0.16em] text-[#74695f]">
                 {metric.note}
               </span>
             </Card>
@@ -123,21 +125,21 @@ export function OverviewPage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">Setup guide</h2>
-              <p className="mt-2 text-sm text-[#5f5958]">
+              <p className="mt-2 text-sm text-[#74695f]">
                 Finish these steps to make the workspace production-ready.
               </p>
             </div>
-            <CheckCircle2 className="size-6 text-[#6d8067]" />
+            <CheckCircle2 className="size-6 text-[#68775f]" />
           </div>
           <div className="mt-6 grid gap-3">
             {["Create a scoped API key", "Review available models", "Check usage logs"].map(
               (item, index) => (
                 <div
-                  className="flex items-center justify-between rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] px-4 py-3"
+                  className="flex items-center justify-between rounded-lg border border-[#ddd4ca]/88 bg-[#fffdf8]/72 px-4 py-3 shadow-[0_8px_20px_rgb(74_58_42_/_0.04)]"
                   key={item}
                 >
                   <span className="text-sm font-medium">{item}</span>
-                  <span className="text-xs text-[#6c6a67]">0{index + 1}</span>
+                  <span className="text-xs text-[#74695f]">0{index + 1}</span>
                 </div>
               ),
             )}
@@ -147,29 +149,29 @@ export function OverviewPage() {
         <Card className="max-h-96 overflow-y-auto">
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold">Platform brief</h2>
-            <Clock3 className="size-5 text-[#000000]" />
+            <Clock3 className="size-5 text-[#4a433d]" />
           </div>
           <div className="mt-6 space-y-4">
-            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-4 text-sm leading-6 text-[#3b3736]">
+            <div className="rounded-lg border border-[#ddd4ca]/88 bg-[#fffdf8]/72 p-4 text-sm leading-6 text-[#4a433d]">
               {data.status.system_name} started at {formatStartTime(data.status.start_time)}.
             </div>
             {briefItems.length > 0 ? (
               briefItems.map((item) => (
                 <div
-                  className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-4 text-sm leading-6 text-[#3b3736]"
+                  className="rounded-lg border border-[#ddd4ca]/88 bg-[#fffdf8]/72 p-4 text-sm leading-6 text-[#4a433d]"
                   key={item}
                 >
                   {item}
                 </div>
               ))
             ) : (
-              <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-4 text-sm leading-6 text-[#3b3736]">
+              <div className="rounded-lg border border-[#ddd4ca]/88 bg-[#fffdf8]/72 p-4 text-sm leading-6 text-[#4a433d]">
                 No additional platform panels are enabled.
               </div>
             )}
           </div>
           <button
-            className="mt-5 inline-flex h-10 items-center justify-center gap-2 rounded-[2px] px-4 text-sm font-medium text-[#242121] transition-colors hover:bg-[#efeded]"
+            className="mt-5 inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm font-medium text-[#2b2621] transition-all hover:bg-[#eee8e1] active:translate-y-px"
             onClick={() => void reload()}
             type="button"
           >
