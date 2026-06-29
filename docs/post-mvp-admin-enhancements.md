@@ -149,6 +149,30 @@ Maintenance rule:
 - Completed: 2026-06-26
 - Notes: Added root-only payment gateway configuration for general top-up pricing, Stripe, Creem, Waffo, and Waffo Pancake through the backend option API, plus payment compliance confirmation through `POST /api/option/payment_compliance`.
 
+### Root-Only Permission Isolation
+
+- Owner: `shared/lib/roles.ts` and admin routes
+- Completed: 2026-06-29
+- Notes: Settings and operation tools are isolated behind root-user checks using the shared role helpers, with a root-required state for non-root admins.
+
+### Sensitive Configuration Editors
+
+- Owner: `/admin/settings`
+- Completed: 2026-06-29
+- Notes: Added root-only editors for SSRF fetch settings, sensitive words, model request rate limits, and stream cache queue length through the backend option API.
+
+### Structured Console Content Editors
+
+- Owner: `/admin/settings`
+- Completed: 2026-06-29
+- Notes: Replaced raw-only console JSON editing with structured list editors for API info, announcements, FAQ, and Uptime Kuma groups while still persisting through backend console option keys.
+
+### Performance And Operations Tools
+
+- Owner: `/admin/settings`
+- Completed: 2026-06-29
+- Notes: Added performance stats, GC, disk cache cleanup, stats reset, log file listing, and log cleanup backed by `/api/performance/*` root-only routes.
+
 ## Channels
 
 No deferred Channel items remain.
@@ -171,26 +195,4 @@ No deferred Billing items remain.
 
 ## Settings / Operations
 
-### Root-Only Permission Isolation
-
-- Owner: `shared/lib/roles.ts` and admin routes
-- Permission: Root-only
-- Notes: Centralize `isRootUser` decisions and avoid scattered route checks.
-
-### Sensitive Configuration Editors
-
-- Owner: `/admin/settings/security`
-- Permission: Root-only
-- Notes: SSRF protection, sensitive words, and request limits.
-
-### Structured Console Content Editors
-
-- Owner: `/admin/settings`
-- Permission: Root-only
-- Notes: Replace raw JSON textareas for API info, announcements, FAQ, and Uptime Kuma groups with add/edit/reorder item editors and schema-specific previews.
-
-### Performance And Operations Tools
-
-- Owner: `/admin/settings/operations`
-- Permission: Root-only
-- Notes: GC, disk cache, performance logs, and update checks.
+No deferred Settings / Operations items remain.

@@ -47,19 +47,19 @@ frontend implementation details.
 
 ## Admin Strategy
 
-| Area                       | Decision                  | Status   | Notes                                                                                          |
-| -------------------------- | ------------------------- | -------- | ---------------------------------------------------------------------------------------------- |
-| Existing AGPL admin UI     | Keep separate deployment  | Deferred | Can remain available separately while commercial UI matures                                    |
-| Commercial admin rewrite   | Clean-room MVP            | Verified | Independent admin surface implemented from backend protocol                                    |
-| Shared auth with admin     | Session based             | Verified | Same backend session and `New-Api-User` header                                                 |
-| Admin users                | Post-MVP users phase      | Verified | User CRUD, role/status/quota ops, OAuth bindings, binding cleanup, passkey, 2FA, subscriptions |
-| Admin channels             | MVP coverage              | Verified | List, search, create, edit, delete, test, balance, copy                                        |
-| Admin models               | Post-MVP models phase     | Verified | Model CRUD, official sync, conflict triage, vendor CRUD, prefills, deployments                 |
-| Admin logs                 | Post-MVP logs complete    | Verified | Usage, audit, drawing, task logs, filters, usage stats, admin quota and flow data              |
-| Admin redemptions          | MVP coverage              | Verified | List, search, batch generate, edit, status, cleanup                                            |
-| Admin billing              | Post-MVP billing complete | Verified | Top-up ledger, manual completion, subscription plans, and root payment gateway configuration   |
-| Admin settings             | Root-only MVP             | Verified | Low-risk options and raw JSON console content editing                                          |
-| High-sensitivity admin ops | Post-MVP                  | Deferred | Security editors, advanced operations tools, and audit tooling                                 |
+| Area                       | Decision                   | Status   | Notes                                                                                          |
+| -------------------------- | -------------------------- | -------- | ---------------------------------------------------------------------------------------------- |
+| Existing AGPL admin UI     | Keep separate deployment   | Deferred | Can remain available separately while commercial UI matures                                    |
+| Commercial admin rewrite   | Clean-room MVP             | Verified | Independent admin surface implemented from backend protocol                                    |
+| Shared auth with admin     | Session based              | Verified | Same backend session and `New-Api-User` header                                                 |
+| Admin users                | Post-MVP users phase       | Verified | User CRUD, role/status/quota ops, OAuth bindings, binding cleanup, passkey, 2FA, subscriptions |
+| Admin channels             | MVP coverage               | Verified | List, search, create, edit, delete, test, balance, copy                                        |
+| Admin models               | Post-MVP models phase      | Verified | Model CRUD, official sync, conflict triage, vendor CRUD, prefills, deployments                 |
+| Admin logs                 | Post-MVP logs complete     | Verified | Usage, audit, drawing, task logs, filters, usage stats, admin quota and flow data              |
+| Admin redemptions          | MVP coverage               | Verified | List, search, batch generate, edit, status, cleanup                                            |
+| Admin billing              | Post-MVP billing complete  | Verified | Top-up ledger, manual completion, subscription plans, and root payment gateway configuration   |
+| Admin settings             | Post-MVP settings complete | Verified | Root-only settings, security editors, structured console content, and performance operations   |
+| High-sensitivity admin ops | Post-MVP                   | Deferred | Advanced audit tooling                                                                         |
 
 ## Commercial Release Gate
 

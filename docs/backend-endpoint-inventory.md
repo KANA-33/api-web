@@ -226,7 +226,7 @@ handling.
 ## Admin MVP
 
 | Capability                    | Method   | Path                                                        | Auth          | Notes                                                                 |
-| ----------------------------- | -------- | ----------------------------------------------------------- | ------------- | --------------------------------------------------------------------- |
+| ----------------------------- | -------- | ----------------------------------------------------------- | ------------- | --------------------------------------------------------------------- | --------------------------- |
 | Admin user list               | GET      | `/api/user/`                                                | Admin session | Paginated                                                             |
 | Admin user search             | GET      | `/api/user/search`                                          | Admin session | Keyword, group, role, status filters                                  |
 | Admin user create             | POST     | `/api/user/`                                                | Admin session | Creates one account                                                   |
@@ -312,3 +312,9 @@ handling.
 | Payment compliance confirm    | POST     | `/api/option/payment_compliance`                            | Root session  | Body `{ confirmed: true }`; records current compliance terms          |
 | Root option list              | GET      | `/api/option/`                                              | Root session  | Sensitive keys omitted by backend                                     |
 | Root option update            | PUT      | `/api/option/`                                              | Root session  | Body `{ key, value }`                                                 |
+| Performance stats             | GET      | `/api/performance/stats`                                    | Root session  | Memory, disk cache, disk space, and performance config                |
+| Clear disk cache              | DELETE   | `/api/performance/disk_cache`                               | Root session  | Removes inactive disk cache files                                     |
+| Reset performance stats       | POST     | `/api/performance/reset_stats`                              | Root session  | Resets disk cache counters                                            |
+| Force GC                      | POST     | `/api/performance/gc`                                       | Root session  | Triggers runtime garbage collection                                   |
+| Performance log list          | GET      | `/api/performance/logs`                                     | Root session  | Lists backend log files                                               |
+| Performance log cleanup       | DELETE   | `/api/performance/logs`                                     | Root session  | Query `mode=by_count                                                  | by_days`and positive`value` |

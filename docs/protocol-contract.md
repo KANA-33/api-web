@@ -846,6 +846,15 @@ location_ids, container_config, registry_config }`. Update accepts mutable
 - Methods and Paths:
   - `GET /api/option/`
   - `PUT /api/option/`
+  - `GET /api/performance/stats`
+  - `DELETE /api/performance/disk_cache`
+  - `POST /api/performance/reset_stats`
+  - `POST /api/performance/gc`
+  - `GET /api/performance/logs`
+  - `DELETE /api/performance/logs`
 - Auth: root session
-- Notes: sensitive keys are not returned by `GET /api/option/`. The MVP edits
-  low-risk option values and backend-validated console JSON fields only.
+- Notes: sensitive keys are not returned by `GET /api/option/`. Root settings
+  include platform identity, access policy, usage display, SSRF/fetch
+  protections, sensitive-word checks, model request rate limits, structured
+  console content, and performance settings. Performance log cleanup accepts
+  `mode=by_count|by_days` and `value=<positive integer>`.
