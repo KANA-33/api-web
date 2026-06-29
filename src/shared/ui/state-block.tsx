@@ -11,10 +11,10 @@ interface StateBlockProps {
 export function LoadingBlock({ title = "Loading" }: Partial<StateBlockProps>) {
   return (
     <Card>
-      <p className="text-sm font-medium text-[#837462]">{title}</p>
+      <p className="text-sm font-medium text-[#626b73]">{title}</p>
       <div className="mt-4 grid gap-3">
-        <span className="h-3 w-2/3 rounded-full bg-[#e3d6c4]" />
-        <span className="h-3 w-1/2 rounded-full bg-[#e3d6c4]" />
+        <span className="h-3 w-2/3 rounded-full bg-[#d1d7dc]" />
+        <span className="h-3 w-1/2 rounded-full bg-[#d1d7dc]" />
       </div>
     </Card>
   );
@@ -24,7 +24,7 @@ export function EmptyBlock({ title, description, actionLabel, onAction }: StateB
   return (
     <Card>
       <h2 className="text-lg font-semibold">{title}</h2>
-      <p className="mt-2 text-sm leading-6 text-[#655b50]">{description}</p>
+      <p className="mt-2 text-sm leading-6 text-[#535b63]">{description}</p>
       {actionLabel && onAction && (
         <Button className="mt-5" onClick={onAction} variant="secondary">
           {actionLabel}

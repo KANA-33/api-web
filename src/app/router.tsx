@@ -21,6 +21,7 @@ import { AdminSettingsPage } from "@pages/admin/admin-settings-page";
 import { AdminUsersPage } from "@pages/admin/admin-users-page";
 import { ApiKeysPage } from "@pages/api-keys/api-keys-page";
 import { ErrorPage } from "@pages/error/error-page";
+import { LandingPage } from "@pages/landing/landing-page";
 import { LoginPage } from "@pages/login/login-page";
 import { LogsPage } from "@pages/logs/logs-page";
 import { ModelDetailPage } from "@pages/models/model-detail-page";
@@ -78,9 +79,7 @@ const adminRoute = createRoute({
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/",
-  beforeLoad: () => {
-    throw redirect({ to: "/overview" });
-  },
+  component: LandingPage,
 });
 
 const overviewRoute = createRoute({

@@ -47,17 +47,21 @@ export function AppShell() {
     return true;
   });
 
+  if (pathname === "/logs") {
+    return <Outlet />;
+  }
+
   return (
-    <div className="min-h-screen text-[#2d2926]">
-      <header className="sticky top-0 z-20 border-b border-[#d5c8b6]/80 bg-[#f5eee4]/82 backdrop-blur-xl">
+    <div className="min-h-screen text-[#202326]">
+      <header className="sticky top-0 z-20 border-b border-[#aeb6bf]/80 bg-[#eef1f3]/82 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.7)] backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-5 py-4 sm:px-8">
           <Link className="flex items-center gap-3" to="/overview">
-            <span className="grid size-9 place-items-center rounded-md bg-[#2f3533] text-sm font-semibold text-[#f7efe3]">
+            <span className="grid size-9 place-items-center rounded-md bg-[#24282d] text-sm font-semibold text-[#f4f6f7]">
               C
             </span>
             <span>
               <span className="block text-sm font-semibold">Console</span>
-              <span className="block text-xs text-[#7c6e5e]">Premium API workspace</span>
+              <span className="block text-xs text-[#626b73]">Premium API workspace</span>
             </span>
           </Link>
           <nav className="hidden items-center gap-1 lg:flex">
@@ -67,9 +71,9 @@ export function AppShell() {
               return (
                 <Link
                   className={cn(
-                    "inline-flex h-10 items-center gap-2 rounded-md px-3 text-sm text-[#655b50] transition-colors",
-                    active && "bg-[#2f3533] text-[#f8f1e7]",
-                    !active && "hover:bg-[#eadfce] hover:text-[#2d2926]",
+                    "inline-flex h-10 items-center gap-2 rounded-md px-3 text-sm text-[#535b63] transition-colors",
+                    active && "bg-[#24282d] text-[#f4f6f7]",
+                    !active && "hover:bg-[#dce1e5] hover:text-[#202326]",
                   )}
                   key={item.to}
                   to={item.to}
@@ -81,12 +85,12 @@ export function AppShell() {
             })}
           </nav>
           <div className="hidden items-center gap-3 lg:flex">
-            <span className="max-w-40 truncate text-sm text-[#6d6256]">
+            <span className="max-w-40 truncate text-sm text-[#535b63]">
               {user?.display_name || user?.username}
             </span>
             {isAdminUser(user) && (
               <Link
-                className="inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-[#4b4640] transition-colors hover:bg-[#e8dece]"
+                className="inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-[#343a40] transition-colors hover:bg-[#dce1e5]"
                 to="/admin"
               >
                 <LayoutDashboard className="size-4" />
@@ -103,7 +107,7 @@ export function AppShell() {
         <Outlet />
       </main>
       <nav
-        className="fixed inset-x-0 bottom-0 z-20 grid border-t border-[#d5c8b6] bg-[#f5eee4]/92 px-2 py-2 backdrop-blur-xl lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-20 grid border-t border-[#aeb6bf] bg-[#eef1f3]/92 px-2 py-2 shadow-[inset_0_1px_0_rgb(255_255_255_/_0.75)] backdrop-blur-xl lg:hidden"
         style={{ gridTemplateColumns: `repeat(${visibleNavigation.length}, minmax(0, 1fr))` }}
       >
         {visibleNavigation.map((item) => {
@@ -113,8 +117,8 @@ export function AppShell() {
             <Link
               aria-label={item.label}
               className={cn(
-                "grid place-items-center rounded-md py-2 text-[#6d6256]",
-                active && "bg-[#2f3533] text-[#f8f1e7]",
+                "grid place-items-center rounded-md py-2 text-[#535b63]",
+                active && "bg-[#24282d] text-[#f4f6f7]",
               )}
               key={item.to}
               to={item.to}
