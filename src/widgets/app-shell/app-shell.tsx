@@ -19,7 +19,7 @@ import { Button } from "@shared/ui/button";
 
 const navigation = [
   { label: "Overview", to: "/overview", icon: BarChart3 },
-  { label: "Models", to: "/models", icon: ListTree },
+  { label: "Analytics", to: "/models", icon: ListTree },
   { label: "Logs", to: "/logs", icon: PenLine },
   { label: "Playground", to: "/playground", icon: Code2 },
   { label: "API Keys", to: "/api-keys", icon: KeyRound },
@@ -116,27 +116,6 @@ export function AppShell() {
               </span>
               <span className="text-sm font-bold uppercase tracking-[0.1em]">Console</span>
             </Link>
-            <nav className="hidden items-center gap-1 lg:flex">
-              {visibleNavigation.map((item) => {
-                const Icon = item.icon;
-                const active =
-                  item.to === "/models" ? pathname.startsWith(item.to) : pathname === item.to;
-                return (
-                  <Link
-                    className={cn(
-                      "inline-flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-semibold uppercase tracking-[0.08em] text-[#6d6258] transition-colors",
-                      active && "bg-[#211d19] !text-[#fffaf3] [&_svg]:!text-[#fffaf3]",
-                      !active && "hover:bg-[#eee8e1] hover:text-[#181614]",
-                    )}
-                    key={item.to}
-                    to={item.to}
-                  >
-                    <Icon className="size-4" />
-                    {item.label}
-                  </Link>
-                );
-              })}
-            </nav>
             <div className="ml-auto hidden items-center gap-3 lg:flex">
               <span className="max-w-40 truncate text-sm font-medium text-[#74695f]">
                 {user?.display_name || user?.username}
