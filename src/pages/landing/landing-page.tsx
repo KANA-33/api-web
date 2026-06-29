@@ -14,17 +14,17 @@ const landingMetalStyle = {
 
 export function LandingPage() {
   return (
-    <main className="min-h-[100dvh] overflow-hidden text-[#f4f6f7]" style={landingMetalStyle}>
+    <main className="min-h-[100dvh] overflow-hidden text-[#ffffff]" style={landingMetalStyle}>
       <header className="grid h-20 grid-cols-3 items-center border-b border-[#d6dce1]/55 bg-[#121519]/42 px-5 backdrop-blur-xl sm:px-9 lg:px-14">
         <div aria-hidden="true" />
         <a
-          className="justify-self-center text-sm font-semibold text-[#c2c9cf] transition-colors hover:text-[#f4f6f7] sm:text-base"
+          className="justify-self-center text-sm font-semibold text-[#c2c9cf] transition-colors hover:text-[#ffffff] sm:text-base"
           href="#pricing"
         >
           Pricing
         </a>
         <Link
-          className="justify-self-end whitespace-nowrap text-sm font-bold uppercase text-[#f4f6f7] transition-colors hover:text-[#c2c9cf] sm:text-base"
+          className="justify-self-end whitespace-nowrap text-sm font-bold uppercase text-[#ffffff] transition-colors hover:text-[#c2c9cf] sm:text-base"
           to="/login"
         >
           Login
@@ -37,12 +37,12 @@ export function LandingPage() {
         style={dotGridStyle}
       >
         <div className="pointer-events-none absolute inset-5 border border-[#d6dce1]/52 sm:inset-8" />
-        <div className="pointer-events-none absolute inset-x-5 top-5 border-t border-[#f4f6f7]/65 sm:inset-x-8 sm:top-8" />
-        <div className="pointer-events-none absolute inset-x-5 bottom-5 border-b border-[#f4f6f7]/65 sm:inset-x-8 sm:bottom-8" />
+        <div className="pointer-events-none absolute inset-x-5 top-5 border-t border-[#ffffff]/65 sm:inset-x-8 sm:top-8" />
+        <div className="pointer-events-none absolute inset-x-5 bottom-5 border-b border-[#ffffff]/65 sm:inset-x-8 sm:bottom-8" />
 
         <div className="relative z-10 flex min-h-[calc(100dvh-5rem)] flex-col items-center justify-center px-6 py-20 text-center">
           <div className="mx-auto w-full max-w-5xl">
-            <h1 className="text-6xl font-bold leading-none text-[#dce1e5] sm:text-7xl lg:text-8xl">
+            <h1 className="text-6xl font-bold leading-none text-[#efeded] sm:text-7xl lg:text-8xl">
               AI Models
             </h1>
             <p className="mx-auto mt-8 max-w-4xl text-xl font-semibold leading-8 text-[#b9c0c7] sm:text-2xl sm:leading-9 lg:text-3xl lg:leading-10">
@@ -53,7 +53,7 @@ export function LandingPage() {
 
             <div className="mt-14 flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-10">
               <Link
-                className="group grid grid-cols-[auto_auto] items-center gap-7 text-left text-lg font-bold text-[#f4f6f7] transition-colors hover:text-[#c2c9cf] sm:text-xl"
+                className="group grid grid-cols-[auto_auto] items-center gap-7 text-left text-lg font-bold text-[#ffffff] transition-colors hover:text-[#c2c9cf] sm:text-xl"
                 to="/overview"
               >
                 <span className="leading-tight">
@@ -69,7 +69,7 @@ export function LandingPage() {
 
               <Link
                 aria-label="Open dashboard"
-                className="h-16 w-52 rounded-[18px] border-2 border-[#f4f6f7]/85 bg-[#f4f6f7]/[0.03] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.2)] transition-all hover:border-[#c2c9cf] hover:bg-[#f4f6f7]/10 focus:outline-none focus:ring-2 focus:ring-[#f4f6f7]/70 focus:ring-offset-4 focus:ring-offset-[#15181c]"
+                className="h-16 w-52 rounded-[18px] border-2 border-[#ffffff]/85 bg-[#ffffff]/[0.03] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.2)] transition-all hover:border-[#c2c9cf] hover:bg-[#ffffff]/10 focus:outline-none focus:ring-2 focus:ring-[#ffffff]/70 focus:ring-offset-4 focus:ring-offset-[#15181c]"
                 to="/overview"
               />
             </div>

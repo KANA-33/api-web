@@ -152,45 +152,45 @@ function renderUsageTable(
 ) {
   return (
     <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
-      <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+      <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
         <tr>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Request</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">User</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Model</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Tokens</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Channel</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Time</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Request</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">User</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Model</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Quota</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Tokens</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Channel</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Time</th>
         </tr>
       </thead>
       <tbody>
         {items.map((item) => (
           <tr key={`${item.request_id || item.id}-${item.created_at}`}>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               <div className="font-medium">{getLogTypeLabel(item.type)}</div>
-              <div className="mt-1 max-w-80 truncate text-xs text-[#7c6e5e]">
+              <div className="mt-1 max-w-80 truncate text-xs text-[#6c6a67]">
                 {item.content || item.request_id || "No detail"}
               </div>
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               <div>{item.username || `User #${item.user_id}`}</div>
-              <div className="mt-1 text-xs text-[#7c6e5e]">{item.group || "default"}</div>
+              <div className="mt-1 text-xs text-[#6c6a67]">{item.group || "default"}</div>
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4 font-mono text-xs">
+            <td className="border-b border-[#efeded] py-4 pr-4 font-mono text-xs">
               {item.model_name || "N/A"}
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               {formatQuota(item.quota, platformStatus)}
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               <div>{formatRawNumber(item.prompt_tokens + item.completion_tokens)}</div>
-              <div className="mt-1 text-xs text-[#7c6e5e]">{item.use_time}ms</div>
+              <div className="mt-1 text-xs text-[#6c6a67]">{item.use_time}ms</div>
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               <div>{item.channel_name || `#${item.channel}`}</div>
-              <div className="mt-1 text-xs text-[#7c6e5e]">{item.token_name || "No token"}</div>
+              <div className="mt-1 text-xs text-[#6c6a67]">{item.token_name || "No token"}</div>
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">{formatTime(item.created_at)}</td>
+            <td className="border-b border-[#efeded] py-4 pr-4">{formatTime(item.created_at)}</td>
           </tr>
         ))}
       </tbody>
@@ -201,14 +201,14 @@ function renderUsageTable(
 function renderAuditTable(items: UsageLogRecord[]) {
   return (
     <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
-      <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+      <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
         <tr>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Action</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Target</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Operator</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Route</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">IP</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Time</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Action</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Target</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Operator</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Route</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">IP</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Time</th>
         </tr>
       </thead>
       <tbody>
@@ -223,33 +223,33 @@ function renderAuditTable(items: UsageLogRecord[]) {
 
           return (
             <tr key={`${item.id}-${item.created_at}-${item.request_id}`}>
-              <td className="border-b border-[#eadfce] py-4 pr-4">
-                <div className="font-medium text-[#2d2926]">{action}</div>
-                <div className="mt-1 max-w-96 truncate text-xs text-[#7c6e5e]">
+              <td className="border-b border-[#efeded] py-4 pr-4">
+                <div className="font-medium text-[#171717]">{action}</div>
+                <div className="mt-1 max-w-96 truncate text-xs text-[#6c6a67]">
                   {item.content || "No content"}
                 </div>
               </td>
-              <td className="border-b border-[#eadfce] py-4 pr-4">
+              <td className="border-b border-[#efeded] py-4 pr-4">
                 <div>{item.username || `User #${item.user_id}`}</div>
-                <div className="mt-1 max-w-80 truncate font-mono text-xs text-[#7c6e5e]">
+                <div className="mt-1 max-w-80 truncate font-mono text-xs text-[#6c6a67]">
                   {Object.keys(params).length > 0 ? JSON.stringify(params) : "No params"}
                 </div>
               </td>
-              <td className="border-b border-[#eadfce] py-4 pr-4">
+              <td className="border-b border-[#efeded] py-4 pr-4">
                 <div>{formatAuditValue(adminInfo.admin_username)}</div>
-                <div className="mt-1 text-xs text-[#7c6e5e]">
+                <div className="mt-1 text-xs text-[#6c6a67]">
                   Role {formatAuditValue(adminInfo.admin_role)} ·{" "}
                   {formatAuditValue(adminInfo.auth_method)}
                 </div>
               </td>
-              <td className="border-b border-[#eadfce] py-4 pr-4">
+              <td className="border-b border-[#efeded] py-4 pr-4">
                 <div className="font-mono text-xs">{route || "Handler audit"}</div>
-                <div className="mt-1 max-w-80 truncate font-mono text-xs text-[#7c6e5e]">
+                <div className="mt-1 max-w-80 truncate font-mono text-xs text-[#6c6a67]">
                   {item.request_id || "No request id"}
                 </div>
               </td>
-              <td className="border-b border-[#eadfce] py-4 pr-4">{item.ip || "Hidden"}</td>
-              <td className="border-b border-[#eadfce] py-4 pr-4">{formatTime(item.created_at)}</td>
+              <td className="border-b border-[#efeded] py-4 pr-4">{item.ip || "Hidden"}</td>
+              <td className="border-b border-[#efeded] py-4 pr-4">{formatTime(item.created_at)}</td>
             </tr>
           );
         })}
@@ -264,42 +264,42 @@ function renderDrawingTable(
 ) {
   return (
     <table className="w-full min-w-[1080px] border-collapse text-left text-sm">
-      <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+      <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
         <tr>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Task</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Prompt</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Channel</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Submitted</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Task</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Prompt</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Quota</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Channel</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Submitted</th>
         </tr>
       </thead>
       <tbody>
         {items.map((item) => (
           <tr key={`${item.id}-${item.mj_id}`}>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               <div className="font-medium">{item.action || "Draw"}</div>
-              <div className="mt-1 font-mono text-xs text-[#7c6e5e]">
+              <div className="mt-1 font-mono text-xs text-[#6c6a67]">
                 {item.mj_id || `#${item.id}`}
               </div>
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               <div className="max-w-96 truncate">
                 {item.prompt || item.prompt_en || "No prompt"}
               </div>
               {item.fail_reason && (
-                <div className="mt-1 text-xs text-[#8a4d3d]">{item.fail_reason}</div>
+                <div className="mt-1 text-xs text-[#7f1d1d]">{item.fail_reason}</div>
               )}
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               <div>{item.status || "Unknown"}</div>
-              <div className="mt-1 text-xs text-[#7c6e5e]">{item.progress || "0%"}</div>
+              <div className="mt-1 text-xs text-[#6c6a67]">{item.progress || "0%"}</div>
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               {formatQuota(item.quota, platformStatus)}
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">#{item.channel_id}</td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">{formatTime(item.submit_time)}</td>
+            <td className="border-b border-[#efeded] py-4 pr-4">#{item.channel_id}</td>
+            <td className="border-b border-[#efeded] py-4 pr-4">{formatTime(item.submit_time)}</td>
           </tr>
         ))}
       </tbody>
@@ -313,40 +313,40 @@ function renderTaskTable(
 ) {
   return (
     <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
-      <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+      <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
         <tr>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Task</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">User</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Action</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Channel</th>
-          <th className="border-b border-[#ddcfbd] py-3 pr-4">Submitted</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Task</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">User</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Action</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Quota</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Channel</th>
+          <th className="border-b border-[#d8d2d2] py-3 pr-4">Submitted</th>
         </tr>
       </thead>
       <tbody>
         {items.map((item) => (
           <tr key={`${item.id}-${item.task_id}`}>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               <div className="font-mono text-xs font-medium">{item.task_id || `#${item.id}`}</div>
-              <div className="mt-1 text-xs text-[#7c6e5e]">
+              <div className="mt-1 text-xs text-[#6c6a67]">
                 {item.platform || "Unknown platform"}
               </div>
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               <div>{item.username || `User #${item.user_id}`}</div>
-              <div className="mt-1 text-xs text-[#7c6e5e]">{item.group || "default"}</div>
+              <div className="mt-1 text-xs text-[#6c6a67]">{item.group || "default"}</div>
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">{item.action || "N/A"}</td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">{item.action || "N/A"}</td>
+            <td className="border-b border-[#efeded] py-4 pr-4">
               <div>{item.status || "Unknown"}</div>
-              <div className="mt-1 text-xs text-[#7c6e5e]">{item.progress || "0%"}</div>
+              <div className="mt-1 text-xs text-[#6c6a67]">{item.progress || "0%"}</div>
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">
+            <td className="border-b border-[#efeded] py-4 pr-4">
               {formatQuota(item.quota, platformStatus)}
             </td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">#{item.channel_id}</td>
-            <td className="border-b border-[#eadfce] py-4 pr-4">{formatTime(item.submit_time)}</td>
+            <td className="border-b border-[#efeded] py-4 pr-4">#{item.channel_id}</td>
+            <td className="border-b border-[#efeded] py-4 pr-4">{formatTime(item.submit_time)}</td>
           </tr>
         ))}
       </tbody>
@@ -537,17 +537,17 @@ export function AdminLogsPage() {
           { label: "TPM", value: statLoading ? "..." : formatRawNumber(stat?.tpm) },
         ].map((item) => (
           <Card className="min-h-28" key={item.label}>
-            <p className="text-sm text-[#837462]">{item.label}</p>
+            <p className="text-sm text-[#6c6a67]">{item.label}</p>
             <strong className="mt-3 block text-3xl font-semibold">{item.value}</strong>
           </Card>
         ))}
       </div>
-      {statError && <p className="text-sm text-[#8a4d3d]">{statError}</p>}
+      {statError && <p className="text-sm text-[#7f1d1d]">{statError}</p>}
 
       <Card>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <div className="flex items-center gap-2 text-sm font-medium text-[#655b50]">
+            <div className="flex items-center gap-2 text-sm font-medium text-[#5f5958]">
               <Database className="size-4" />
               Admin data dashboard
             </div>
@@ -561,10 +561,10 @@ export function AdminLogsPage() {
             ].map((item) => (
               <button
                 className={cn(
-                  "h-10 rounded-md px-4 text-sm transition-colors",
+                  "h-10 rounded-[2px] px-4 text-sm transition-colors",
                   dataMode === item.id
-                    ? "bg-[#2f3533] text-[#f8f1e7]"
-                    : "bg-[#efe5d6] text-[#62584d] hover:bg-[#e5d8c5]",
+                    ? "bg-[#000000] text-[#fffdfd]"
+                    : "bg-[#efeded] text-[#62584d] hover:bg-[#e3e2e2]",
                 )}
                 key={item.id}
                 onClick={() => setDataMode(item.id as "flow" | "model" | "user")}
@@ -577,19 +577,19 @@ export function AdminLogsPage() {
         </div>
         <form className="mt-5 grid gap-3 lg:grid-cols-[1fr_1fr_1fr_auto]" onSubmit={applyDataQuery}>
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setDataStartDate(event.target.value)}
             type="date"
             value={dataStartDate}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setDataEndDate(event.target.value)}
             type="date"
             value={dataEndDate}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setDataUsername(event.target.value)}
             placeholder="Username filter"
             value={dataUsername}
@@ -600,45 +600,45 @@ export function AdminLogsPage() {
           </Button>
         </form>
         <div className="mt-5 grid gap-4 md:grid-cols-3">
-          <div className="rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4">
-            <p className="text-sm text-[#837462]">Quota</p>
+          <div className="rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-4">
+            <p className="text-sm text-[#6c6a67]">Quota</p>
             <strong className="mt-2 block text-2xl">
               {formatQuota(quotaSummary.quota, platformStatus)}
             </strong>
           </div>
-          <div className="rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4">
-            <p className="text-sm text-[#837462]">Tokens</p>
+          <div className="rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-4">
+            <p className="text-sm text-[#6c6a67]">Tokens</p>
             <strong className="mt-2 block text-2xl">
               {formatRawNumber(quotaSummary.tokenUsed)}
             </strong>
           </div>
-          <div className="rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4">
-            <p className="text-sm text-[#837462]">Requests</p>
+          <div className="rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-4">
+            <p className="text-sm text-[#6c6a67]">Requests</p>
             <strong className="mt-2 block text-2xl">{formatRawNumber(quotaSummary.count)}</strong>
           </div>
         </div>
-        {quotaDataError && <p className="mt-4 text-sm text-[#8a4d3d]">{quotaDataError}</p>}
+        {quotaDataError && <p className="mt-4 text-sm text-[#7f1d1d]">{quotaDataError}</p>}
         {quotaDataLoading ? (
-          <p className="mt-5 text-sm text-[#655b50]">Loading data dashboard...</p>
+          <p className="mt-5 text-sm text-[#5f5958]">Loading data dashboard...</p>
         ) : (
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[860px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
                 <tr>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Dimension</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">User</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Group</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Tokens</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Requests</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Dimension</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">User</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Group</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Quota</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Tokens</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Requests</th>
                 </tr>
               </thead>
               <tbody>
                 {quotaRows.map((row: FlowQuotaDataPoint | QuotaDataPoint, index) => (
                   <tr key={`${row.model_name ?? row.username ?? row.use_group ?? "row"}-${index}`}>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div>{row.model_name || row.node_name || "N/A"}</div>
-                      <div className="mt-1 text-xs text-[#7c6e5e]">
+                      <div className="mt-1 text-xs text-[#6c6a67]">
                         {"channel_name" in row && row.channel_name
                           ? row.channel_name
                           : row.channel_id
@@ -646,26 +646,26 @@ export function AdminLogsPage() {
                             : "Platform"}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {row.username || (row.user_id ? `User #${row.user_id}` : "All users")}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {row.use_group || "default"}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {formatQuota(row.quota, platformStatus)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {formatRawNumber(row.token_used)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {formatRawNumber(row.count)}
                     </td>
                   </tr>
                 ))}
                 {quotaRows.length === 0 && (
                   <tr>
-                    <td className="py-5 text-sm text-[#655b50]" colSpan={6}>
+                    <td className="py-5 text-sm text-[#5f5958]" colSpan={6}>
                       No data for the selected range.
                     </td>
                   </tr>
@@ -683,10 +683,10 @@ export function AdminLogsPage() {
             return (
               <button
                 className={cn(
-                  "inline-flex h-10 items-center gap-2 rounded-md px-4 text-sm transition-colors",
+                  "inline-flex h-10 items-center gap-2 rounded-[2px] px-4 text-sm transition-colors",
                   activeTab === tab.id
-                    ? "bg-[#2f3533] text-[#f8f1e7]"
-                    : "bg-[#efe5d6] text-[#62584d] hover:bg-[#e5d8c5]",
+                    ? "bg-[#000000] text-[#fffdfd]"
+                    : "bg-[#efeded] text-[#62584d] hover:bg-[#e3e2e2]",
                 )}
                 key={tab.id}
                 onClick={() => changeTab(tab.id)}
@@ -701,7 +701,7 @@ export function AdminLogsPage() {
 
         <form className="mt-6 grid gap-3 lg:grid-cols-6" onSubmit={applyFilters}>
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             disabled={activeTab === "audit"}
             onChange={(event) => setFilters((value) => ({ ...value, keyword: event.target.value }))}
             placeholder={
@@ -716,7 +716,7 @@ export function AdminLogsPage() {
             value={filters.keyword}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             disabled={activeTab !== "usage" && activeTab !== "audit"}
             onChange={(event) =>
               setFilters((value) => ({ ...value, username: event.target.value }))
@@ -725,7 +725,7 @@ export function AdminLogsPage() {
             value={filters.username}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             disabled={activeTab !== "usage"}
             onChange={(event) =>
               setFilters((value) => ({ ...value, modelName: event.target.value }))
@@ -734,7 +734,7 @@ export function AdminLogsPage() {
             value={filters.modelName}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) =>
               setFilters((value) => ({ ...value, channelId: event.target.value }))
             }
@@ -743,7 +743,7 @@ export function AdminLogsPage() {
             value={filters.channelId}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) =>
               setFilters((value) => ({ ...value, startDate: event.target.value }))
             }
@@ -751,14 +751,14 @@ export function AdminLogsPage() {
             value={filters.startDate}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setFilters((value) => ({ ...value, endDate: event.target.value }))}
             type="date"
             value={filters.endDate}
           />
 
           <select
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             disabled={activeTab !== "usage"}
             onChange={(event) => setFilters((value) => ({ ...value, type: event.target.value }))}
             value={filters.type}
@@ -773,14 +773,14 @@ export function AdminLogsPage() {
             <option value={7}>Login</option>
           </select>
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             disabled={activeTab !== "usage" && activeTab !== "audit"}
             onChange={(event) => setFilters((value) => ({ ...value, group: event.target.value }))}
             placeholder="Group"
             value={filters.group}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             disabled={activeTab !== "usage" && activeTab !== "audit"}
             onChange={(event) =>
               setFilters((value) => ({ ...value, requestId: event.target.value }))
@@ -789,7 +789,7 @@ export function AdminLogsPage() {
             value={filters.requestId}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             disabled={activeTab !== "task"}
             onChange={(event) =>
               setFilters((value) => ({ ...value, platform: event.target.value }))
@@ -798,14 +798,14 @@ export function AdminLogsPage() {
             value={filters.platform}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             disabled={activeTab !== "task"}
             onChange={(event) => setFilters((value) => ({ ...value, action: event.target.value }))}
             placeholder="Action"
             value={filters.action}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             disabled={activeTab !== "task"}
             onChange={(event) => setFilters((value) => ({ ...value, status: event.target.value }))}
             placeholder="Task status"
@@ -842,11 +842,11 @@ export function AdminLogsPage() {
               <h2 className="text-xl font-semibold">
                 {tabs.find((tab) => tab.id === activeTab)?.label}
               </h2>
-              <p className="mt-2 text-sm text-[#655b50]">
+              <p className="mt-2 text-sm text-[#5f5958]">
                 Showing {data.items.length} of {data.total} records.
               </p>
             </div>
-            <FileSearch className="size-6 text-[#8b765e]" />
+            <FileSearch className="size-6 text-[#000000]" />
           </div>
 
           <div className="mt-6 overflow-x-auto">
@@ -858,7 +858,7 @@ export function AdminLogsPage() {
             {activeTab === "task" && renderTaskTable(data.items as AdminTaskLog[], platformStatus)}
           </div>
 
-          <div className="mt-5 flex items-center justify-between text-sm text-[#655b50]">
+          <div className="mt-5 flex items-center justify-between text-sm text-[#5f5958]">
             <Button
               disabled={page <= 1}
               onClick={() => setPage((value) => Math.max(1, value - 1))}

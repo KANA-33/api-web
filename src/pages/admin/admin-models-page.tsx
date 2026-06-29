@@ -844,13 +844,13 @@ export function AdminModelsPage() {
         <Card>
           <form className="grid gap-3 md:grid-cols-[1fr_0.7fr_auto]" onSubmit={applyFilters}>
             <input
-              className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+              className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
               onChange={(event) => setKeyword(event.target.value)}
               placeholder="Search model name, description, or tags"
               value={keyword}
             />
             <select
-              className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+              className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
               disabled={vendorsLoading}
               onChange={(event) => setVendor(event.target.value)}
               value={vendor}
@@ -866,12 +866,12 @@ export function AdminModelsPage() {
               Search
             </Button>
           </form>
-          {vendorsError && <p className="mt-3 text-sm text-[#8a4d3d]">{vendorsError}</p>}
+          {vendorsError && <p className="mt-3 text-sm text-[#7f1d1d]">{vendorsError}</p>}
         </Card>
 
         <Card className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm text-[#837462]">Missing models</p>
+            <p className="text-sm text-[#6c6a67]">Missing models</p>
             <strong className="mt-1 block text-2xl font-semibold">
               {missingLoading ? "..." : (missingModels?.length ?? 0)}
             </strong>
@@ -892,7 +892,7 @@ export function AdminModelsPage() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">Missing model references</h2>
-              <p className="mt-2 text-sm leading-6 text-[#655b50]">
+              <p className="mt-2 text-sm leading-6 text-[#5f5958]">
                 Models referenced by channels but not yet configured in metadata.
               </p>
             </div>
@@ -900,15 +900,15 @@ export function AdminModelsPage() {
               Refresh
             </Button>
           </div>
-          {missingError && <p className="mt-4 text-sm text-[#8a4d3d]">{missingError}</p>}
+          {missingError && <p className="mt-4 text-sm text-[#7f1d1d]">{missingError}</p>}
           {!missingError && (
             <div className="mt-5 flex flex-wrap gap-2">
               {(missingModels ?? []).length === 0 ? (
-                <span className="text-sm text-[#655b50]">No missing models detected.</span>
+                <span className="text-sm text-[#5f5958]">No missing models detected.</span>
               ) : (
                 (missingModels ?? []).map((item) => (
                   <button
-                    className="rounded-md border border-[#d8cbb8] bg-[#f7f0e8] px-3 py-2 font-mono text-xs text-[#4b4640] hover:bg-[#eadfce]"
+                    className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] px-3 py-2 font-mono text-xs text-[#242121] hover:bg-[#efeded]"
                     key={item}
                     onClick={() => openCreateForm(item)}
                     type="button"
@@ -927,7 +927,7 @@ export function AdminModelsPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Model sync preview</h2>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-[#655b50]">
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-[#5f5958]">
                 Review backend-reported missing models and current matching metadata before creating
                 exact records or editing a covering match rule.
               </p>
@@ -944,43 +944,43 @@ export function AdminModelsPage() {
           </div>
 
           <div className="mt-6 grid gap-4 lg:grid-cols-[0.85fr_1.15fr]">
-            <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
-              <p className="text-sm font-semibold text-[#2d2926]">Conflict triage</p>
-              <p className="mt-1 text-xs leading-5 text-[#7c6e5e]">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+              <p className="text-sm font-semibold text-[#171717]">Conflict triage</p>
+              <p className="mt-1 text-xs leading-5 text-[#6c6a67]">
                 Missing channel references are split by whether an existing matching rule already
                 covers them on the current page.
               </p>
               <div className="mt-4 max-h-80 space-y-5 overflow-auto">
                 {conflictRows.length === 0 ? (
-                  <span className="text-sm text-[#655b50]">No missing models detected.</span>
+                  <span className="text-sm text-[#5f5958]">No missing models detected.</span>
                 ) : (
                   <>
                     <div>
                       <div className="flex items-center justify-between gap-3">
-                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a63]">
+                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6c6a67]">
                           Uncovered
                         </p>
-                        <span className="text-xs text-[#7c6e5e]">
+                        <span className="text-xs text-[#6c6a67]">
                           {uncoveredMissingModels.length}
                         </span>
                       </div>
                       <div className="mt-3 space-y-2">
                         {uncoveredMissingModels.length === 0 ? (
-                          <p className="text-xs text-[#655b50]">
+                          <p className="text-xs text-[#5f5958]">
                             All missing references are covered by a current matching rule.
                           </p>
                         ) : (
                           uncoveredMissingModels.map((item) => (
                             <div
-                              className="rounded-md border border-[#e1d3c0] bg-[#fffaf3] p-3"
+                              className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-3"
                               key={item.modelName}
                             >
                               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                                <p className="font-mono text-xs font-medium text-[#2d2926]">
+                                <p className="font-mono text-xs font-medium text-[#171717]">
                                   {item.modelName}
                                 </p>
                                 <button
-                                  className="rounded-md px-2 py-1 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                                  className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                                   onClick={() => openCreateForm(item.modelName)}
                                   type="button"
                                 >
@@ -995,31 +995,31 @@ export function AdminModelsPage() {
 
                     <div>
                       <div className="flex items-center justify-between gap-3">
-                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a63]">
+                        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6c6a67]">
                           Covered by rule
                         </p>
-                        <span className="text-xs text-[#7c6e5e]">
+                        <span className="text-xs text-[#6c6a67]">
                           {coveredMissingModels.length}
                         </span>
                       </div>
                       <div className="mt-3 space-y-2">
                         {coveredMissingModels.length === 0 ? (
-                          <p className="text-xs text-[#655b50]">
+                          <p className="text-xs text-[#5f5958]">
                             No missing reference is covered by the current page matching rules.
                           </p>
                         ) : (
                           coveredMissingModels.map((item) => (
                             <div
-                              className="rounded-md border border-[#e1d3c0] bg-[#fffaf3] p-3"
+                              className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-3"
                               key={item.modelName}
                             >
-                              <p className="font-mono text-xs font-medium text-[#2d2926]">
+                              <p className="font-mono text-xs font-medium text-[#171717]">
                                 {item.modelName}
                               </p>
                               <div className="mt-2 flex flex-wrap gap-2">
                                 {item.coveringModels.map((model) => (
                                   <button
-                                    className="rounded-md bg-[#eadfce] px-2 py-1 text-xs text-[#4b4640] hover:bg-[#e0d2bd]"
+                                    className="rounded-[2px] bg-[#efeded] px-2 py-1 text-xs text-[#242121] hover:bg-[#e0d2bd]"
                                     key={model.id}
                                     onClick={() => openEditForm(model)}
                                     type="button"
@@ -1028,7 +1028,7 @@ export function AdminModelsPage() {
                                   </button>
                                 ))}
                                 <button
-                                  className="rounded-md px-2 py-1 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                                  className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                                   onClick={() => openCreateForm(item.modelName)}
                                   type="button"
                                 >
@@ -1045,41 +1045,41 @@ export function AdminModelsPage() {
               </div>
             </div>
 
-            <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
-              <p className="text-sm font-semibold text-[#2d2926]">Matching preview</p>
-              <p className="mt-1 text-xs leading-5 text-[#7c6e5e]">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+              <p className="text-sm font-semibold text-[#171717]">Matching preview</p>
+              <p className="mt-1 text-xs leading-5 text-[#6c6a67]">
                 Current page models whose rule matches upstream or channel model names.
               </p>
               <div className="mt-4 max-h-64 space-y-3 overflow-auto">
                 {syncPreviewItems.length === 0 ? (
-                  <span className="text-sm text-[#655b50]">
+                  <span className="text-sm text-[#5f5958]">
                     No matching metadata reported on this page.
                   </span>
                 ) : (
                   syncPreviewItems.map((model) => (
                     <div
-                      className="rounded-md border border-[#e1d3c0] bg-[#fffaf3] p-3"
+                      className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-3"
                       key={model.id}
                     >
                       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                        <p className="font-mono text-sm font-medium text-[#2d2926]">
+                        <p className="font-mono text-sm font-medium text-[#171717]">
                           {model.model_name}
                         </p>
-                        <span className="text-xs text-[#7c6e5e]">
+                        <span className="text-xs text-[#6c6a67]">
                           {model.matched_count ?? model.matched_models?.length ?? 0} matched
                         </span>
                       </div>
                       <div className="mt-2 flex flex-wrap gap-2">
                         {(model.matched_models ?? []).slice(0, 16).map((item) => (
                           <span
-                            className="rounded-md bg-[#eadfce] px-2 py-1 font-mono text-xs"
+                            className="rounded-[2px] bg-[#efeded] px-2 py-1 font-mono text-xs"
                             key={item}
                           >
                             {item}
                           </span>
                         ))}
                         {(model.matched_models?.length ?? 0) > 16 && (
-                          <span className="text-xs text-[#7c6e5e]">
+                          <span className="text-xs text-[#6c6a67]">
                             +{(model.matched_models?.length ?? 0) - 16} more
                           </span>
                         )}
@@ -1098,14 +1098,14 @@ export function AdminModelsPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Official upstream sync</h2>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-[#655b50]">
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-[#5f5958]">
                 Pull official metadata, create missing models, and overwrite only the conflict
                 fields selected below.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
               <select
-                className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                 onChange={(event) => setSyncLocale(event.target.value)}
                 value={syncLocale}
               >
@@ -1122,23 +1122,23 @@ export function AdminModelsPage() {
             </div>
           </div>
 
-          {upstreamSyncError && <p className="mt-4 text-sm text-[#8a4d3d]">{upstreamSyncError}</p>}
-          {upstreamSyncLoading && <p className="mt-4 text-sm text-[#655b50]">Loading preview...</p>}
+          {upstreamSyncError && <p className="mt-4 text-sm text-[#7f1d1d]">{upstreamSyncError}</p>}
+          {upstreamSyncLoading && <p className="mt-4 text-sm text-[#5f5958]">Loading preview...</p>}
 
           {upstreamSyncPreview && (
             <div className="mt-6 grid gap-4 lg:grid-cols-[0.42fr_0.58fr]">
-              <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
-                <p className="text-sm font-semibold text-[#2d2926]">Missing official models</p>
-                <p className="mt-1 text-xs text-[#7c6e5e]">
+              <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+                <p className="text-sm font-semibold text-[#171717]">Missing official models</p>
+                <p className="mt-1 text-xs text-[#6c6a67]">
                   {officialMissingModels.length} model(s) can be created during apply.
                 </p>
                 <div className="mt-4 flex max-h-52 flex-wrap gap-2 overflow-auto">
                   {officialMissingModels.length === 0 ? (
-                    <span className="text-sm text-[#655b50]">No official missing models.</span>
+                    <span className="text-sm text-[#5f5958]">No official missing models.</span>
                   ) : (
                     officialMissingModels.map((item) => (
                       <span
-                        className="rounded-md bg-[#fffaf3] px-2 py-1 font-mono text-xs"
+                        className="rounded-[2px] bg-[#fffdfd] px-2 py-1 font-mono text-xs"
                         key={item}
                       >
                         {item}
@@ -1148,37 +1148,37 @@ export function AdminModelsPage() {
                 </div>
               </div>
 
-              <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
-                <p className="text-sm font-semibold text-[#2d2926]">Overwrite conflicts</p>
-                <p className="mt-1 text-xs text-[#7c6e5e]">
+              <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+                <p className="text-sm font-semibold text-[#171717]">Overwrite conflicts</p>
+                <p className="mt-1 text-xs text-[#6c6a67]">
                   Select exactly which fields should be overwritten by official metadata.
                 </p>
                 <div className="mt-4 max-h-72 space-y-3 overflow-auto">
                   {officialSyncConflicts.length === 0 ? (
-                    <span className="text-sm text-[#655b50]">No conflicts found.</span>
+                    <span className="text-sm text-[#5f5958]">No conflicts found.</span>
                   ) : (
                     officialSyncConflicts.map((conflict) => (
                       <div
-                        className="rounded-md border border-[#e1d3c0] bg-[#fffaf3] p-3"
+                        className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-3"
                         key={conflict.model_name}
                       >
-                        <p className="font-mono text-sm font-medium text-[#2d2926]">
+                        <p className="font-mono text-sm font-medium text-[#171717]">
                           {conflict.model_name}
                         </p>
                         <div className="mt-3 space-y-2">
                           {asArray(conflict.fields).map((field) => (
                             <label
-                              className="grid gap-1 rounded-md bg-[#f8f1e7] p-2 text-xs"
+                              className="grid gap-1 rounded-[2px] bg-[#fffdfd] p-2 text-xs"
                               key={field.field}
                             >
-                              <span className="flex items-center gap-2 font-semibold text-[#4b4640]">
+                              <span className="flex items-center gap-2 font-semibold text-[#242121]">
                                 <input
                                   checked={
                                     selectedConflictFields[conflict.model_name]?.includes(
                                       field.field,
                                     ) ?? false
                                   }
-                                  className="size-4 accent-[#2f3533]"
+                                  className="size-4 accent-[#000000]"
                                   onChange={() =>
                                     toggleConflictField(conflict.model_name, field.field)
                                   }
@@ -1186,10 +1186,10 @@ export function AdminModelsPage() {
                                 />
                                 {field.field}
                               </span>
-                              <span className="text-[#7c6e5e]">
+                              <span className="text-[#6c6a67]">
                                 Local: {String(field.local ?? "")}
                               </span>
-                              <span className="text-[#7c6e5e]">
+                              <span className="text-[#6c6a67]">
                                 Upstream: {String(field.upstream ?? "")}
                               </span>
                             </label>
@@ -1210,7 +1210,7 @@ export function AdminModelsPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Vendors</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#655b50]">
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#5f5958]">
                 Manage provider metadata used by model assignment and filtering.
               </p>
             </div>
@@ -1230,7 +1230,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Vendor name
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setVendorForm((value) => ({ ...value, name: event.target.value }))
                   }
@@ -1241,7 +1241,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Status
                 <select
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setVendorForm((value) => ({ ...value, status: event.target.value }))
                   }
@@ -1254,7 +1254,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Icon
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setVendorForm((value) => ({ ...value, icon: event.target.value }))
                   }
@@ -1265,7 +1265,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium md:col-span-2">
                 Description
                 <textarea
-                  className="min-h-20 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 py-2 text-sm outline-none focus:border-[#8b765e]"
+                  className="min-h-20 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 py-2 text-sm outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setVendorForm((value) => ({ ...value, description: event.target.value }))
                   }
@@ -1285,48 +1285,48 @@ export function AdminModelsPage() {
 
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[820px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
                 <tr>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Vendor</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Updated</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Actions</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Vendor</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Updated</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {vendorItems.length === 0 ? (
                   <tr>
-                    <td className="border-b border-[#eadfce] py-4 pr-4 text-[#655b50]" colSpan={4}>
+                    <td className="border-b border-[#efeded] py-4 pr-4 text-[#5f5958]" colSpan={4}>
                       No vendors loaded.
                     </td>
                   </tr>
                 ) : (
                   vendorItems.map((vendorItem) => (
                     <tr key={vendorItem.id}>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
-                        <div className="font-medium text-[#2d2926]">{vendorItem.name}</div>
-                        <div className="mt-1 max-w-96 truncate text-xs text-[#7c6e5e]">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
+                        <div className="font-medium text-[#171717]">{vendorItem.name}</div>
+                        <div className="mt-1 max-w-96 truncate text-xs text-[#6c6a67]">
                           {vendorItem.description || vendorItem.icon || "No description"}
                         </div>
                       </td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
                         <span className="inline-flex items-center gap-1.5">
                           {vendorItem.status === VENDOR_STATUS_ENABLED ? (
                             <BadgeCheck className="size-4 text-[#63785f]" />
                           ) : (
-                            <BadgeX className="size-4 text-[#8a4d3d]" />
+                            <BadgeX className="size-4 text-[#7f1d1d]" />
                           )}
                           {vendorItem.status === VENDOR_STATUS_ENABLED ? "Enabled" : "Disabled"}
                         </span>
                       </td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
                         {formatTime(vendorItem.updated_time)}
                       </td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
                         <div className="flex flex-wrap gap-1">
                           <button
                             aria-label="Edit vendor"
-                            className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                            className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                             onClick={() => openEditVendorForm(vendorItem)}
                             type="button"
                           >
@@ -1338,7 +1338,7 @@ export function AdminModelsPage() {
                                 ? "Disable vendor"
                                 : "Enable vendor"
                             }
-                            className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                            className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                             onClick={() => void handleVendorStatus(vendorItem)}
                             type="button"
                           >
@@ -1350,7 +1350,7 @@ export function AdminModelsPage() {
                           </button>
                           <button
                             aria-label="Delete vendor"
-                            className="rounded-md p-2 text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                            className="rounded-[2px] p-2 text-[#7f1d1d] hover:bg-[#efeded]"
                             onClick={() => void handleVendorDelete(vendorItem)}
                             type="button"
                           >
@@ -1372,13 +1372,13 @@ export function AdminModelsPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Prefill groups</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#655b50]">
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#5f5958]">
                 Manage reusable model, tag, and endpoint presets used by admin metadata workflows.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
               <select
-                className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                 onChange={(event) => setPrefillType(event.target.value)}
                 value={prefillType}
               >
@@ -1397,15 +1397,15 @@ export function AdminModelsPage() {
             </div>
           </div>
 
-          {prefillError && <p className="mt-4 text-sm text-[#8a4d3d]">{prefillError}</p>}
-          {prefillLoading && <p className="mt-4 text-sm text-[#655b50]">Loading prefills...</p>}
+          {prefillError && <p className="mt-4 text-sm text-[#7f1d1d]">{prefillError}</p>}
+          {prefillLoading && <p className="mt-4 text-sm text-[#5f5958]">Loading prefills...</p>}
 
           {prefillFormMode && (
             <form className="mt-6 grid gap-4 md:grid-cols-2" onSubmit={handlePrefillSubmit}>
               <label className="grid gap-2 text-sm font-medium">
                 Name
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setPrefillForm((value) => ({ ...value, name: event.target.value }))
                   }
@@ -1416,7 +1416,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Type
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setPrefillForm((value) => ({ ...value, type: event.target.value }))
                   }
@@ -1427,7 +1427,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium md:col-span-2">
                 Description
                 <textarea
-                  className="min-h-20 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 py-2 text-sm outline-none focus:border-[#8b765e]"
+                  className="min-h-20 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 py-2 text-sm outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setPrefillForm((value) => ({ ...value, description: event.target.value }))
                   }
@@ -1437,7 +1437,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium md:col-span-2">
                 Items JSON
                 <textarea
-                  className="min-h-32 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 py-2 font-mono text-xs outline-none focus:border-[#8b765e]"
+                  className="min-h-32 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 py-2 font-mono text-xs outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setPrefillForm((value) => ({ ...value, items: event.target.value }))
                   }
@@ -1457,45 +1457,45 @@ export function AdminModelsPage() {
 
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[860px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
                 <tr>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Group</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Type</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Items</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Updated</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Actions</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Group</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Type</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Items</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Updated</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {(prefillGroups ?? []).length === 0 ? (
                   <tr>
-                    <td className="border-b border-[#eadfce] py-4 pr-4 text-[#655b50]" colSpan={5}>
+                    <td className="border-b border-[#efeded] py-4 pr-4 text-[#5f5958]" colSpan={5}>
                       No prefill groups loaded.
                     </td>
                   </tr>
                 ) : (
                   (prefillGroups ?? []).map((group) => (
                     <tr key={group.id}>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
-                        <div className="font-medium text-[#2d2926]">{group.name}</div>
-                        <div className="mt-1 max-w-80 truncate text-xs text-[#7c6e5e]">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
+                        <div className="font-medium text-[#171717]">{group.name}</div>
+                        <div className="mt-1 max-w-80 truncate text-xs text-[#6c6a67]">
                           {group.description || "No description"}
                         </div>
                       </td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">{group.type}</td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <td className="border-b border-[#efeded] py-4 pr-4">{group.type}</td>
+                      <td className="border-b border-[#efeded] py-4 pr-4">
                         <code className="block max-w-80 truncate text-xs">
                           {JSON.stringify(group.items)}
                         </code>
                       </td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
                         {formatTime(group.updated_time)}
                       </td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
                         <div className="flex flex-wrap gap-1">
                           <button
                             aria-label="Edit prefill group"
-                            className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                            className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                             onClick={() => openEditPrefillForm(group)}
                             type="button"
                           >
@@ -1503,7 +1503,7 @@ export function AdminModelsPage() {
                           </button>
                           <button
                             aria-label="Delete prefill group"
-                            className="rounded-md p-2 text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                            className="rounded-[2px] p-2 text-[#7f1d1d] hover:bg-[#efeded]"
                             onClick={() => void handlePrefillDelete(group)}
                             type="button"
                           >
@@ -1525,11 +1525,11 @@ export function AdminModelsPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Deployments</h2>
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#655b50]">
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-[#5f5958]">
                 Operate io.net model deployments, containers, and lifecycle actions from the
                 confirmed backend contract.
               </p>
-              <p className="mt-2 text-xs text-[#7c6e5e]">
+              <p className="mt-2 text-xs text-[#6c6a67]">
                 {deploymentSettings
                   ? `${deploymentSettings.provider} · enabled ${String(
                       deploymentSettings.enabled,
@@ -1537,18 +1537,18 @@ export function AdminModelsPage() {
                   : "Deployment settings not loaded"}
               </p>
               {deploymentSettingsError && (
-                <p className="mt-2 text-xs text-[#8a4d3d]">{deploymentSettingsError}</p>
+                <p className="mt-2 text-xs text-[#7f1d1d]">{deploymentSettingsError}</p>
               )}
             </div>
             <div className="flex flex-wrap gap-2">
               <input
-                className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                 onChange={(event) => setDeploymentKeyword(event.target.value)}
                 placeholder="Search deployment"
                 value={deploymentKeyword}
               />
               <select
-                className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                 onChange={(event) => setDeploymentStatus(event.target.value)}
                 value={deploymentStatus}
               >
@@ -1585,7 +1585,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Deployment request JSON
                 <textarea
-                  className="min-h-72 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 py-2 font-mono text-xs outline-none focus:border-[#8b765e]"
+                  className="min-h-72 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 py-2 font-mono text-xs outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setDeploymentForm((value) => ({ ...value, payload: event.target.value }))
                   }
@@ -1605,82 +1605,82 @@ export function AdminModelsPage() {
             </form>
           )}
 
-          {deploymentsError && <p className="mt-4 text-sm text-[#8a4d3d]">{deploymentsError}</p>}
+          {deploymentsError && <p className="mt-4 text-sm text-[#7f1d1d]">{deploymentsError}</p>}
           {deploymentsLoading && (
-            <p className="mt-4 text-sm text-[#655b50]">Loading deployments...</p>
+            <p className="mt-4 text-sm text-[#5f5958]">Loading deployments...</p>
           )}
 
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[1100px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
                 <tr>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Deployment</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Hardware</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Progress</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Remaining</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Actions</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Deployment</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Hardware</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Progress</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Remaining</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {(deployments?.items ?? []).length === 0 ? (
                   <tr>
-                    <td className="border-b border-[#eadfce] py-4 pr-4 text-[#655b50]" colSpan={6}>
+                    <td className="border-b border-[#efeded] py-4 pr-4 text-[#5f5958]" colSpan={6}>
                       No deployments loaded.
                     </td>
                   </tr>
                 ) : (
                   (deployments?.items ?? []).map((deployment) => (
                     <tr key={deployment.id}>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
-                        <div className="font-medium text-[#2d2926]">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
+                        <div className="font-medium text-[#171717]">
                           {deployment.deployment_name}
                         </div>
-                        <div className="mt-1 max-w-64 truncate font-mono text-xs text-[#7c6e5e]">
+                        <div className="mt-1 max-w-64 truncate font-mono text-xs text-[#6c6a67]">
                           {deployment.id}
                         </div>
                       </td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">{deployment.status}</td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <td className="border-b border-[#efeded] py-4 pr-4">{deployment.status}</td>
+                      <td className="border-b border-[#efeded] py-4 pr-4">
                         <div>
                           {deployment.hardware_info || deployment.hardware_name || "Unknown"}
                         </div>
-                        <div className="mt-1 text-xs text-[#7c6e5e]">
+                        <div className="mt-1 text-xs text-[#6c6a67]">
                           {deployment.brand_name || deployment.provider || "Provider"}
                         </div>
                       </td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
                         {deployment.completed_percent ?? 0}%
                       </td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
                         {deployment.time_remaining ||
                           `${deployment.compute_minutes_remaining ?? 0} minutes`}
                       </td>
-                      <td className="border-b border-[#eadfce] py-4 pr-4">
+                      <td className="border-b border-[#efeded] py-4 pr-4">
                         <div className="flex flex-wrap gap-2">
                           <button
-                            className="rounded-md px-2 py-1 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                            className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                             onClick={() => void handleDeploymentContainers(deployment)}
                             type="button"
                           >
                             Containers
                           </button>
                           <button
-                            className="rounded-md px-2 py-1 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                            className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                             onClick={() => void handleDeploymentRename(deployment)}
                             type="button"
                           >
                             Rename
                           </button>
                           <button
-                            className="rounded-md px-2 py-1 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                            className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                             onClick={() => void handleDeploymentExtend(deployment)}
                             type="button"
                           >
                             Extend
                           </button>
                           <button
-                            className="rounded-md px-2 py-1 text-xs font-medium text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                            className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#7f1d1d] hover:bg-[#efeded]"
                             onClick={() => void handleDeploymentDelete(deployment)}
                             type="button"
                           >
@@ -1696,13 +1696,13 @@ export function AdminModelsPage() {
           </div>
 
           {selectedDeployment && (
-            <div className="mt-6 rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
+            <div className="mt-6 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-[#2d2926]">
+                  <p className="text-sm font-semibold text-[#171717]">
                     {selectedDeployment.deployment_name} containers
                   </p>
-                  <p className="mt-1 text-xs text-[#7c6e5e]">
+                  <p className="mt-1 text-xs text-[#6c6a67]">
                     {deploymentContainers?.total ?? 0} container(s)
                   </p>
                 </div>
@@ -1713,21 +1713,21 @@ export function AdminModelsPage() {
               <div className="mt-4 grid gap-3 md:grid-cols-2">
                 {(deploymentContainers?.containers ?? []).map((container) => (
                   <div
-                    className="rounded-md border border-[#e1d3c0] bg-[#fffaf3] p-3"
+                    className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-3"
                     key={container.container_id}
                   >
                     <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                       <div>
-                        <p className="font-mono text-xs font-medium text-[#2d2926]">
+                        <p className="font-mono text-xs font-medium text-[#171717]">
                           {container.container_id}
                         </p>
-                        <p className="mt-1 text-xs text-[#7c6e5e]">
+                        <p className="mt-1 text-xs text-[#6c6a67]">
                           {container.hardware || "Unknown hardware"} · {container.status}
                         </p>
                       </div>
                       {container.public_url && (
                         <a
-                          className="text-xs font-medium text-[#5f554b] underline"
+                          className="text-xs font-medium text-[#3b3736] underline"
                           href={container.public_url}
                           rel="noreferrer"
                           target="_blank"
@@ -1736,7 +1736,7 @@ export function AdminModelsPage() {
                         </a>
                       )}
                     </div>
-                    <div className="mt-3 max-h-28 space-y-1 overflow-auto text-xs text-[#655b50]">
+                    <div className="mt-3 max-h-28 space-y-1 overflow-auto text-xs text-[#5f5958]">
                       {(container.events ?? []).length === 0
                         ? "No events"
                         : (container.events ?? []).map((event) => (
@@ -1754,7 +1754,7 @@ export function AdminModelsPage() {
       )}
 
       {(formMode || actionMessage) && (
-        <Card className="border-[#c9baa4]">
+        <Card className="border-[#d4cece]">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">
@@ -1765,12 +1765,12 @@ export function AdminModelsPage() {
                     : "Model action"}
               </h2>
               {actionMessage && (
-                <p className="mt-2 text-sm leading-6 text-[#655b50]">{actionMessage}</p>
+                <p className="mt-2 text-sm leading-6 text-[#5f5958]">{actionMessage}</p>
               )}
             </div>
             <button
               aria-label="Close"
-              className="rounded-md p-2 text-[#6d6256] hover:bg-[#eadfce]"
+              className="rounded-[2px] p-2 text-[#5f5958] hover:bg-[#efeded]"
               onClick={closePanel}
               type="button"
             >
@@ -1783,7 +1783,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Model name
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 font-mono text-sm outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 font-mono text-sm outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, modelName: event.target.value }))
                   }
@@ -1794,7 +1794,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Vendor
                 <select
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, vendorId: event.target.value }))
                   }
@@ -1811,7 +1811,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Icon
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) => setForm((value) => ({ ...value, icon: event.target.value }))}
                   placeholder="Icon key"
                   value={form.icon}
@@ -1820,7 +1820,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Tags
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) => setForm((value) => ({ ...value, tags: event.target.value }))}
                   placeholder="Comma-separated tags"
                   value={form.tags}
@@ -1829,7 +1829,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Name rule
                 <select
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, nameRule: event.target.value }))
                   }
@@ -1845,7 +1845,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Status
                 <select
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, status: event.target.value }))
                   }
@@ -1858,7 +1858,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Sync official
                 <select
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, syncOfficial: event.target.value }))
                   }
@@ -1871,7 +1871,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium md:col-span-2">
                 Description
                 <textarea
-                  className="min-h-20 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 py-2 text-sm outline-none focus:border-[#8b765e]"
+                  className="min-h-20 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 py-2 text-sm outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, description: event.target.value }))
                   }
@@ -1881,7 +1881,7 @@ export function AdminModelsPage() {
               <label className="grid gap-2 text-sm font-medium md:col-span-2">
                 Endpoints
                 <textarea
-                  className="min-h-24 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 py-2 font-mono text-xs outline-none focus:border-[#8b765e]"
+                  className="min-h-24 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 py-2 font-mono text-xs outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, endpoints: event.target.value }))
                   }
@@ -1922,7 +1922,7 @@ export function AdminModelsPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Model metadata</h2>
-              <p className="mt-2 text-sm text-[#655b50]">
+              <p className="mt-2 text-sm text-[#5f5958]">
                 Showing {data.items.length} of {data.total} models.
               </p>
             </div>
@@ -1930,69 +1930,69 @@ export function AdminModelsPage() {
 
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
                 <tr>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Model</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Vendor</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Rule</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Bindings</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Groups</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Updated</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Actions</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Model</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Vendor</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Rule</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Bindings</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Groups</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Updated</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {data.items.map((model) => (
                   <tr key={model.id}>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
-                      <div className="font-mono text-sm font-medium text-[#2d2926]">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
+                      <div className="font-mono text-sm font-medium text-[#171717]">
                         {model.model_name}
                       </div>
-                      <div className="mt-1 max-w-80 truncate text-xs text-[#7c6e5e]">
+                      <div className="mt-1 max-w-80 truncate text-xs text-[#6c6a67]">
                         {model.description || model.tags || "No description"}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {getVendorName(vendorItems, model.vendor_id)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {getNameRuleLabel(model.name_rule)}
                       {model.matched_count ? (
-                        <div className="mt-1 text-xs text-[#7c6e5e]">
+                        <div className="mt-1 text-xs text-[#6c6a67]">
                           {model.matched_count} matched
                         </div>
                       ) : null}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <span className="inline-flex items-center gap-1.5">
                         {model.status === MODEL_STATUS_ENABLED ? (
                           <BadgeCheck className="size-4 text-[#63785f]" />
                         ) : (
-                          <BadgeX className="size-4 text-[#8a4d3d]" />
+                          <BadgeX className="size-4 text-[#7f1d1d]" />
                         )}
                         {model.status === MODEL_STATUS_ENABLED ? "Enabled" : "Disabled"}
                       </span>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div>{model.bound_channels?.length ?? 0} channels</div>
-                      <div className="mt-1 max-w-48 truncate text-xs text-[#7c6e5e]">
+                      <div className="mt-1 max-w-48 truncate text-xs text-[#6c6a67]">
                         {model.bound_channels?.map((item) => item.name).join(", ") || "No bindings"}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
-                      <div className="max-w-40 truncate text-xs text-[#655b50]">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
+                      <div className="max-w-40 truncate text-xs text-[#5f5958]">
                         {model.enable_groups?.join(", ") || "None"}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {formatTime(model.updated_time)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div className="flex flex-wrap gap-1">
                         <button
                           aria-label="Edit model"
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => openEditForm(model)}
                           type="button"
                         >
@@ -2002,7 +2002,7 @@ export function AdminModelsPage() {
                           aria-label={
                             model.status === MODEL_STATUS_ENABLED ? "Disable model" : "Enable model"
                           }
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => void handleStatus(model)}
                           type="button"
                         >
@@ -2014,7 +2014,7 @@ export function AdminModelsPage() {
                         </button>
                         <button
                           aria-label="Delete model"
-                          className="rounded-md p-2 text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                          className="rounded-[2px] p-2 text-[#7f1d1d] hover:bg-[#efeded]"
                           onClick={() => void handleDelete(model)}
                           type="button"
                         >
@@ -2028,7 +2028,7 @@ export function AdminModelsPage() {
             </table>
           </div>
 
-          <div className="mt-5 flex items-center justify-between text-sm text-[#655b50]">
+          <div className="mt-5 flex items-center justify-between text-sm text-[#5f5958]">
             <Button
               disabled={page <= 1}
               onClick={() => setPage((value) => Math.max(1, value - 1))}

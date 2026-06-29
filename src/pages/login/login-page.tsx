@@ -35,15 +35,15 @@ export function LoginPage() {
   }
 
   return (
-    <main className="grid min-h-screen place-items-center px-5 py-10 text-[#2d2926]">
+    <main className="grid min-h-screen place-items-center px-5 py-10 text-[#171717]">
       <Card className="w-full max-w-md">
         <div className="flex items-center gap-3">
-          <span className="grid size-10 place-items-center rounded-md bg-[#2f3533] text-[#f8f1e7]">
+          <span className="grid size-10 place-items-center rounded-[2px] bg-[#000000] text-[#fffdfd]">
             <KeyRound className="size-5" />
           </span>
           <div>
             <h1 className="text-xl font-semibold">Sign in</h1>
-            <p className="text-sm text-[#6d6256]">Open your commercial console.</p>
+            <p className="text-sm text-[#5f5958]">Open your commercial console.</p>
           </div>
         </div>
 
@@ -52,7 +52,7 @@ export function LoginPage() {
             Username
             <input
               autoComplete="username"
-              className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
               onChange={(event) => setUsername(event.target.value)}
               required
               value={username}
@@ -63,7 +63,7 @@ export function LoginPage() {
             Password
             <input
               autoComplete="current-password"
-              className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
               onChange={(event) => setPassword(event.target.value)}
               required
               type="password"
@@ -72,7 +72,7 @@ export function LoginPage() {
           </label>
 
           {message && (
-            <p className="rounded-md border border-[#d9bfa7] bg-[#f7eadb] px-3 py-2 text-sm text-[#6a4e38]">
+            <p className="rounded-[2px] border border-[#d8d2d2] bg-[#f3f1f1] px-3 py-2 text-sm text-[#3b3736]">
               {message}
             </p>
           )}

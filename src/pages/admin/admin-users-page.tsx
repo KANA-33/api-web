@@ -620,19 +620,19 @@ export function AdminUsersPage() {
           onSubmit={applyFilters}
         >
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setKeyword(event.target.value)}
             placeholder="Search username, email, display name, or ID"
             value={keyword}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setGroup(event.target.value)}
             placeholder="Group"
             value={group}
           />
           <select
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setRole(event.target.value)}
             value={role}
           >
@@ -642,7 +642,7 @@ export function AdminUsersPage() {
             <option value={ROLE_ROOT}>Root</option>
           </select>
           <select
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setStatus(event.target.value)}
             value={status}
           >
@@ -658,7 +658,7 @@ export function AdminUsersPage() {
       </Card>
 
       {(formMode || quotaUser || securityUser || subscriptionUser || actionMessage) && (
-        <Card className="border-[#c9baa4]">
+        <Card className="border-[#d4cece]">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">
@@ -675,12 +675,12 @@ export function AdminUsersPage() {
                           : "User action"}
               </h2>
               {actionMessage && (
-                <p className="mt-2 text-sm leading-6 text-[#655b50]">{actionMessage}</p>
+                <p className="mt-2 text-sm leading-6 text-[#5f5958]">{actionMessage}</p>
               )}
             </div>
             <button
               aria-label="Close"
-              className="rounded-md p-2 text-[#6d6256] hover:bg-[#eadfce]"
+              className="rounded-[2px] p-2 text-[#5f5958] hover:bg-[#efeded]"
               onClick={closePanels}
               type="button"
             >
@@ -693,7 +693,7 @@ export function AdminUsersPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Username
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   maxLength={20}
                   onChange={(event) =>
                     setForm((value) => ({ ...value, username: event.target.value }))
@@ -705,7 +705,7 @@ export function AdminUsersPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Display name
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   maxLength={20}
                   onChange={(event) =>
                     setForm((value) => ({ ...value, displayName: event.target.value }))
@@ -716,7 +716,7 @@ export function AdminUsersPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Password
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   maxLength={20}
                   minLength={8}
                   onChange={(event) =>
@@ -735,7 +735,7 @@ export function AdminUsersPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Role
                 <select
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e] disabled:opacity-60"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000] disabled:opacity-60"
                   disabled={formMode === "edit"}
                   onChange={(event) => setForm((value) => ({ ...value, role: event.target.value }))}
                   value={form.role}
@@ -749,7 +749,7 @@ export function AdminUsersPage() {
                   <label className="grid gap-2 text-sm font-medium">
                     Group
                     <input
-                      className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                      className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                       onChange={(event) =>
                         setForm((value) => ({ ...value, group: event.target.value }))
                       }
@@ -759,7 +759,7 @@ export function AdminUsersPage() {
                   <label className="grid gap-2 text-sm font-medium">
                     Remark
                     <input
-                      className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                      className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                       maxLength={255}
                       onChange={(event) =>
                         setForm((value) => ({ ...value, remark: event.target.value }))
@@ -778,7 +778,7 @@ export function AdminUsersPage() {
           {quotaUser && (
             <form className="mt-6 grid gap-4 md:grid-cols-[1fr_1fr_auto]" onSubmit={handleQuota}>
               <select
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                 onChange={(event) =>
                   setQuotaMode(event.target.value as "add" | "override" | "subtract")
                 }
@@ -789,7 +789,7 @@ export function AdminUsersPage() {
                 <option value="override">Override quota</option>
               </select>
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                 min={0}
                 onChange={(event) => setQuotaValue(event.target.value)}
                 placeholder="Raw quota value"
@@ -803,18 +803,18 @@ export function AdminUsersPage() {
 
           {securityUser && (
             <div className="mt-6 grid gap-5 xl:grid-cols-[0.38fr_0.62fr]">
-              <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
-                <p className="text-sm font-semibold text-[#2d2926]">2FA coverage</p>
+              <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+                <p className="text-sm font-semibold text-[#171717]">2FA coverage</p>
                 <p className="mt-2 text-3xl font-semibold">
                   {twoFAStats?.enabled_rate ?? "Unknown"}
                 </p>
-                <p className="mt-1 text-xs text-[#7c6e5e]">
+                <p className="mt-1 text-xs text-[#6c6a67]">
                   {twoFAStats
                     ? `${twoFAStats.enabled_users} of ${twoFAStats.total_users} users enabled`
                     : "Stats unavailable"}
                 </p>
                 {twoFAStatsError && (
-                  <p className="mt-2 text-xs text-[#8a4d3d]">{twoFAStatsError}</p>
+                  <p className="mt-2 text-xs text-[#7f1d1d]">{twoFAStatsError}</p>
                 )}
                 <div className="mt-5 flex flex-wrap gap-2">
                   <Button onClick={() => void handleDisableTwoFA()} variant="secondary">
@@ -826,11 +826,11 @@ export function AdminUsersPage() {
                 </div>
               </div>
 
-              <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
+              <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-sm font-semibold text-[#2d2926]">Account bindings</p>
-                    <p className="mt-1 text-xs text-[#7c6e5e]">
+                    <p className="text-sm font-semibold text-[#171717]">Account bindings</p>
+                    <p className="mt-1 text-xs text-[#6c6a67]">
                       OAuth providers and legacy account identifiers that can be cleared by admin.
                     </p>
                   </div>
@@ -840,30 +840,30 @@ export function AdminUsersPage() {
                 </div>
 
                 <div className="mt-4">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a63]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6c6a67]">
                     OAuth
                   </p>
                   <div className="mt-2 space-y-2">
                     {oauthBindingsLoading ? (
-                      <p className="text-sm text-[#655b50]">Loading OAuth bindings...</p>
+                      <p className="text-sm text-[#5f5958]">Loading OAuth bindings...</p>
                     ) : (oauthBindings ?? []).length === 0 ? (
-                      <p className="text-sm text-[#655b50]">No OAuth bindings found.</p>
+                      <p className="text-sm text-[#5f5958]">No OAuth bindings found.</p>
                     ) : (
                       (oauthBindings ?? []).map((binding) => (
                         <div
-                          className="flex flex-col gap-2 rounded-md border border-[#e1d3c0] bg-[#fffaf3] p-3 sm:flex-row sm:items-center sm:justify-between"
+                          className="flex flex-col gap-2 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-3 sm:flex-row sm:items-center sm:justify-between"
                           key={binding.provider_id}
                         >
                           <div>
-                            <p className="text-sm font-medium text-[#2d2926]">
+                            <p className="text-sm font-medium text-[#171717]">
                               {binding.provider_name}
                             </p>
-                            <p className="mt-1 font-mono text-xs text-[#7c6e5e]">
+                            <p className="mt-1 font-mono text-xs text-[#6c6a67]">
                               {binding.provider_slug} · {binding.provider_user_id}
                             </p>
                           </div>
                           <button
-                            className="rounded-md px-2 py-1 text-xs font-medium text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                            className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#7f1d1d] hover:bg-[#efeded]"
                             onClick={() => void handleUnbindOAuth(binding)}
                             type="button"
                           >
@@ -876,13 +876,13 @@ export function AdminUsersPage() {
                 </div>
 
                 <div className="mt-5">
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a63]">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6c6a67]">
                     Direct bindings
                   </p>
                   <div className="mt-2 flex flex-wrap gap-2">
                     {bindingTypes.map((binding) => (
                       <button
-                        className="rounded-md border border-[#d8cbb8] bg-[#fffaf3] px-3 py-2 text-xs font-medium text-[#4b4640] hover:bg-[#eadfce]"
+                        className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 py-2 text-xs font-medium text-[#242121] hover:bg-[#efeded]"
                         key={binding.value}
                         onClick={() => void handleClearBinding(binding.value)}
                         type="button"
@@ -898,17 +898,17 @@ export function AdminUsersPage() {
 
           {subscriptionUser && (
             <div className="mt-6 grid gap-5 xl:grid-cols-[0.42fr_0.58fr]">
-              <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
-                <p className="text-sm font-semibold text-[#2d2926]">Bind plan</p>
-                <p className="mt-1 text-xs text-[#7c6e5e]">
+              <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+                <p className="text-sm font-semibold text-[#171717]">Bind plan</p>
+                <p className="mt-1 text-xs text-[#6c6a67]">
                   Grant an active subscription without payment.
                 </p>
                 {subscriptionPlansError && (
-                  <p className="mt-3 text-xs text-[#8a4d3d]">{subscriptionPlansError}</p>
+                  <p className="mt-3 text-xs text-[#7f1d1d]">{subscriptionPlansError}</p>
                 )}
                 <div className="mt-4 grid gap-3">
                   <select
-                    className="h-11 rounded-md border border-[#d8cbb8] bg-[#fffaf3] px-3 text-sm outline-none focus:border-[#8b765e]"
+                    className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                     onChange={(event) => setSelectedPlanId(event.target.value)}
                     value={selectedPlanId}
                   >
@@ -924,16 +924,16 @@ export function AdminUsersPage() {
                 <div className="mt-5 space-y-2">
                   {(subscriptionPlans ?? []).slice(0, 6).map(({ plan }) => (
                     <div
-                      className="rounded-md border border-[#e1d3c0] bg-[#fffaf3] p-3"
+                      className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-3"
                       key={plan.id}
                     >
                       <div className="flex items-center justify-between gap-3">
-                        <p className="text-sm font-medium text-[#2d2926]">{plan.title}</p>
-                        <span className="text-xs text-[#7c6e5e]">
+                        <p className="text-sm font-medium text-[#171717]">{plan.title}</p>
+                        <span className="text-xs text-[#6c6a67]">
                           {plan.enabled ? "Enabled" : "Disabled"}
                         </span>
                       </div>
-                      <p className="mt-1 text-xs text-[#7c6e5e]">
+                      <p className="mt-1 text-xs text-[#6c6a67]">
                         {plan.duration_value} {plan.duration_unit} · quota{" "}
                         {formatRawNumber(plan.total_amount ?? 0)}
                       </p>
@@ -942,11 +942,11 @@ export function AdminUsersPage() {
                 </div>
               </div>
 
-              <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
+              <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-sm font-semibold text-[#2d2926]">User subscriptions</p>
-                    <p className="mt-1 text-xs text-[#7c6e5e]">
+                    <p className="text-sm font-semibold text-[#171717]">User subscriptions</p>
+                    <p className="mt-1 text-xs text-[#6c6a67]">
                       Active, expired, and cancelled subscription records.
                     </p>
                   </div>
@@ -960,9 +960,9 @@ export function AdminUsersPage() {
 
                 <div className="mt-4 max-h-[28rem] space-y-3 overflow-auto">
                   {subscriptionsLoading ? (
-                    <p className="text-sm text-[#655b50]">Loading subscriptions...</p>
+                    <p className="text-sm text-[#5f5958]">Loading subscriptions...</p>
                   ) : (userSubscriptions ?? []).length === 0 ? (
-                    <p className="text-sm text-[#655b50]">No subscriptions found.</p>
+                    <p className="text-sm text-[#5f5958]">No subscriptions found.</p>
                   ) : (
                     (userSubscriptions ?? []).map((summary) => {
                       const subscription = summary.subscription;
@@ -971,28 +971,28 @@ export function AdminUsersPage() {
                       )?.plan;
                       return (
                         <div
-                          className="rounded-md border border-[#e1d3c0] bg-[#fffaf3] p-3"
+                          className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-3"
                           key={subscription.id}
                         >
                           <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                             <div>
-                              <p className="text-sm font-medium text-[#2d2926]">
+                              <p className="text-sm font-medium text-[#171717]">
                                 #{subscription.id} · {plan?.title ?? `Plan ${subscription.plan_id}`}
                               </p>
-                              <p className="mt-1 text-xs text-[#7c6e5e]">
+                              <p className="mt-1 text-xs text-[#6c6a67]">
                                 {subscription.status} · source {subscription.source}
                               </p>
                             </div>
                             <div className="flex flex-wrap gap-2">
                               <button
-                                className="rounded-md px-2 py-1 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                                className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                                 onClick={() => void handleInvalidateSubscription(summary)}
                                 type="button"
                               >
                                 Invalidate
                               </button>
                               <button
-                                className="rounded-md px-2 py-1 text-xs font-medium text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                                className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#7f1d1d] hover:bg-[#efeded]"
                                 onClick={() => void handleDeleteSubscription(summary)}
                                 type="button"
                               >
@@ -1000,7 +1000,7 @@ export function AdminUsersPage() {
                               </button>
                             </div>
                           </div>
-                          <div className="mt-3 grid gap-2 text-xs text-[#655b50] md:grid-cols-2">
+                          <div className="mt-3 grid gap-2 text-xs text-[#5f5958] md:grid-cols-2">
                             <span>
                               Quota {formatRawNumber(subscription.amount_used)} /{" "}
                               {formatRawNumber(subscription.amount_total)}
@@ -1048,7 +1048,7 @@ export function AdminUsersPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">User directory</h2>
-              <p className="mt-2 text-sm text-[#655b50]">
+              <p className="mt-2 text-sm text-[#5f5958]">
                 Showing {data.items.length} of {data.total} accounts.
               </p>
             </div>
@@ -1056,65 +1056,65 @@ export function AdminUsersPage() {
 
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
                 <tr>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">User</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Role</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Group</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Requests</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Last login</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Actions</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">User</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Role</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Group</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Quota</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Requests</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Last login</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {data.items.map((user) => (
                   <tr key={user.id}>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
-                      <div className="font-medium text-[#2d2926]">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
+                      <div className="font-medium text-[#171717]">
                         {user.display_name || user.username}
                       </div>
-                      <div className="mt-1 text-xs text-[#7c6e5e]">
+                      <div className="mt-1 text-xs text-[#6c6a67]">
                         #{user.id} · {user.username}
                         {user.email ? ` · ${user.email}` : ""}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
-                      <span className="rounded-md border border-[#d8cbb8] bg-[#f7f0e8] px-2 py-1 text-xs font-medium">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
+                      <span className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] px-2 py-1 text-xs font-medium">
                         {getRoleLabel(user.role)}
                       </span>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <span className="inline-flex items-center gap-1.5 text-sm">
                         {user.status === STATUS_DISABLED ? (
-                          <BadgeX className="size-4 text-[#8a4d3d]" />
+                          <BadgeX className="size-4 text-[#7f1d1d]" />
                         ) : (
                           <BadgeCheck className="size-4 text-[#63785f]" />
                         )}
                         {getStatusLabel(user.status)}
                       </span>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {user.group || "default"}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div>{formatQuota(user.quota, platformStatus)}</div>
-                      <div className="mt-1 text-xs text-[#7c6e5e]">
+                      <div className="mt-1 text-xs text-[#6c6a67]">
                         Used {formatQuota(user.used_quota, platformStatus)}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {formatRawNumber(user.request_count)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {formatTime(user.last_login_at)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div className="flex flex-wrap gap-1">
                         <button
                           aria-label="Edit user"
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => openEditForm(user)}
                           type="button"
                         >
@@ -1122,7 +1122,7 @@ export function AdminUsersPage() {
                         </button>
                         <button
                           aria-label="Adjust quota"
-                          className="rounded-md px-2 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] px-2 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => {
                             setQuotaUser(user);
                             setFormMode(null);
@@ -1136,7 +1136,7 @@ export function AdminUsersPage() {
                         </button>
                         <button
                           aria-label="Security and bindings"
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => void openSecurityPanel(user)}
                           type="button"
                         >
@@ -1144,7 +1144,7 @@ export function AdminUsersPage() {
                         </button>
                         <button
                           aria-label="User subscriptions"
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => void openSubscriptionPanel(user)}
                           type="button"
                         >
@@ -1154,7 +1154,7 @@ export function AdminUsersPage() {
                           aria-label={
                             user.status === STATUS_DISABLED ? "Enable user" : "Disable user"
                           }
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() =>
                             void handleManage(
                               user,
@@ -1172,7 +1172,7 @@ export function AdminUsersPage() {
                         {user.role >= ROLE_ADMIN ? (
                           <button
                             aria-label="Demote user"
-                            className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                            className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                             onClick={() => void handleManage(user, "demote")}
                             type="button"
                           >
@@ -1181,7 +1181,7 @@ export function AdminUsersPage() {
                         ) : (
                           <button
                             aria-label="Promote user"
-                            className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                            className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                             onClick={() => void handleManage(user, "promote")}
                             type="button"
                           >
@@ -1190,7 +1190,7 @@ export function AdminUsersPage() {
                         )}
                         <button
                           aria-label="Delete user"
-                          className="rounded-md p-2 text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                          className="rounded-[2px] p-2 text-[#7f1d1d] hover:bg-[#efeded]"
                           onClick={() => void handleManage(user, "delete")}
                           type="button"
                         >
@@ -1204,7 +1204,7 @@ export function AdminUsersPage() {
             </table>
           </div>
 
-          <div className="mt-5 flex items-center justify-between text-sm text-[#655b50]">
+          <div className="mt-5 flex items-center justify-between text-sm text-[#5f5958]">
             <Button
               disabled={page <= 1}
               onClick={() => setPage((value) => Math.max(1, value - 1))}

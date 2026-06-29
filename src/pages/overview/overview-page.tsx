@@ -78,19 +78,19 @@ export function OverviewPage() {
         <Card className="min-h-64">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-sm text-[#837462]">Remaining quota</p>
-              <strong className="mt-4 block text-5xl font-semibold text-[#2d2926]">
+              <p className="text-sm text-[#6c6a67]">Remaining quota</p>
+              <strong className="mt-4 block text-5xl font-semibold text-[#171717]">
                 {formatQuota(remainingQuota, data.status)}
               </strong>
             </div>
-            <WalletCards className="size-7 text-[#8b765e]" />
+            <WalletCards className="size-7 text-[#000000]" />
           </div>
-          <p className="mt-8 max-w-sm text-sm leading-6 text-[#655b50]">
+          <p className="mt-8 max-w-sm text-sm leading-6 text-[#5f5958]">
             Used quota: {formatQuota(user?.used_quota, data.status)}. Request count:{" "}
             {formatRawNumber(user?.request_count)}.
           </p>
           <Link
-            className="mt-8 inline-flex h-10 items-center justify-center rounded-md border border-[#c9baa4] bg-[#efe5d6] px-4 text-sm font-medium text-[#2d2926] transition-colors hover:bg-[#e5d8c5]"
+            className="mt-8 inline-flex h-10 items-center justify-center rounded-[2px] border border-[#d4cece] bg-[#efeded] px-4 text-sm font-medium text-[#171717] transition-colors hover:bg-[#e3e2e2]"
             to="/wallet"
           >
             Manage wallet
@@ -108,9 +108,9 @@ export function OverviewPage() {
             { label: "TPM", value: formatRawNumber(data.summary.tpm), note: "Tokens per minute" },
           ].map((metric) => (
             <Card className="min-h-40" key={metric.label}>
-              <p className="text-sm text-[#837462]">{metric.label}</p>
+              <p className="text-sm text-[#6c6a67]">{metric.label}</p>
               <strong className="mt-4 block text-3xl font-semibold">{metric.value}</strong>
-              <span className="mt-5 block text-xs uppercase tracking-[0.2em] text-[#9a8973]">
+              <span className="mt-5 block text-xs uppercase tracking-[0.2em] text-[#6c6a67]">
                 {metric.note}
               </span>
             </Card>
@@ -123,7 +123,7 @@ export function OverviewPage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">Setup guide</h2>
-              <p className="mt-2 text-sm text-[#655b50]">
+              <p className="mt-2 text-sm text-[#5f5958]">
                 Finish these steps to make the workspace production-ready.
               </p>
             </div>
@@ -133,11 +133,11 @@ export function OverviewPage() {
             {["Create a scoped API key", "Review available models", "Check usage logs"].map(
               (item, index) => (
                 <div
-                  className="flex items-center justify-between rounded-md border border-[#ddcfbd] bg-[#f6efe5] px-4 py-3"
+                  className="flex items-center justify-between rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] px-4 py-3"
                   key={item}
                 >
                   <span className="text-sm font-medium">{item}</span>
-                  <span className="text-xs text-[#8a7a66]">0{index + 1}</span>
+                  <span className="text-xs text-[#6c6a67]">0{index + 1}</span>
                 </div>
               ),
             )}
@@ -147,29 +147,29 @@ export function OverviewPage() {
         <Card className="max-h-96 overflow-y-auto">
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-xl font-semibold">Platform brief</h2>
-            <Clock3 className="size-5 text-[#8b765e]" />
+            <Clock3 className="size-5 text-[#000000]" />
           </div>
           <div className="mt-6 space-y-4">
-            <div className="rounded-md border border-[#dfd1be] bg-[#f7f0e8] p-4 text-sm leading-6 text-[#5f554b]">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-4 text-sm leading-6 text-[#3b3736]">
               {data.status.system_name} started at {formatStartTime(data.status.start_time)}.
             </div>
             {briefItems.length > 0 ? (
               briefItems.map((item) => (
                 <div
-                  className="rounded-md border border-[#dfd1be] bg-[#f7f0e8] p-4 text-sm leading-6 text-[#5f554b]"
+                  className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-4 text-sm leading-6 text-[#3b3736]"
                   key={item}
                 >
                   {item}
                 </div>
               ))
             ) : (
-              <div className="rounded-md border border-[#dfd1be] bg-[#f7f0e8] p-4 text-sm leading-6 text-[#5f554b]">
+              <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-4 text-sm leading-6 text-[#3b3736]">
                 No additional platform panels are enabled.
               </div>
             )}
           </div>
           <button
-            className="mt-5 inline-flex h-10 items-center justify-center gap-2 rounded-md px-4 text-sm font-medium text-[#4b4640] transition-colors hover:bg-[#e8dece]"
+            className="mt-5 inline-flex h-10 items-center justify-center gap-2 rounded-[2px] px-4 text-sm font-medium text-[#242121] transition-colors hover:bg-[#efeded]"
             onClick={() => void reload()}
             type="button"
           >

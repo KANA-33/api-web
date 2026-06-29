@@ -173,11 +173,11 @@ export function WalletPage() {
       </div>
 
       <Card>
-        <p className="text-sm text-[#837462]">Available quota</p>
+        <p className="text-sm text-[#6c6a67]">Available quota</p>
         <strong className="mt-3 block text-5xl font-semibold">
           {formatQuota(Math.max((user?.quota ?? 0) - (user?.used_quota ?? 0), 0), platformStatus)}
         </strong>
-        <p className="mt-4 text-sm text-[#655b50]">
+        <p className="mt-4 text-sm text-[#5f5958]">
           Total quota {formatQuota(user?.quota, platformStatus)}. Used{" "}
           {formatQuota(user?.used_quota, platformStatus)}.
         </p>
@@ -201,7 +201,7 @@ export function WalletPage() {
               <h2 className="text-xl font-semibold">Redeem code</h2>
               <form className="mt-5 grid gap-3" onSubmit={handleRedeem}>
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                   onChange={(event) => setRedeemKey(event.target.value)}
                   placeholder="Enter redemption code"
                   required
@@ -217,7 +217,7 @@ export function WalletPage() {
               <h2 className="text-xl font-semibold">Online top-up</h2>
               <form className="mt-5 grid gap-3" onSubmit={handleQuote}>
                 <select
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                   onChange={(event) => setProvider(event.target.value as PaymentProvider)}
                   value={provider}
                 >
@@ -234,7 +234,7 @@ export function WalletPage() {
 
                 {provider === "epay" && (
                   <select
-                    className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                    className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                     onChange={(event) => setPaymentMethod(event.target.value)}
                     value={paymentMethod}
                   >
@@ -249,7 +249,7 @@ export function WalletPage() {
 
                 {provider === "waffo" && (
                   <select
-                    className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                    className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                     onChange={(event) => setWaffoMethodIndex(event.target.value)}
                     value={waffoMethodIndex}
                   >
@@ -263,7 +263,7 @@ export function WalletPage() {
                 )}
 
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                   min={1}
                   onChange={(event) => setAmount(event.target.value)}
                   placeholder="Amount"
@@ -282,13 +282,13 @@ export function WalletPage() {
               </form>
 
               {quote && (
-                <p className="mt-4 rounded-md border border-[#ddcfbd] bg-[#f7f0e8] px-3 py-2 text-sm text-[#655b50]">
+                <p className="mt-4 rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] px-3 py-2 text-sm text-[#5f5958]">
                   Estimated payment: {quote}
                 </p>
               )}
 
               {actionMessage && (
-                <p className="mt-4 rounded-md border border-[#ddcfbd] bg-[#f7f0e8] px-3 py-2 text-sm text-[#655b50]">
+                <p className="mt-4 rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] px-3 py-2 text-sm text-[#5f5958]">
                   {actionMessage}
                 </p>
               )}
@@ -306,12 +306,12 @@ export function WalletPage() {
               <div className="mt-5 space-y-3">
                 {data.records.items.map((record) => (
                   <div
-                    className="grid gap-2 rounded-md border border-[#ddcfbd] bg-[#f7f0e8] p-4 text-sm sm:grid-cols-[1fr_auto]"
+                    className="grid gap-2 rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-4 text-sm sm:grid-cols-[1fr_auto]"
                     key={record.id}
                   >
                     <div>
                       <p className="font-medium">{record.trade_no}</p>
-                      <p className="mt-1 text-[#655b50]">
+                      <p className="mt-1 text-[#5f5958]">
                         {record.payment_provider || record.payment_method} ·{" "}
                         {formatTime(record.complete_time || record.create_time)} · {record.status}
                       </p>

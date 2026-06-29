@@ -8,15 +8,15 @@ export function ErrorPage({ error }: ErrorPageProps) {
   const message = error instanceof Error ? error.message : "The page failed to load.";
 
   return (
-    <main className="grid min-h-screen place-items-center px-5 py-10 text-[#2d2926]">
-      <Card className="max-w-lg border-[#d9bfa7] bg-[#f7eadb]/85">
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#9b6f50]">
+    <main className="grid min-h-screen place-items-center px-5 py-10 text-[#171717]">
+      <Card className="max-w-lg border-[#d8d2d2] bg-[#f3f1f1]/85">
+        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#5f5958]">
           Runtime error
         </p>
-        <h1 className="mt-3 text-3xl font-semibold text-[#5d3d29]">Something needs attention.</h1>
-        <p className="mt-3 text-sm leading-6 text-[#6a4e38]">{message}</p>
+        <h1 className="mt-3 text-3xl font-semibold text-[#171717]">Something needs attention.</h1>
+        <p className="mt-3 text-sm leading-6 text-[#3b3736]">{message}</p>
         <button
-          className="mt-6 inline-flex h-10 items-center justify-center rounded-md border border-[#c9baa4] bg-[#efe5d6] px-4 text-sm font-medium text-[#2d2926] transition-colors hover:bg-[#e5d8c5]"
+          className="mt-6 inline-flex h-10 items-center justify-center rounded-[2px] border border-[#d4cece] bg-[#efeded] px-4 text-sm font-medium text-[#171717] transition-colors hover:bg-[#e3e2e2]"
           onClick={() => window.location.reload()}
           type="button"
         >

@@ -399,11 +399,11 @@ export function AdminSettingsPage() {
   function renderField(config: SettingFieldConfig) {
     const value = getValue(config.key);
     const commonClass =
-      "rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]";
+      "rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]";
 
     return (
       <div
-        className="grid gap-2 rounded-md border border-[#eadfce] bg-[#fbf6ee] p-3"
+        className="grid gap-2 rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-3"
         key={config.key}
       >
         <div className="flex items-start justify-between gap-3">
@@ -411,10 +411,10 @@ export function AdminSettingsPage() {
             <label className="text-sm font-semibold" htmlFor={config.key}>
               {config.label}
             </label>
-            <p className="mt-1 font-mono text-xs text-[#8d7a63]">{config.key}</p>
+            <p className="mt-1 font-mono text-xs text-[#6c6a67]">{config.key}</p>
           </div>
           {isDirty(config.key) && (
-            <span className="text-xs font-medium text-[#8a6a3f]">Changed</span>
+            <span className="text-xs font-medium text-[#5f5958]">Changed</span>
           )}
         </div>
 
@@ -463,7 +463,7 @@ export function AdminSettingsPage() {
           />
         )}
         {config.type === "json" && !isJsonValid(value) && (
-          <p className="text-sm text-[#8a4d3d]">Invalid JSON</p>
+          <p className="text-sm text-[#7f1d1d]">Invalid JSON</p>
         )}
       </div>
     );
@@ -476,14 +476,14 @@ export function AdminSettingsPage() {
           description="System settings are protected by root-level backend permissions."
           title="Settings"
         />
-        <Card className="border-[#d9bfa7] bg-[#f7eadb]/85">
+        <Card className="border-[#d8d2d2] bg-[#f3f1f1]/85">
           <div className="flex items-start gap-3">
-            <span className="grid size-10 shrink-0 place-items-center rounded-md border border-[#d8cbb8] bg-[#f3eadc] text-[#6f5f4b]">
+            <span className="grid size-10 shrink-0 place-items-center rounded-[2px] border border-[#d8d2d2] bg-[#efeded] text-[#5f5958]">
               <LockKeyhole className="size-5" />
             </span>
             <div>
-              <h2 className="text-lg font-semibold text-[#5d3d29]">Root access required</h2>
-              <p className="mt-2 text-sm leading-6 text-[#6a4e38]">
+              <h2 className="text-lg font-semibold text-[#171717]">Root access required</h2>
+              <p className="mt-2 text-sm leading-6 text-[#3b3736]">
                 This page maps to root-only backend settings and operations.
               </p>
             </div>
@@ -525,8 +525,8 @@ export function AdminSettingsPage() {
       </div>
 
       {actionMessage && (
-        <Card className="border-[#c9baa4] bg-[#f8f1e7]/85">
-          <p className="text-sm font-medium text-[#5d4f41]">{actionMessage}</p>
+        <Card className="border-[#d4cece] bg-[#fffdfd]/85">
+          <p className="text-sm font-medium text-[#3b3736]">{actionMessage}</p>
         </Card>
       )}
 
@@ -547,7 +547,7 @@ export function AdminSettingsPage() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-xl font-semibold">{group.title}</h2>
-                <p className="mt-2 text-sm text-[#655b50]">
+                <p className="mt-2 text-sm text-[#5f5958]">
                   {group.fields.filter((field) => isDirty(field.key)).length} pending changes
                 </p>
               </div>
@@ -571,7 +571,7 @@ export function AdminSettingsPage() {
       <Card>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="flex items-center gap-2 text-sm font-medium text-[#655b50]">
+            <div className="flex items-center gap-2 text-sm font-medium text-[#5f5958]">
               <FileText className="size-4" />
               Structured console content
             </div>
@@ -613,7 +613,7 @@ export function AdminSettingsPage() {
       </Card>
 
       <Card>
-        <div className="flex items-center gap-2 text-sm font-medium text-[#655b50]">
+        <div className="flex items-center gap-2 text-sm font-medium text-[#5f5958]">
           <Activity className="size-4" />
           Performance and operations
         </div>
@@ -629,7 +629,7 @@ export function AdminSettingsPage() {
             value={`${performanceStats?.disk_space_info?.used_percent?.toFixed?.(1) ?? "0"}%`}
           />
         </div>
-        {performanceError && <p className="mt-4 text-sm text-[#8a4d3d]">{performanceError}</p>}
+        {performanceError && <p className="mt-4 text-sm text-[#7f1d1d]">{performanceError}</p>}
         <div className="mt-5 flex flex-wrap gap-2">
           <Button
             onClick={() =>
@@ -671,11 +671,11 @@ export function AdminSettingsPage() {
           </Button>
         </div>
 
-        <div className="mt-6 rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4">
+        <div className="mt-6 rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-4">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h3 className="font-semibold">Log files</h3>
-              <p className="mt-1 text-sm text-[#655b50]">
+              <p className="mt-1 text-sm text-[#5f5958]">
                 {performanceLogs?.enabled ? performanceLogs.log_dir : "Log directory unavailable"}
               </p>
             </div>
@@ -696,7 +696,7 @@ export function AdminSettingsPage() {
               }}
             >
               <select
-                className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm"
+                className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm"
                 onChange={(event) => setCleanupMode(event.target.value as "by_count" | "by_days")}
                 value={cleanupMode}
               >
@@ -704,7 +704,7 @@ export function AdminSettingsPage() {
                 <option value="by_days">Delete older than days</option>
               </select>
               <input
-                className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm"
+                className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm"
                 min={1}
                 onChange={(event) => setCleanupValue(event.target.value)}
                 type="number"
@@ -716,16 +716,16 @@ export function AdminSettingsPage() {
               </Button>
             </form>
           </div>
-          {logsError && <p className="mt-4 text-sm text-[#8a4d3d]">{logsError}</p>}
+          {logsError && <p className="mt-4 text-sm text-[#7f1d1d]">{logsError}</p>}
           <div className="mt-4 grid gap-2">
             {(performanceLogs?.files ?? []).slice(0, 6).map((file) => (
               <div
-                className="grid gap-2 rounded-md border border-[#eadfce] bg-[#f8f1e7] p-3 text-sm md:grid-cols-[1fr_auto_auto]"
+                className="grid gap-2 rounded-[2px] border border-[#efeded] bg-[#fffdfd] p-3 text-sm md:grid-cols-[1fr_auto_auto]"
                 key={file.name}
               >
                 <span className="font-mono text-xs">{file.name}</span>
                 <span>{bytes(file.size)}</span>
-                <span className="text-[#655b50]">{time(file.mod_time)}</span>
+                <span className="text-[#5f5958]">{time(file.mod_time)}</span>
               </div>
             ))}
           </div>
@@ -737,8 +737,8 @@ export function AdminSettingsPage() {
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4">
-      <p className="text-sm text-[#837462]">{label}</p>
+    <div className="rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-4">
+      <p className="text-sm text-[#6c6a67]">{label}</p>
       <strong className="mt-2 block text-2xl">{value}</strong>
     </div>
   );
@@ -751,7 +751,7 @@ function rowInput(
 ) {
   return (
     <input
-      className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+      className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
       onChange={(event) => onChange(event.target.value)}
       placeholder={placeholder}
       value={value ?? ""}
@@ -769,7 +769,7 @@ function EditorShell({
   title: string;
 }) {
   return (
-    <div className="rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4">
+    <div className="rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h3 className="font-semibold">{title}</h3>
         <div className="flex gap-2">

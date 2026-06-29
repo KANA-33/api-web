@@ -114,7 +114,7 @@ export function PlaygroundPage() {
           <label className="grid gap-2 text-sm font-medium">
             Model
             <select
-              className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
               onChange={(event) => setModel(event.target.value)}
               value={model}
             >
@@ -130,7 +130,7 @@ export function PlaygroundPage() {
           <label className="grid gap-2 text-sm font-medium">
             System
             <textarea
-              className="min-h-24 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] p-4 text-sm outline-none focus:border-[#8b765e]"
+              className="min-h-24 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4 text-sm outline-none focus:border-[#000000]"
               onChange={(event) => setSystemPrompt(event.target.value)}
               value={systemPrompt}
             />
@@ -139,7 +139,7 @@ export function PlaygroundPage() {
           <label className="grid gap-2 text-sm font-medium">
             Prompt
             <textarea
-              className="min-h-64 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] p-4 text-sm outline-none focus:border-[#8b765e]"
+              className="min-h-64 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4 text-sm outline-none focus:border-[#000000]"
               onChange={(event) => setPrompt(event.target.value)}
               placeholder="Write a request..."
               value={prompt}
@@ -150,7 +150,7 @@ export function PlaygroundPage() {
             <label className="grid gap-2 text-sm font-medium">
               Temperature
               <input
-                className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 max={2}
                 min={0}
                 onChange={(event) => setTemperature(event.target.value)}
@@ -162,7 +162,7 @@ export function PlaygroundPage() {
             <label className="grid gap-2 text-sm font-medium">
               Top P
               <input
-                className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 max={1}
                 min={0}
                 onChange={(event) => setTopP(event.target.value)}
@@ -174,7 +174,7 @@ export function PlaygroundPage() {
             <label className="grid gap-2 text-sm font-medium">
               Max tokens
               <input
-                className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 min={1}
                 onChange={(event) => setMaxTokens(event.target.value)}
                 step={1}
@@ -185,7 +185,7 @@ export function PlaygroundPage() {
           </div>
 
           {runError && (
-            <p className="rounded-md border border-[#d9bfa7] bg-[#f7eadb] px-3 py-2 text-sm text-[#6a4e38]">
+            <p className="rounded-[2px] border border-[#d8d2d2] bg-[#f3f1f1] px-3 py-2 text-sm text-[#3b3736]">
               {runError}
             </p>
           )}
@@ -200,16 +200,16 @@ export function PlaygroundPage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">Response</h2>
-              <p className="mt-2 text-sm text-[#655b50]">
+              <p className="mt-2 text-sm text-[#5f5958]">
                 Non-streaming chat completion through the session playground endpoint.
               </p>
             </div>
           </div>
-          <pre className="mt-6 min-h-96 whitespace-pre-wrap rounded-md border border-[#d8cbb8] bg-[#efe5d6] p-4 text-sm leading-6 text-[#3f3933]">
+          <pre className="mt-6 min-h-96 whitespace-pre-wrap rounded-[2px] border border-[#d8d2d2] bg-[#efeded] p-4 text-sm leading-6 text-[#3b3736]">
             {getAssistantText(response)}
           </pre>
           {response?.usage && (
-            <div className="mt-4 grid gap-3 text-sm text-[#655b50] sm:grid-cols-3">
+            <div className="mt-4 grid gap-3 text-sm text-[#5f5958] sm:grid-cols-3">
               <span>
                 Prompt: {response.usage.prompt_tokens ?? response.usage.input_tokens ?? 0}
               </span>

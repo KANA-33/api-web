@@ -191,7 +191,7 @@ export function ApiKeysPage() {
       <Card>
         <form className="flex flex-col gap-3 sm:flex-row" onSubmit={applySearch}>
           <input
-            className="h-10 flex-1 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 flex-1 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setKeyword(event.target.value)}
             placeholder="Search by key name or token"
             value={keyword}
@@ -203,19 +203,19 @@ export function ApiKeysPage() {
       </Card>
 
       {(formOpen || actionMessage || revealedKey) && (
-        <Card className="border-[#c9baa4]">
+        <Card className="border-[#d4cece]">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">
                 {formOpen ? (editingKey ? "Edit key" : "Create key") : "Key action"}
               </h2>
               {actionMessage && (
-                <p className="mt-2 text-sm leading-6 text-[#655b50]">{actionMessage}</p>
+                <p className="mt-2 text-sm leading-6 text-[#5f5958]">{actionMessage}</p>
               )}
             </div>
             <button
               aria-label="Close"
-              className="rounded-md p-2 text-[#6d6256] hover:bg-[#eadfce]"
+              className="rounded-[2px] p-2 text-[#5f5958] hover:bg-[#efeded]"
               onClick={() => {
                 setFormOpen(false);
                 setActionMessage(null);
@@ -228,7 +228,7 @@ export function ApiKeysPage() {
           </div>
 
           {revealedKey && (
-            <div className="mt-5 rounded-md border border-[#ddcfbd] bg-[#f7f0e8] p-4 font-mono text-xs text-[#4b4640]">
+            <div className="mt-5 rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-4 font-mono text-xs text-[#242121]">
               {revealedKey}
             </div>
           )}
@@ -238,7 +238,7 @@ export function ApiKeysPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Name
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) => setForm((value) => ({ ...value, name: event.target.value }))}
                   required
                   value={form.name}
@@ -247,7 +247,7 @@ export function ApiKeysPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Group
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, group: event.target.value }))
                   }
@@ -258,7 +258,7 @@ export function ApiKeysPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Quota
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   disabled={form.unlimitedQuota}
                   min={0}
                   onChange={(event) =>
@@ -271,7 +271,7 @@ export function ApiKeysPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Expired time
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, expiredTime: event.target.value }))
                   }
@@ -322,46 +322,46 @@ export function ApiKeysPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Credential inventory</h2>
-              <p className="mt-2 text-sm text-[#655b50]">
+              <p className="mt-2 text-sm text-[#5f5958]">
                 Showing {data.items.length} of {data.total} keys.
               </p>
             </div>
           </div>
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[860px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
                 <tr>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Name</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Key</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Last used</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Actions</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Name</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Key</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Quota</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Last used</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {data.items.map((key) => (
                   <tr key={key.id}>
-                    <td className="border-b border-[#eadfce] py-4 pr-4 font-medium">{key.name}</td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4 font-mono text-xs text-[#655b50]">
+                    <td className="border-b border-[#efeded] py-4 pr-4 font-medium">{key.name}</td>
+                    <td className="border-b border-[#efeded] py-4 pr-4 font-mono text-xs text-[#5f5958]">
                       {key.key}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {key.unlimited_quota
                         ? "Unlimited"
                         : formatQuota(key.remain_quota, platformStatus)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {formatTime(key.accessed_time)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {key.status === 1 ? "Active" : "Inactive"}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div className="flex gap-1">
                         <button
                           aria-label="Reveal key"
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => void handleReveal(key.id)}
                           type="button"
                         >
@@ -369,7 +369,7 @@ export function ApiKeysPage() {
                         </button>
                         <button
                           aria-label="Edit key"
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => openEditForm(key)}
                           type="button"
                         >
@@ -377,7 +377,7 @@ export function ApiKeysPage() {
                         </button>
                         <button
                           aria-label="Delete key"
-                          className="rounded-md p-2 text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                          className="rounded-[2px] p-2 text-[#7f1d1d] hover:bg-[#efeded]"
                           onClick={() => void handleDelete(key)}
                           type="button"
                         >
@@ -390,7 +390,7 @@ export function ApiKeysPage() {
               </tbody>
             </table>
           </div>
-          <div className="mt-5 flex items-center justify-between text-sm text-[#655b50]">
+          <div className="mt-5 flex items-center justify-between text-sm text-[#5f5958]">
             <Button
               disabled={page <= 1}
               onClick={() => setPage((value) => Math.max(1, value - 1))}

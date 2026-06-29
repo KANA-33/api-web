@@ -861,25 +861,25 @@ export function AdminChannelsPage() {
           onSubmit={applyFilters}
         >
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setKeyword(event.target.value)}
             placeholder="Search channel name"
             value={keyword}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setModel(event.target.value)}
             placeholder="Model contains"
             value={model}
           />
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setGroup(event.target.value)}
             placeholder="Group"
             value={group}
           />
           <select
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setStatus(event.target.value)}
             value={status}
           >
@@ -888,7 +888,7 @@ export function AdminChannelsPage() {
             <option value={0}>Disabled</option>
           </select>
           <select
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setType(event.target.value)}
             value={type}
           >
@@ -905,21 +905,21 @@ export function AdminChannelsPage() {
         </form>
       </Card>
 
-      <Card className="border-[#d0c0aa] bg-[#f8f1e7]/88">
+      <Card className="border-[#d0c0aa] bg-[#fffdfd]/88">
         <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <div>
-            <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#8d7a63]">
+            <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.18em] text-[#6c6a67]">
               <Tags className="size-4" />
               Batch operations
             </div>
-            <p className="mt-2 text-sm leading-6 text-[#655b50]">
+            <p className="mt-2 text-sm leading-6 text-[#5f5958]">
               {selectedIds.length} selected. Batch delete and tag updates apply to selected
               channels; tag status actions apply to every channel with that tag.
             </p>
           </div>
           <div className="grid gap-3 md:grid-cols-[minmax(180px,260px)_auto_auto] xl:min-w-[620px]">
             <input
-              className="h-10 rounded-md border border-[#d8cbb8] bg-[#fbf6ee] px-3 text-sm outline-none focus:border-[#8b765e]"
+              className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] px-3 text-sm outline-none focus:border-[#000000]"
               onChange={(event) => setBatchTag(event.target.value)}
               placeholder="Tag for selected channels"
               value={batchTag}
@@ -942,7 +942,7 @@ export function AdminChannelsPage() {
         </div>
         <div className="mt-5 grid gap-3 md:grid-cols-[minmax(180px,260px)_auto_auto_auto]">
           <input
-            className="h-10 rounded-md border border-[#d8cbb8] bg-[#fbf6ee] px-3 text-sm outline-none focus:border-[#8b765e]"
+            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] px-3 text-sm outline-none focus:border-[#000000]"
             onChange={(event) => setTagActionValue(event.target.value)}
             placeholder="Tag for enable/disable"
             value={tagActionValue}
@@ -965,7 +965,7 @@ export function AdminChannelsPage() {
         operationResult ||
         multiKeyStatus ||
         multiKeyStatus) && (
-        <Card className="border-[#c9baa4]">
+        <Card className="border-[#d4cece]">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold">
@@ -976,12 +976,12 @@ export function AdminChannelsPage() {
                     : "Channel action"}
               </h2>
               {actionMessage && (
-                <p className="mt-2 text-sm leading-6 text-[#655b50]">{actionMessage}</p>
+                <p className="mt-2 text-sm leading-6 text-[#5f5958]">{actionMessage}</p>
               )}
             </div>
             <button
               aria-label="Close"
-              className="rounded-md p-2 text-[#6d6256] hover:bg-[#eadfce]"
+              className="rounded-[2px] p-2 text-[#5f5958] hover:bg-[#efeded]"
               onClick={closePanel}
               type="button"
             >
@@ -994,7 +994,7 @@ export function AdminChannelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Name
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) => setForm((value) => ({ ...value, name: event.target.value }))}
                   required
                   value={form.name}
@@ -1003,7 +1003,7 @@ export function AdminChannelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Type
                 <select
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) => setForm((value) => ({ ...value, type: event.target.value }))}
                   value={form.type}
                 >
@@ -1017,7 +1017,7 @@ export function AdminChannelsPage() {
               <label className="grid gap-2 text-sm font-medium md:col-span-2">
                 API key
                 <textarea
-                  className="min-h-24 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 py-2 font-mono text-xs outline-none focus:border-[#8b765e]"
+                  className="min-h-24 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 py-2 font-mono text-xs outline-none focus:border-[#000000]"
                   onChange={(event) => setForm((value) => ({ ...value, key: event.target.value }))}
                   placeholder={
                     formMode === "edit"
@@ -1033,7 +1033,7 @@ export function AdminChannelsPage() {
                   <label className="grid gap-2 text-sm font-medium">
                     Key update mode
                     <select
-                      className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                      className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                       onChange={(event) =>
                         setForm((value) => ({
                           ...value,
@@ -1049,7 +1049,7 @@ export function AdminChannelsPage() {
                   <label className="grid gap-2 text-sm font-medium">
                     Multi-key routing mode
                     <select
-                      className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                      className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                       onChange={(event) =>
                         setForm((value) => ({ ...value, multiKeyMode: event.target.value }))
                       }
@@ -1065,7 +1065,7 @@ export function AdminChannelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Base URL
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, baseUrl: event.target.value }))
                   }
@@ -1076,7 +1076,7 @@ export function AdminChannelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Group
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, group: event.target.value }))
                   }
@@ -1087,7 +1087,7 @@ export function AdminChannelsPage() {
                 Models
                 <div className="grid gap-2 sm:grid-cols-[1fr_auto]">
                   <input
-                    className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                    className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                     onChange={(event) =>
                       setForm((value) => ({ ...value, models: event.target.value }))
                     }
@@ -1105,7 +1105,7 @@ export function AdminChannelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Test model
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, testModel: event.target.value }))
                   }
@@ -1115,7 +1115,7 @@ export function AdminChannelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Tag
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) => setForm((value) => ({ ...value, tag: event.target.value }))}
                   value={form.tag}
                 />
@@ -1123,7 +1123,7 @@ export function AdminChannelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Priority
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, priority: event.target.value }))
                   }
@@ -1134,7 +1134,7 @@ export function AdminChannelsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Weight
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, weight: event.target.value }))
                   }
@@ -1145,7 +1145,7 @@ export function AdminChannelsPage() {
               <label className="grid gap-2 text-sm font-medium md:col-span-2">
                 Remark
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   maxLength={255}
                   onChange={(event) =>
                     setForm((value) => ({ ...value, remark: event.target.value }))
@@ -1160,13 +1160,13 @@ export function AdminChannelsPage() {
           )}
 
           {revealedSecret && (
-            <div className="mt-6 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] p-4">
+            <div className="mt-6 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-[#2d2926]">
+                  <p className="text-sm font-semibold text-[#171717]">
                     {revealedSecret.channelName}
                   </p>
-                  <p className="mt-1 text-xs text-[#7c6e5e]">
+                  <p className="mt-1 text-xs text-[#6c6a67]">
                     Channel #{revealedSecret.channelId} · root-only secret view
                   </p>
                 </div>
@@ -1182,18 +1182,18 @@ export function AdminChannelsPage() {
                   </Button>
                 </div>
               </div>
-              <pre className="mt-4 max-h-64 overflow-auto rounded-md border border-[#ddcfbd] bg-[#fffaf3] p-3 font-mono text-xs leading-5 text-[#3c352e]">
+              <pre className="mt-4 max-h-64 overflow-auto rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-3 font-mono text-xs leading-5 text-[#3b3736]">
                 {revealedSecret.key}
               </pre>
             </div>
           )}
 
           {operationResult && (
-            <div className="mt-6 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] p-4">
+            <div className="mt-6 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-[#2d2926]">{operationResult.title}</p>
-                  <p className="mt-1 text-xs text-[#7c6e5e]">
+                  <p className="text-sm font-semibold text-[#171717]">{operationResult.title}</p>
+                  <p className="mt-1 text-xs text-[#6c6a67]">
                     {operationResult.upstreamStatus
                       ? `Upstream status ${operationResult.upstreamStatus}`
                       : "Channel operation result"}
@@ -1203,17 +1203,17 @@ export function AdminChannelsPage() {
                   Close result
                 </Button>
               </div>
-              <pre className="mt-4 max-h-80 overflow-auto rounded-md border border-[#ddcfbd] bg-[#fffaf3] p-3 font-mono text-xs leading-5 text-[#3c352e]">
+              <pre className="mt-4 max-h-80 overflow-auto rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-3 font-mono text-xs leading-5 text-[#3b3736]">
                 {JSON.stringify(operationResult.body, null, 2)}
               </pre>
               {upstreamReview && (
-                <div className="mt-4 border-t border-[#ddcfbd] pt-4">
+                <div className="mt-4 border-t border-[#d8d2d2] pt-4">
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                      <p className="text-sm font-semibold text-[#2d2926]">
+                      <p className="text-sm font-semibold text-[#171717]">
                         Pending upstream changes
                       </p>
-                      <p className="mt-1 text-xs text-[#7c6e5e]">
+                      <p className="mt-1 text-xs text-[#6c6a67]">
                         {upstreamReview.add_models.length} add ·{" "}
                         {upstreamReview.remove_models.length} remove · auto added{" "}
                         {upstreamReview.auto_added_models}
@@ -1231,40 +1231,40 @@ export function AdminChannelsPage() {
                   </div>
                   <div className="mt-4 grid gap-4 md:grid-cols-2">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a63]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6c6a67]">
                         Add candidates
                       </p>
                       <div className="mt-2 flex max-h-32 flex-wrap gap-2 overflow-auto">
                         {upstreamReview.add_models.length > 0 ? (
                           upstreamReview.add_models.map((item) => (
                             <span
-                              className="rounded-md bg-[#e7ddcb] px-2 py-1 font-mono text-xs"
+                              className="rounded-[2px] bg-[#e7ddcb] px-2 py-1 font-mono text-xs"
                               key={item}
                             >
                               {item}
                             </span>
                           ))
                         ) : (
-                          <span className="text-sm text-[#7c6e5e]">No add candidates</span>
+                          <span className="text-sm text-[#6c6a67]">No add candidates</span>
                         )}
                       </div>
                     </div>
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a63]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6c6a67]">
                         Remove candidates
                       </p>
                       <div className="mt-2 flex max-h-32 flex-wrap gap-2 overflow-auto">
                         {upstreamReview.remove_models.length > 0 ? (
                           upstreamReview.remove_models.map((item) => (
                             <span
-                              className="rounded-md bg-[#f0dfd2] px-2 py-1 font-mono text-xs text-[#7a4a3b]"
+                              className="rounded-[2px] bg-[#efeded] px-2 py-1 font-mono text-xs text-[#7f1d1d]"
                               key={item}
                             >
                               {item}
                             </span>
                           ))
                         ) : (
-                          <span className="text-sm text-[#7c6e5e]">No remove candidates</span>
+                          <span className="text-sm text-[#6c6a67]">No remove candidates</span>
                         )}
                       </div>
                     </div>
@@ -1275,13 +1275,13 @@ export function AdminChannelsPage() {
           )}
 
           {multiKeyStatus && (
-            <div className="mt-6 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] p-4">
+            <div className="mt-6 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-sm font-semibold text-[#2d2926]">
+                  <p className="text-sm font-semibold text-[#171717]">
                     {multiKeyStatus.channelName} multi-key status
                   </p>
-                  <p className="mt-1 text-xs text-[#7c6e5e]">
+                  <p className="mt-1 text-xs text-[#6c6a67]">
                     {multiKeyStatus.data.enabled_count} enabled ·{" "}
                     {multiKeyStatus.data.manual_disabled_count} manual disabled ·{" "}
                     {multiKeyStatus.data.auto_disabled_count} auto disabled
@@ -1310,36 +1310,36 @@ export function AdminChannelsPage() {
               </div>
               <div className="mt-4 overflow-x-auto">
                 <table className="w-full min-w-[760px] border-collapse text-left text-sm">
-                  <thead className="text-xs uppercase tracking-[0.16em] text-[#8d7a63]">
+                  <thead className="text-xs uppercase tracking-[0.16em] text-[#6c6a67]">
                     <tr>
-                      <th className="border-b border-[#ddcfbd] py-3 pr-4">Index</th>
-                      <th className="border-b border-[#ddcfbd] py-3 pr-4">Preview</th>
-                      <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-                      <th className="border-b border-[#ddcfbd] py-3 pr-4">Reason</th>
-                      <th className="border-b border-[#ddcfbd] py-3 pr-4">Actions</th>
+                      <th className="border-b border-[#d8d2d2] py-3 pr-4">Index</th>
+                      <th className="border-b border-[#d8d2d2] py-3 pr-4">Preview</th>
+                      <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+                      <th className="border-b border-[#d8d2d2] py-3 pr-4">Reason</th>
+                      <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {multiKeyStatus.data.keys.map((item) => (
                       <tr key={item.index}>
-                        <td className="border-b border-[#eadfce] py-3 pr-4">{item.index}</td>
-                        <td className="border-b border-[#eadfce] py-3 pr-4 font-mono text-xs">
+                        <td className="border-b border-[#efeded] py-3 pr-4">{item.index}</td>
+                        <td className="border-b border-[#efeded] py-3 pr-4 font-mono text-xs">
                           {item.key_preview}
                         </td>
-                        <td className="border-b border-[#eadfce] py-3 pr-4">
+                        <td className="border-b border-[#efeded] py-3 pr-4">
                           {item.status === 1
                             ? "Enabled"
                             : item.status === 2
                               ? "Manual disabled"
                               : "Auto disabled"}
                         </td>
-                        <td className="border-b border-[#eadfce] py-3 pr-4">
+                        <td className="border-b border-[#efeded] py-3 pr-4">
                           {item.reason || "None"}
                         </td>
-                        <td className="border-b border-[#eadfce] py-3 pr-4">
+                        <td className="border-b border-[#efeded] py-3 pr-4">
                           <div className="flex flex-wrap gap-2">
                             <button
-                              className="rounded-md px-2 py-1 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                              className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                               onClick={() =>
                                 void handleMultiKeyAction(
                                   item.status === 1 ? "disable_key" : "enable_key",
@@ -1351,7 +1351,7 @@ export function AdminChannelsPage() {
                               {item.status === 1 ? "Disable" : "Enable"}
                             </button>
                             <button
-                              className="rounded-md px-2 py-1 text-xs font-medium text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                              className="rounded-[2px] px-2 py-1 text-xs font-medium text-[#7f1d1d] hover:bg-[#efeded]"
                               onClick={() => void handleMultiKeyAction("delete_key", item.index)}
                               type="button"
                             >
@@ -1394,7 +1394,7 @@ export function AdminChannelsPage() {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Channel inventory</h2>
-              <p className="mt-2 text-sm text-[#655b50]">
+              <p className="mt-2 text-sm text-[#5f5958]">
                 Showing {data.items.length} of {data.total} channels.
               </p>
             </div>
@@ -1402,88 +1402,88 @@ export function AdminChannelsPage() {
 
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[1180px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
                 <tr>
-                  <th className="w-10 border-b border-[#ddcfbd] py-3 pr-4">
+                  <th className="w-10 border-b border-[#d8d2d2] py-3 pr-4">
                     <input
                       aria-label="Select current page channels"
                       checked={currentPageSelected}
-                      className="size-4 accent-[#2f3533]"
+                      className="size-4 accent-[#000000]"
                       onChange={toggleCurrentPageSelection}
                       type="checkbox"
                     />
                   </th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Channel</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Type</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Group</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Models</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Health</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Balance</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Actions</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Channel</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Type</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Group</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Models</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Health</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Balance</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {data.items.map((channel) => (
                   <tr key={channel.id}>
-                    <td className="border-b border-[#eadfce] py-4 pr-4 align-top">
+                    <td className="border-b border-[#efeded] py-4 pr-4 align-top">
                       <input
                         aria-label={`Select ${channel.name}`}
                         checked={isSelected(channel.id)}
-                        className="size-4 accent-[#2f3533]"
+                        className="size-4 accent-[#000000]"
                         onChange={() => toggleSelected(channel.id)}
                         type="checkbox"
                       />
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
-                      <div className="font-medium text-[#2d2926]">{channel.name}</div>
-                      <div className="mt-1 text-xs text-[#7c6e5e]">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
+                      <div className="font-medium text-[#171717]">{channel.name}</div>
+                      <div className="mt-1 text-xs text-[#6c6a67]">
                         #{channel.id}
                         {channel.tag ? ` · ${channel.tag}` : ""}
                         {channel.base_url ? ` · ${channel.base_url}` : ""}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {getChannelTypeLabel(channel.type)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <span className="inline-flex items-center gap-1.5">
                         {channel.status === CHANNEL_STATUS_ENABLED ? (
                           <BadgeCheck className="size-4 text-[#63785f]" />
                         ) : (
-                          <BadgeX className="size-4 text-[#8a4d3d]" />
+                          <BadgeX className="size-4 text-[#7f1d1d]" />
                         )}
                         {getStatusLabel(channel.status)}
                       </span>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">{channel.group}</td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
-                      <div className="max-w-72 truncate font-mono text-xs text-[#655b50]">
+                    <td className="border-b border-[#efeded] py-4 pr-4">{channel.group}</td>
+                    <td className="border-b border-[#efeded] py-4 pr-4">
+                      <div className="max-w-72 truncate font-mono text-xs text-[#5f5958]">
                         {channel.models || "None"}
                       </div>
                       {channel.test_model && (
-                        <div className="mt-1 text-xs text-[#7c6e5e]">Test {channel.test_model}</div>
+                        <div className="mt-1 text-xs text-[#6c6a67]">Test {channel.test_model}</div>
                       )}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div>
                         {channel.response_time ? `${channel.response_time}ms` : "Not tested"}
                       </div>
-                      <div className="mt-1 text-xs text-[#7c6e5e]">
+                      <div className="mt-1 text-xs text-[#6c6a67]">
                         {formatTime(channel.test_time)}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div>${formatRawNumber(channel.balance)}</div>
-                      <div className="mt-1 text-xs text-[#7c6e5e]">
+                      <div className="mt-1 text-xs text-[#6c6a67]">
                         Used {formatRawNumber(channel.used_quota)}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div className="flex flex-wrap gap-1">
                         <button
                           aria-label="Edit channel"
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => openEditForm(channel)}
                           type="button"
                         >
@@ -1491,7 +1491,7 @@ export function AdminChannelsPage() {
                         </button>
                         <button
                           aria-label="Test channel"
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => void handleTest(channel)}
                           type="button"
                         >
@@ -1499,7 +1499,7 @@ export function AdminChannelsPage() {
                         </button>
                         <button
                           aria-label="Update balance"
-                          className="rounded-md px-2 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] px-2 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => void handleBalance(channel)}
                           type="button"
                         >
@@ -1507,7 +1507,7 @@ export function AdminChannelsPage() {
                         </button>
                         <button
                           aria-label="Fetch upstream models"
-                          className="rounded-md px-2 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] px-2 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => void handleFetchUpstreamModels(channel)}
                           type="button"
                         >
@@ -1515,7 +1515,7 @@ export function AdminChannelsPage() {
                         </button>
                         <button
                           aria-label="Detect upstream model changes"
-                          className="rounded-md px-2 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] px-2 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => void handleDetectUpstreamModels(channel)}
                           type="button"
                         >
@@ -1524,7 +1524,7 @@ export function AdminChannelsPage() {
                         {channel.channel_info?.is_multi_key && (
                           <button
                             aria-label="Manage multi-key status"
-                            className="rounded-md px-2 text-xs font-medium text-[#5f554b] hover:bg-[#eadfce]"
+                            className="rounded-[2px] px-2 text-xs font-medium text-[#3b3736] hover:bg-[#efeded]"
                             onClick={() => void loadMultiKeyStatus(channel)}
                             type="button"
                           >
@@ -1534,7 +1534,7 @@ export function AdminChannelsPage() {
                         {canRevealSecrets && (
                           <button
                             aria-label="Reveal channel secret"
-                            className="rounded-md p-2 text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                            className="rounded-[2px] p-2 text-[#7f1d1d] hover:bg-[#efeded]"
                             onClick={() => void handleRevealKey(channel)}
                             type="button"
                           >
@@ -1543,7 +1543,7 @@ export function AdminChannelsPage() {
                         )}
                         <button
                           aria-label="Copy channel"
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => void handleCopy(channel)}
                           type="button"
                         >
@@ -1555,7 +1555,7 @@ export function AdminChannelsPage() {
                               ? "Disable channel"
                               : "Enable channel"
                           }
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => void handleStatus(channel)}
                           type="button"
                         >
@@ -1567,7 +1567,7 @@ export function AdminChannelsPage() {
                         </button>
                         <button
                           aria-label="Delete channel"
-                          className="rounded-md p-2 text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                          className="rounded-[2px] p-2 text-[#7f1d1d] hover:bg-[#efeded]"
                           onClick={() => void handleDelete(channel)}
                           type="button"
                         >
@@ -1581,7 +1581,7 @@ export function AdminChannelsPage() {
             </table>
           </div>
 
-          <div className="mt-5 flex items-center justify-between text-sm text-[#655b50]">
+          <div className="mt-5 flex items-center justify-between text-sm text-[#5f5958]">
             <Button
               disabled={page <= 1}
               onClick={() => setPage((value) => Math.max(1, value - 1))}

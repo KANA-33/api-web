@@ -1,25 +1,14 @@
 import { useState, type FormEvent, type ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
 import {
-  BarChart3,
-  Bell,
-  BookOpen,
   CalendarDays,
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
-  CircleHelp,
   Gauge,
-  Headphones,
   KeyRound,
-  MessageSquare,
   RefreshCw,
-  Search,
-  Settings,
-  TerminalSquare,
 } from "lucide-react";
 import * as logsApi from "@features/logs/api";
-import { useAuthStore } from "@features/auth/store";
 import { usePlatformStore } from "@features/platform/store";
 import type { PlatformStatus } from "@shared/api/contracts";
 import { useAsyncData } from "@shared/lib/use-async-data";
@@ -125,7 +114,6 @@ export function LogsPage() {
   const [filters, setFilters] = useState<LogFilters>(emptyFilters);
   const [appliedFilters, setAppliedFilters] = useState<LogFilters>(emptyFilters);
   const pageSize = 100;
-  const user = useAuthStore((state) => state.user);
   const platformStatus = usePlatformStore((state) => state.status);
 
   const { data, error, loading, reload } = useAsyncData(async () => {
@@ -202,274 +190,175 @@ export function LogsPage() {
       : 0;
 
   return (
-    <div className="min-h-[100dvh] bg-[#fbf9f9] text-[#171717]">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-[296px] flex-col border-r border-[#d8d2d2] bg-[#fbf9f9] px-5 py-9 md:flex">
-        <div>
-          <h1 className="text-[34px] font-bold leading-[1.08] tracking-[-0.03em]">
-            System
-            <br />
-            Console
-          </h1>
-          <p className="mt-3 text-sm font-medium text-[#67605f]">Production v2.4</p>
-        </div>
+    <div className="space-y-8 pb-20 lg:pb-0">
+      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <h2 className="text-[46px] font-bold leading-none tracking-[-0.045em] md:text-[56px]">
+          {tabs.find((tab) => tab.id === activeTab)?.label}
+        </h2>
+        <button
+          className="inline-flex h-10 w-fit items-center gap-2 rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#242121] hover:bg-[#efeded]"
+          onClick={() => void reload()}
+          type="button"
+        >
+          <RefreshCw className="size-4" />
+          Refresh
+        </button>
+      </div>
 
-        <nav className="mt-14 grid gap-2">
-          <Link
-            className="flex h-11 items-center gap-4 rounded-[2px] px-4 text-sm font-semibold uppercase tracking-[0.13em] text-[#5f5958] hover:bg-[#efeded]"
-            to="/playground"
-          >
-            <TerminalSquare className="size-5" />
-            Playground
-          </Link>
-          <Link
-            className="flex h-11 items-center gap-4 rounded-[2px] px-4 text-sm font-semibold uppercase tracking-[0.13em] text-[#5f5958] hover:bg-[#efeded]"
-            to="/playground"
-          >
-            <MessageSquare className="size-5" />
-            Chat
-          </Link>
-          <Link
-            className="flex h-11 items-center gap-4 rounded-[2px] bg-black px-4 text-sm font-bold uppercase tracking-[0.13em] text-white"
-            to="/logs"
-          >
-            <BarChart3 className="size-5" />
-            Usage Logs
-          </Link>
-          <Link
-            className="flex h-11 items-center gap-4 rounded-[2px] px-4 text-sm font-semibold uppercase tracking-[0.13em] text-[#5f5958] hover:bg-[#efeded]"
-            to="/profile"
-          >
-            <Settings className="size-5" />
-            Settings
-          </Link>
-        </nav>
+      <div className="mt-9 grid gap-7 md:grid-cols-3">
+        <StatPlate label="Total usage" value={formatQuota(usageTotal, platformStatus)} />
+        <StatPlate label="Avg latency" value={formatSeconds(avgLatency)} />
+        <StatPlate label="Tokens" value={formatRawNumber(totalTokens)} />
+      </div>
 
-        <div className="mt-auto border-t border-[#d8d2d2] pt-9">
-          <Link
-            className="flex h-11 items-center gap-4 rounded-[2px] px-4 text-sm font-semibold uppercase tracking-[0.13em] text-[#5f5958] hover:bg-[#efeded]"
-            to="/models"
+      <div className="mt-8 flex flex-wrap gap-2">
+        {tabs.map((tab) => (
+          <button
+            className={cn(
+              "h-10 rounded-[2px] border px-4 text-sm font-bold uppercase tracking-[0.08em]",
+              activeTab === tab.id
+                ? "border-black bg-black text-white"
+                : "border-[#d4cece] bg-[#fffdfd] text-[#5f5958] hover:bg-[#efeded]",
+            )}
+            key={tab.id}
+            onClick={() => changeTab(tab.id)}
+            type="button"
           >
-            <BookOpen className="size-5" />
-            Documentation
-          </Link>
-          <Link
-            className="mt-2 flex h-11 items-center gap-4 rounded-[2px] px-4 text-sm font-semibold uppercase tracking-[0.13em] text-[#5f5958] hover:bg-[#efeded]"
-            to="/profile"
-          >
-            <Headphones className="size-5" />
-            Support
-          </Link>
-          <Link
-            className="mt-5 flex h-11 items-center justify-center rounded-[2px] bg-black px-4 text-sm font-bold uppercase tracking-[0.13em] text-white"
-            to="/wallet"
-          >
-            Upgrade Plan
-          </Link>
-        </div>
-      </aside>
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
-      <main className="min-h-[100dvh] md:pl-[296px]">
-        <header className="sticky top-0 z-20 flex h-[74px] items-center justify-between border-b border-[#d8d2d2] bg-[#fbf9f9]/92 px-5 backdrop-blur md:px-7">
-          <form className="relative w-full max-w-[300px]" onSubmit={applyFilters}>
-            <Search className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[#5f5958]" />
+      <form
+        className="mt-8 flex flex-col gap-4 border border-[#d8d2d2] bg-[#fbf9f9] p-5 lg:flex-row lg:items-center lg:justify-between"
+        onSubmit={applyFilters}
+      >
+        <div className="flex flex-1 flex-wrap gap-4">
+          <label className="relative w-full sm:w-[374px]">
+            <CalendarDays className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[#5f5958]" />
+            <span className="sr-only">Start date</span>
             <input
-              className="h-[38px] w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] pl-12 pr-3 text-sm font-semibold text-[#242121] outline-none focus:border-black"
+              className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] pl-12 pr-3 text-sm font-semibold text-[#3b3736] outline-none focus:border-black"
               onChange={(event) =>
-                setFilters((value) => ({ ...value, keyword: event.target.value }))
+                setFilters((value) => ({ ...value, startDate: event.target.value }))
               }
-              placeholder="Search logs..."
-              value={filters.keyword}
+              type="date"
+              value={filters.startDate}
             />
-          </form>
+          </label>
+          <input
+            className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[168px]"
+            onChange={(event) =>
+              setFilters((value) => ({ ...value, modelName: event.target.value }))
+            }
+            placeholder={activeTab === "task" ? "All Actions" : "All Models"}
+            value={filters.modelName}
+          />
+          <input
+            className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[150px]"
+            onChange={(event) => setFilters((value) => ({ ...value, status: event.target.value }))}
+            placeholder={activeTab === "task" ? "All Status" : "All Groups"}
+            value={filters.status}
+          />
+          <input
+            className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[150px]"
+            onChange={(event) => setFilters((value) => ({ ...value, endDate: event.target.value }))}
+            type="date"
+            value={filters.endDate}
+          />
+        </div>
+        <div className="flex gap-2">
+          <button
+            className="h-11 rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-5 text-sm font-semibold text-[#3b3736] hover:bg-[#efeded]"
+            onClick={clearFilters}
+            type="button"
+          >
+            Reset
+          </button>
+          <button
+            className="h-11 rounded-[2px] border border-black bg-black px-6 text-sm font-bold text-white hover:bg-[#303031]"
+            type="submit"
+          >
+            Search
+          </button>
+        </div>
+      </form>
 
-          <div className="ml-4 flex items-center gap-4 text-[#4f4948]">
-            <button className="rounded-full p-1.5 hover:bg-[#efeded]" type="button">
-              <Bell className="size-5" />
-            </button>
-            <button className="rounded-full p-1.5 hover:bg-[#efeded]" type="button">
-              <CircleHelp className="size-5" />
-            </button>
-            <span className="grid size-9 place-items-center rounded-full border border-[#d8d2d2] bg-[#efeded] text-xs font-bold text-[#242121]">
-              {firstGlyph(user?.display_name || user?.username || "AD")}
-            </span>
-          </div>
-        </header>
+      <div className="mt-8">
+        <div
+          className={`${logGridClass} hidden border-b border-[#d8d2d2] px-5 pb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#6c6a67] xl:grid`}
+        >
+          <span>Time</span>
+          <span>Channel</span>
+          <span>User</span>
+          <span>Token</span>
+          <span>Model</span>
+          <span>Timing</span>
+          <span>Tokens</span>
+          <span>Cost</span>
+          <span>Details</span>
+        </div>
 
-        <div className="mx-auto max-w-[1640px] px-5 py-14 md:px-14 xl:px-[58px]">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-            <h2 className="text-[46px] font-bold leading-none tracking-[-0.045em] md:text-[56px]">
-              {tabs.find((tab) => tab.id === activeTab)?.label}
-            </h2>
-            <button
-              className="inline-flex h-10 w-fit items-center gap-2 rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#242121] hover:bg-[#efeded]"
-              onClick={() => void reload()}
-              type="button"
-            >
-              <RefreshCw className="size-4" />
-              Refresh
-            </button>
-          </div>
+        {loading && <LoadingBlock title="Loading logs" />}
 
-          <div className="mt-9 grid gap-7 md:grid-cols-3">
-            <StatPlate label="Total usage" value={formatQuota(usageTotal, platformStatus)} />
-            <StatPlate label="Avg latency" value={formatSeconds(avgLatency)} />
-            <StatPlate label="Tokens" value={formatRawNumber(totalTokens)} />
-          </div>
+        {error && (
+          <ErrorBlock
+            actionLabel="Retry"
+            description={error}
+            onAction={() => void reload()}
+            title="Logs unavailable"
+          />
+        )}
 
-          <div className="mt-8 flex flex-wrap gap-2">
-            {tabs.map((tab) => (
-              <button
-                className={cn(
-                  "h-10 rounded-[2px] border px-4 text-sm font-bold uppercase tracking-[0.08em]",
-                  activeTab === tab.id
-                    ? "border-black bg-black text-white"
-                    : "border-[#d4cece] bg-[#fffdfd] text-[#5f5958] hover:bg-[#efeded]",
-                )}
-                key={tab.id}
-                onClick={() => changeTab(tab.id)}
-                type="button"
-              >
-                {tab.label}
-              </button>
+        {!loading && !error && records.length === 0 && (
+          <EmptyBlock
+            description="Records will appear here once requests or tasks are processed."
+            title="No records"
+          />
+        )}
+
+        {!loading && !error && records.length > 0 && (
+          <div className="mt-3 space-y-3">
+            {records.map((record, index) => (
+              <LogRecord
+                activeTab={activeTab}
+                index={index}
+                key={String((record as Record<string, unknown>).id ?? index)}
+                platformStatus={platformStatus}
+                record={record as Record<string, unknown>}
+              />
             ))}
           </div>
+        )}
 
-          <form
-            className="mt-8 flex flex-col gap-4 border border-[#d8d2d2] bg-[#fbf9f9] p-5 lg:flex-row lg:items-center lg:justify-between"
-            onSubmit={applyFilters}
-          >
-            <div className="flex flex-1 flex-wrap gap-4">
-              <label className="relative w-full sm:w-[374px]">
-                <CalendarDays className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[#5f5958]" />
-                <span className="sr-only">Start date</span>
-                <input
-                  className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] pl-12 pr-3 text-sm font-semibold text-[#3b3736] outline-none focus:border-black"
-                  onChange={(event) =>
-                    setFilters((value) => ({ ...value, startDate: event.target.value }))
-                  }
-                  type="date"
-                  value={filters.startDate}
-                />
-              </label>
-              <input
-                className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[168px]"
-                onChange={(event) =>
-                  setFilters((value) => ({ ...value, modelName: event.target.value }))
-                }
-                placeholder={activeTab === "task" ? "All Actions" : "All Models"}
-                value={filters.modelName}
-              />
-              <input
-                className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[150px]"
-                onChange={(event) =>
-                  setFilters((value) => ({ ...value, status: event.target.value }))
-                }
-                placeholder={activeTab === "task" ? "All Status" : "All Groups"}
-                value={filters.status}
-              />
-              <input
-                className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[150px]"
-                onChange={(event) =>
-                  setFilters((value) => ({ ...value, endDate: event.target.value }))
-                }
-                type="date"
-                value={filters.endDate}
-              />
-            </div>
-            <div className="flex gap-2">
-              <button
-                className="h-11 rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-5 text-sm font-semibold text-[#3b3736] hover:bg-[#efeded]"
-                onClick={clearFilters}
-                type="button"
-              >
-                Reset
-              </button>
-              <button
-                className="h-11 rounded-[2px] border border-black bg-black px-6 text-sm font-bold text-white hover:bg-[#303031]"
-                type="submit"
-              >
-                Search
-              </button>
-            </div>
-          </form>
-
-          <div className="mt-8">
-            <div
-              className={`${logGridClass} hidden border-b border-[#d8d2d2] px-5 pb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#6c6a67] xl:grid`}
+        <div className="mt-7 flex flex-col gap-4 border-t border-[#d8d2d2] pt-5 text-sm font-medium text-[#5f5958] sm:flex-row sm:items-center sm:justify-end">
+          <span>Total: {formatRawNumber(data?.total ?? 0)}</span>
+          <span>Rows per page</span>
+          <span className="grid h-9 min-w-12 place-items-center rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-3 text-[#242121]">
+            {pageSize}
+          </span>
+          <div className="flex gap-1">
+            <PagerButton disabled={page <= 1} onClick={() => setPage(1)}>
+              <ChevronsLeft className="size-4" />
+            </PagerButton>
+            <PagerButton
+              disabled={page <= 1}
+              onClick={() => setPage((value) => Math.max(1, value - 1))}
             >
-              <span>Time</span>
-              <span>Channel</span>
-              <span>User</span>
-              <span>Token</span>
-              <span>Model</span>
-              <span>Timing</span>
-              <span>Tokens</span>
-              <span>Cost</span>
-              <span>Details</span>
-            </div>
-
-            {loading && <LoadingBlock title="Loading logs" />}
-
-            {error && (
-              <ErrorBlock
-                actionLabel="Retry"
-                description={error}
-                onAction={() => void reload()}
-                title="Logs unavailable"
-              />
-            )}
-
-            {!loading && !error && records.length === 0 && (
-              <EmptyBlock
-                description="Records will appear here once requests or tasks are processed."
-                title="No records"
-              />
-            )}
-
-            {!loading && !error && records.length > 0 && (
-              <div className="mt-3 space-y-3">
-                {records.map((record, index) => (
-                  <LogRecord
-                    activeTab={activeTab}
-                    index={index}
-                    key={String((record as Record<string, unknown>).id ?? index)}
-                    platformStatus={platformStatus}
-                    record={record as Record<string, unknown>}
-                  />
-                ))}
-              </div>
-            )}
-
-            <div className="mt-7 flex flex-col gap-4 border-t border-[#d8d2d2] pt-5 text-sm font-medium text-[#5f5958] sm:flex-row sm:items-center sm:justify-end">
-              <span>Total: {formatRawNumber(data?.total ?? 0)}</span>
-              <span>Rows per page</span>
-              <span className="grid h-9 min-w-12 place-items-center rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-3 text-[#242121]">
-                {pageSize}
-              </span>
-              <div className="flex gap-1">
-                <PagerButton disabled={page <= 1} onClick={() => setPage(1)}>
-                  <ChevronsLeft className="size-4" />
-                </PagerButton>
-                <PagerButton
-                  disabled={page <= 1}
-                  onClick={() => setPage((value) => Math.max(1, value - 1))}
-                >
-                  <ChevronLeft className="size-4" />
-                </PagerButton>
-                <span className="grid size-9 place-items-center rounded-[2px] bg-black text-sm font-bold text-white">
-                  {page}
-                </span>
-                <PagerButton
-                  disabled={page >= totalPages}
-                  onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
-                >
-                  <ChevronRight className="size-4" />
-                </PagerButton>
-              </div>
-            </div>
+              <ChevronLeft className="size-4" />
+            </PagerButton>
+            <span className="grid size-9 place-items-center rounded-[2px] bg-black text-sm font-bold text-white">
+              {page}
+            </span>
+            <PagerButton
+              disabled={page >= totalPages}
+              onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+            >
+              <ChevronRight className="size-4" />
+            </PagerButton>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

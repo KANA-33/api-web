@@ -422,13 +422,13 @@ export function AdminBillingPage() {
         </Button>
       </div>
 
-      {actionMessage && <p className="text-sm font-medium text-[#5d4f41]">{actionMessage}</p>}
+      {actionMessage && <p className="text-sm font-medium text-[#3b3736]">{actionMessage}</p>}
 
       <div className="grid gap-4 xl:grid-cols-[1.1fr_0.9fr]">
         <Card>
           <form className="flex flex-col gap-3 sm:flex-row" onSubmit={applyFilters}>
             <input
-              className="h-11 flex-1 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+              className="h-11 flex-1 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
               onChange={(event) => setKeyword(event.target.value)}
               placeholder="Search trade number, provider, or user context"
               value={keyword}
@@ -442,7 +442,7 @@ export function AdminBillingPage() {
         <Card>
           <form className="flex flex-col gap-3 sm:flex-row" onSubmit={handleManualComplete}>
             <input
-              className="h-11 flex-1 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 font-mono text-sm outline-none focus:border-[#8b765e]"
+              className="h-11 flex-1 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 font-mono text-sm outline-none focus:border-[#000000]"
               onChange={(event) => setTradeNo(event.target.value)}
               placeholder="Trade number for manual completion"
               value={tradeNo}
@@ -477,48 +477,48 @@ export function AdminBillingPage() {
         <Card>
           <div>
             <h2 className="text-xl font-semibold">Top-up ledger</h2>
-            <p className="mt-2 text-sm text-[#655b50]">
+            <p className="mt-2 text-sm text-[#5f5958]">
               Showing {data.items.length} of {data.total} top-up records.
             </p>
           </div>
 
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[1120px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
                 <tr>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Order</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">User</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Amount</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Payment</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Timeline</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Actions</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Order</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">User</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Amount</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Payment</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Timeline</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {data.items.map((record) => (
                   <tr key={record.id}>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
-                      <div className="font-medium text-[#2d2926]">#{record.id}</div>
-                      <div className="mt-1 max-w-80 truncate font-mono text-xs text-[#7c6e5e]">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
+                      <div className="font-medium text-[#171717]">#{record.id}</div>
+                      <div className="mt-1 max-w-80 truncate font-mono text-xs text-[#6c6a67]">
                         {record.trade_no || "No trade number"}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">User {record.user_id}</td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">User {record.user_id}</td>
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div>{formatQuota(record.amount, platformStatus)}</div>
-                      <div className="mt-1 text-xs text-[#7c6e5e]">{formatMoney(record.money)}</div>
+                      <div className="mt-1 text-xs text-[#6c6a67]">{formatMoney(record.money)}</div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div className="inline-flex items-center gap-2">
-                        <CreditCard className="size-4 text-[#8b765e]" />
+                        <CreditCard className="size-4 text-[#000000]" />
                         {record.payment_provider || "Provider"}
                       </div>
-                      <div className="mt-1 text-xs text-[#7c6e5e]">
+                      <div className="mt-1 text-xs text-[#6c6a67]">
                         {record.payment_method || "Unknown method"}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <span className="inline-flex items-center gap-1.5">
                         {isCompleted(record) ? (
                           <BadgeCheck className="size-4 text-[#63785f]" />
@@ -528,13 +528,13 @@ export function AdminBillingPage() {
                         {record.status || "unknown"}
                       </span>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div>Created {formatTime(record.create_time)}</div>
-                      <div className="mt-1 text-xs text-[#7c6e5e]">
+                      <div className="mt-1 text-xs text-[#6c6a67]">
                         Completed {formatTime(record.complete_time)}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <Button
                         disabled={isCompleted(record) || !record.trade_no}
                         onClick={() => void completeByTradeNo(record.trade_no)}
@@ -549,7 +549,7 @@ export function AdminBillingPage() {
             </table>
           </div>
 
-          <div className="mt-5 flex items-center justify-between text-sm text-[#655b50]">
+          <div className="mt-5 flex items-center justify-between text-sm text-[#5f5958]">
             <Button
               disabled={page <= 1}
               onClick={() => setPage((value) => Math.max(1, value - 1))}
@@ -576,7 +576,7 @@ export function AdminBillingPage() {
           <div className="flex items-center justify-between gap-3">
             <div>
               <h2 className="text-xl font-semibold">Subscription plans</h2>
-              <p className="mt-2 text-sm text-[#655b50]">Create and revise paid access plans.</p>
+              <p className="mt-2 text-sm text-[#5f5958]">Create and revise paid access plans.</p>
             </div>
             <Button onClick={() => setPlanDraft(emptyPlan)} type="button" variant="secondary">
               <PackagePlus className="mr-2 size-4" />
@@ -584,13 +584,13 @@ export function AdminBillingPage() {
             </Button>
           </div>
 
-          {planLoading && <p className="mt-5 text-sm text-[#655b50]">Loading plans...</p>}
-          {planError && <p className="mt-5 text-sm text-[#8a4d3d]">{planError}</p>}
+          {planLoading && <p className="mt-5 text-sm text-[#5f5958]">Loading plans...</p>}
+          {planError && <p className="mt-5 text-sm text-[#7f1d1d]">{planError}</p>}
 
           <div className="mt-5 grid gap-3">
             {(planData ?? []).map((plan) => (
               <button
-                className="rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4 text-left transition-colors hover:border-[#c9b89f]"
+                className="rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-4 text-left transition-colors hover:border-[#c9b89f]"
                 key={plan.id}
                 onClick={() => setPlanDraft(normalizePlan(plan))}
                 type="button"
@@ -598,18 +598,18 @@ export function AdminBillingPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <div className="font-semibold">{plan.title}</div>
-                    <div className="mt-1 text-sm text-[#655b50]">
+                    <div className="mt-1 text-sm text-[#5f5958]">
                       {formatMoney(plan.price_amount)} · {plan.duration_value} {plan.duration_unit}
                     </div>
                   </div>
-                  <span className={plan.enabled ? "text-[#63785f]" : "text-[#8a4d3d]"}>
+                  <span className={plan.enabled ? "text-[#63785f]" : "text-[#7f1d1d]"}>
                     {plan.enabled ? "Enabled" : "Disabled"}
                   </span>
                 </div>
               </button>
             ))}
             {(planData ?? []).length === 0 && !planLoading && (
-              <p className="rounded-md border border-dashed border-[#d8cbb8] p-4 text-sm text-[#655b50]">
+              <p className="rounded-[2px] border border-dashed border-[#d8d2d2] p-4 text-sm text-[#5f5958]">
                 No subscription plans yet.
               </p>
             )}
@@ -636,33 +636,33 @@ export function AdminBillingPage() {
 
             <div className="grid gap-3 md:grid-cols-2">
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("title", event.target.value)}
                 placeholder="Title"
                 value={planDraft.title}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("subtitle", event.target.value)}
                 placeholder="Subtitle"
                 value={planDraft.subtitle ?? ""}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("price_amount", Number(event.target.value))}
                 placeholder="Price"
                 type="number"
                 value={planDraft.price_amount}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("total_amount", Number(event.target.value))}
                 placeholder="Total quota"
                 type="number"
                 value={planDraft.total_amount ?? 0}
               />
               <select
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) =>
                   setPlanField(
                     "duration_unit",
@@ -678,21 +678,21 @@ export function AdminBillingPage() {
                 <option value="custom">Custom seconds</option>
               </select>
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("duration_value", Number(event.target.value))}
                 placeholder="Duration value"
                 type="number"
                 value={planDraft.duration_value}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("custom_seconds", Number(event.target.value))}
                 placeholder="Custom seconds"
                 type="number"
                 value={planDraft.custom_seconds ?? 0}
               />
               <select
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) =>
                   setPlanField(
                     "quota_reset_period",
@@ -708,7 +708,7 @@ export function AdminBillingPage() {
                 <option value="custom">Custom seconds</option>
               </select>
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) =>
                   setPlanField("quota_reset_custom_seconds", Number(event.target.value))
                 }
@@ -717,7 +717,7 @@ export function AdminBillingPage() {
                 value={planDraft.quota_reset_custom_seconds ?? 0}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) =>
                   setPlanField("max_purchase_per_user", Number(event.target.value))
                 }
@@ -726,37 +726,37 @@ export function AdminBillingPage() {
                 value={planDraft.max_purchase_per_user ?? 0}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("upgrade_group", event.target.value)}
                 placeholder="Upgrade group"
                 value={planDraft.upgrade_group ?? ""}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("downgrade_group", event.target.value)}
                 placeholder="Downgrade group"
                 value={planDraft.downgrade_group ?? ""}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("stripe_price_id", event.target.value)}
                 placeholder="Stripe price id"
                 value={planDraft.stripe_price_id ?? ""}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("creem_product_id", event.target.value)}
                 placeholder="Creem product id"
                 value={planDraft.creem_product_id ?? ""}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("waffo_pancake_product_id", event.target.value)}
                 placeholder="Waffo Pancake product id"
                 value={planDraft.waffo_pancake_product_id ?? ""}
               />
               <input
-                className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                 onChange={(event) => setPlanField("sort_order", Number(event.target.value))}
                 placeholder="Sort order"
                 type="number"
@@ -802,12 +802,12 @@ export function AdminBillingPage() {
       <Card>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <div className="flex items-center gap-2 text-sm font-medium text-[#655b50]">
+            <div className="flex items-center gap-2 text-sm font-medium text-[#5f5958]">
               <Settings2 className="size-4" />
               Payment gateways
             </div>
             <h2 className="mt-3 text-xl font-semibold">Gateway configuration</h2>
-            {optionError && <p className="mt-3 text-sm text-[#8a4d3d]">{optionError}</p>}
+            {optionError && <p className="mt-3 text-sm text-[#7f1d1d]">{optionError}</p>}
           </div>
           {canEditGateways && (
             <Button
@@ -823,14 +823,14 @@ export function AdminBillingPage() {
         </div>
 
         {!canEditGateways ? (
-          <p className="mt-5 rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4 text-sm text-[#655b50]">
+          <p className="mt-5 rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-4 text-sm text-[#5f5958]">
             Root access is required to edit payment gateway credentials.
           </p>
         ) : (
           <div className="mt-6 grid gap-5">
             {gatewayGroups.map((group) => (
               <form
-                className="rounded-md border border-[#eadfce] bg-[#fbf6ee] p-4"
+                className="rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-4"
                 key={group.title}
                 onSubmit={(event) => {
                   event.preventDefault();
@@ -862,7 +862,7 @@ export function AdminBillingPage() {
                         <label className="text-sm font-medium text-[#3f3931]">{field.label}</label>
                         {field.type === "boolean" ? (
                           <select
-                            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                             onChange={(event) =>
                               setLocalOptions((current) => ({
                                 ...current,
@@ -876,7 +876,7 @@ export function AdminBillingPage() {
                           </select>
                         ) : field.type === "textarea" || field.type === "json" ? (
                           <textarea
-                            className="min-h-24 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 py-2 text-sm outline-none focus:border-[#8b765e]"
+                            className="min-h-24 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 py-2 text-sm outline-none focus:border-[#000000]"
                             onChange={(event) =>
                               setLocalOptions((current) => ({
                                 ...current,
@@ -887,7 +887,7 @@ export function AdminBillingPage() {
                           />
                         ) : (
                           <input
-                            className="h-10 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 text-sm outline-none focus:border-[#8b765e]"
+                            className="h-10 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                             onChange={(event) =>
                               setLocalOptions((current) => ({
                                 ...current,
@@ -898,7 +898,7 @@ export function AdminBillingPage() {
                             value={value}
                           />
                         )}
-                        {invalidJson && <p className="text-xs text-[#8a4d3d]">Invalid JSON</p>}
+                        {invalidJson && <p className="text-xs text-[#7f1d1d]">Invalid JSON</p>}
                       </div>
                     );
                   })}

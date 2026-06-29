@@ -112,7 +112,7 @@ export function AdminOverviewPage() {
           title="Admin Console"
         />
         <button
-          className="inline-flex h-10 items-center justify-center rounded-md border border-[#c9baa4] bg-[#efe5d6] px-4 text-sm font-medium text-[#2d2926] transition-colors hover:bg-[#e5d8c5]"
+          className="inline-flex h-10 items-center justify-center rounded-[2px] border border-[#d4cece] bg-[#efeded] px-4 text-sm font-medium text-[#171717] transition-colors hover:bg-[#e3e2e2]"
           onClick={() => void reload()}
           type="button"
         >
@@ -124,36 +124,36 @@ export function AdminOverviewPage() {
         <Card className="min-h-52">
           <div className="flex items-start justify-between gap-5">
             <div>
-              <h2 className="text-xl font-semibold text-[#2d2926]">Operational snapshot</h2>
-              <p className="mt-2 text-sm leading-6 text-[#655b50]">
+              <h2 className="text-xl font-semibold text-[#171717]">Operational snapshot</h2>
+              <p className="mt-2 text-sm leading-6 text-[#5f5958]">
                 A light readout of the admin MVP surface. Individual module pages remain the source
                 of truth for edits and detailed review.
               </p>
             </div>
-            <span className="grid size-10 shrink-0 place-items-center rounded-md border border-[#d8cbb8] bg-[#f3eadc] text-[#6f5f4b]">
+            <span className="grid size-10 shrink-0 place-items-center rounded-[2px] border border-[#d8d2d2] bg-[#efeded] text-[#5f5958]">
               <Activity className="size-5" />
             </span>
           </div>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a63]">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6c6a67]">
                 Quota
               </p>
               <p className="mt-3 text-2xl font-semibold">
                 {loading ? "..." : formatQuota(data?.usage?.quota, platformStatus)}
               </p>
             </div>
-            <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a63]">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6c6a67]">
                 RPM
               </p>
               <p className="mt-3 text-2xl font-semibold">
                 {loading ? "..." : formatRawNumber(data?.usage?.rpm)}
               </p>
             </div>
-            <div className="rounded-md border border-[#ddcfbd] bg-[#f8f1e7] p-4">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a63]">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6c6a67]">
                 TPM
               </p>
               <p className="mt-3 text-2xl font-semibold">
@@ -164,11 +164,11 @@ export function AdminOverviewPage() {
         </Card>
 
         <Card className="min-h-52">
-          <h2 className="text-xl font-semibold text-[#2d2926]">MVP readiness</h2>
+          <h2 className="text-xl font-semibold text-[#171717]">MVP readiness</h2>
           <div className="mt-5 space-y-3">
             {readinessItems.map((item) => (
-              <div className="flex gap-3 text-sm leading-6 text-[#655b50]" key={item}>
-                <span className="mt-2 size-1.5 shrink-0 rounded-full bg-[#6f5f4b]" />
+              <div className="flex gap-3 text-sm leading-6 text-[#5f5958]" key={item}>
+                <span className="mt-2 size-1.5 shrink-0 rounded-full bg-[#5f5958]" />
                 <span>{item}</span>
               </div>
             ))}
@@ -187,22 +187,22 @@ export function AdminOverviewPage() {
                 <div className="flex h-full flex-col justify-between gap-6">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h2 className="text-lg font-semibold text-[#2d2926]">{module.title}</h2>
-                      <p className="mt-3 text-sm leading-6 text-[#655b50]">{module.description}</p>
+                      <h2 className="text-lg font-semibold text-[#171717]">{module.title}</h2>
+                      <p className="mt-3 text-sm leading-6 text-[#5f5958]">{module.description}</p>
                     </div>
-                    <span className="grid size-10 shrink-0 place-items-center rounded-md border border-[#d8cbb8] bg-[#f3eadc] text-[#6f5f4b]">
+                    <span className="grid size-10 shrink-0 place-items-center rounded-[2px] border border-[#d8d2d2] bg-[#efeded] text-[#5f5958]">
                       <Icon className="size-5" />
                     </span>
                   </div>
 
                   <div className="flex items-end justify-between gap-4">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#8d7a63]">
+                      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6c6a67]">
                         {module.metricKey === "logs" ? "RPM" : "Status"}
                       </p>
-                      <p className="mt-2 text-xl font-semibold text-[#2d2926]">{value}</p>
+                      <p className="mt-2 text-xl font-semibold text-[#171717]">{value}</p>
                     </div>
-                    <span className="inline-flex items-center gap-2 text-sm font-medium text-[#4b4640]">
+                    <span className="inline-flex items-center gap-2 text-sm font-medium text-[#242121]">
                       Open
                       <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                     </span>

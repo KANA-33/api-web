@@ -73,10 +73,10 @@ function getStatusIcon(status: number) {
   }
 
   if (status === REDEMPTION_STATUS_USED) {
-    return <CalendarClock className="size-4 text-[#8b765e]" />;
+    return <CalendarClock className="size-4 text-[#000000]" />;
   }
 
-  return <BadgeX className="size-4 text-[#8a4d3d]" />;
+  return <BadgeX className="size-4 text-[#7f1d1d]" />;
 }
 
 function toForm(redemption: AdminRedemption): RedemptionFormState {
@@ -298,7 +298,7 @@ export function AdminRedemptionsPage() {
       <Card>
         <form className="flex flex-col gap-3 sm:flex-row" onSubmit={applyFilters}>
           <input
-            className="h-11 flex-1 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+            className="h-11 flex-1 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
             onChange={(event) => setKeyword(event.target.value)}
             placeholder="Search by name prefix or exact id"
             value={keyword}
@@ -310,20 +310,20 @@ export function AdminRedemptionsPage() {
       </Card>
 
       {(formMode || generatedKeys.length > 0 || actionMessage) && (
-        <Card className="border-[#c9baa4]">
+        <Card className="border-[#d4cece]">
           <div className="flex items-start justify-between gap-3">
             <div>
               <h2 className="text-xl font-semibold">
                 {formMode === "edit" ? "Edit redemption" : "Redemption action"}
               </h2>
-              <p className="mt-2 text-sm text-[#655b50]">
+              <p className="mt-2 text-sm text-[#5f5958]">
                 Quota values are submitted as raw backend quota units.
               </p>
             </div>
             {formMode && (
               <button
                 aria-label="Close redemption panel"
-                className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                 onClick={closePanel}
                 type="button"
               >
@@ -333,16 +333,16 @@ export function AdminRedemptionsPage() {
           </div>
 
           {actionMessage && (
-            <p className="mt-4 text-sm font-medium text-[#5d4f41]">{actionMessage}</p>
+            <p className="mt-4 text-sm font-medium text-[#3b3736]">{actionMessage}</p>
           )}
 
           {generatedKeys.length > 0 && (
-            <div className="mt-4 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] p-4">
+            <div className="mt-4 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
               <div className="mb-3 flex items-center gap-2 text-sm font-semibold">
                 <KeyRound className="size-4" />
                 Generated keys
               </div>
-              <div className="max-h-56 overflow-auto font-mono text-xs leading-6 text-[#3d3833]">
+              <div className="max-h-56 overflow-auto font-mono text-xs leading-6 text-[#3b3736]">
                 {generatedKeys.map((key) => (
                   <div key={key}>{key}</div>
                 ))}
@@ -355,7 +355,7 @@ export function AdminRedemptionsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Name
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   maxLength={20}
                   onChange={(event) => setForm((value) => ({ ...value, name: event.target.value }))}
                   required
@@ -365,7 +365,7 @@ export function AdminRedemptionsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Raw quota
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   min={1}
                   onChange={(event) =>
                     setForm((value) => ({ ...value, quota: event.target.value }))
@@ -379,7 +379,7 @@ export function AdminRedemptionsPage() {
                 <label className="grid gap-2 text-sm font-medium">
                   Count
                   <input
-                    className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                    className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                     max={100}
                     min={1}
                     onChange={(event) =>
@@ -394,7 +394,7 @@ export function AdminRedemptionsPage() {
               <label className="grid gap-2 text-sm font-medium">
                 Expiration date
                 <input
-                  className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+                  className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
                   onChange={(event) =>
                     setForm((value) => ({ ...value, expiredDate: event.target.value }))
                   }
@@ -434,59 +434,59 @@ export function AdminRedemptionsPage() {
         <Card>
           <div>
             <h2 className="text-xl font-semibold">Redemption inventory</h2>
-            <p className="mt-2 text-sm text-[#655b50]">
+            <p className="mt-2 text-sm text-[#5f5958]">
               Showing {data.items.length} of {data.total} redemption codes.
             </p>
           </div>
 
           <div className="mt-6 overflow-x-auto">
             <table className="w-full min-w-[1080px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#8d7a63]">
+              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
                 <tr>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Code</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Status</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Quota</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Issued</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Expiration</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Redeemed</th>
-                  <th className="border-b border-[#ddcfbd] py-3 pr-4">Actions</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Code</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Quota</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Issued</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Expiration</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Redeemed</th>
+                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {data.items.map((redemption) => (
                   <tr key={redemption.id}>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
-                      <div className="font-medium text-[#2d2926]">{redemption.name}</div>
-                      <div className="mt-1 max-w-72 truncate font-mono text-xs text-[#7c6e5e]">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
+                      <div className="font-medium text-[#171717]">{redemption.name}</div>
+                      <div className="mt-1 max-w-72 truncate font-mono text-xs text-[#6c6a67]">
                         #{redemption.id} · {redemption.key}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <span className="inline-flex items-center gap-1.5">
                         {getStatusIcon(redemption.status)}
                         {getStatusLabel(redemption.status)}
                       </span>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {formatQuota(redemption.quota, platformStatus)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {formatTime(redemption.created_time)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       {formatTime(redemption.expired_time)}
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div>{formatTime(redemption.redeemed_time)}</div>
-                      <div className="mt-1 text-xs text-[#7c6e5e]">
+                      <div className="mt-1 text-xs text-[#6c6a67]">
                         User {redemption.used_user_id || "None"}
                       </div>
                     </td>
-                    <td className="border-b border-[#eadfce] py-4 pr-4">
+                    <td className="border-b border-[#efeded] py-4 pr-4">
                       <div className="flex flex-wrap gap-1">
                         <button
                           aria-label="Edit redemption"
-                          className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                           onClick={() => openEditForm(redemption)}
                           type="button"
                         >
@@ -499,7 +499,7 @@ export function AdminRedemptionsPage() {
                                 ? "Disable redemption"
                                 : "Enable redemption"
                             }
-                            className="rounded-md p-2 text-[#5f554b] hover:bg-[#eadfce]"
+                            className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
                             onClick={() => void handleStatus(redemption)}
                             type="button"
                           >
@@ -512,7 +512,7 @@ export function AdminRedemptionsPage() {
                         )}
                         <button
                           aria-label="Delete redemption"
-                          className="rounded-md p-2 text-[#7a4a3b] hover:bg-[#f0dfd2]"
+                          className="rounded-[2px] p-2 text-[#7f1d1d] hover:bg-[#efeded]"
                           onClick={() => void handleDelete(redemption)}
                           type="button"
                         >
@@ -526,7 +526,7 @@ export function AdminRedemptionsPage() {
             </table>
           </div>
 
-          <div className="mt-5 flex items-center justify-between text-sm text-[#655b50]">
+          <div className="mt-5 flex items-center justify-between text-sm text-[#5f5958]">
             <Button
               disabled={page <= 1}
               onClick={() => setPage((value) => Math.max(1, value - 1))}

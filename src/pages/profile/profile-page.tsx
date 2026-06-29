@@ -50,7 +50,7 @@ export function ProfilePage() {
           <label className="grid gap-2 text-sm font-medium">
             Username
             <input
-              className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
               onChange={(event) => setUsername(event.target.value)}
               required
               value={username}
@@ -59,7 +59,7 @@ export function ProfilePage() {
           <label className="grid gap-2 text-sm font-medium">
             Display name
             <input
-              className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
               onChange={(event) => setDisplayName(event.target.value)}
               value={displayName}
             />
@@ -67,7 +67,7 @@ export function ProfilePage() {
           <label className="grid gap-2 text-sm font-medium">
             Email
             <input
-              className="h-11 rounded-md border border-[#d8cbb8] bg-[#efe5d6] px-3 text-[#6d6256] outline-none"
+              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#efeded] px-3 text-[#5f5958] outline-none"
               readOnly
               value={user?.email ?? ""}
             />
@@ -75,7 +75,7 @@ export function ProfilePage() {
           <label className="grid gap-2 text-sm font-medium">
             Language
             <select
-              className="h-11 rounded-md border border-[#d8cbb8] bg-[#f8f1e7] px-3 outline-none focus:border-[#8b765e]"
+              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
               onChange={(event) => setLanguage(event.target.value)}
               value={language}
             >
@@ -86,7 +86,7 @@ export function ProfilePage() {
           </label>
 
           {message && (
-            <p className="rounded-md border border-[#ddcfbd] bg-[#f7f0e8] px-3 py-2 text-sm text-[#655b50]">
+            <p className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] px-3 py-2 text-sm text-[#5f5958]">
               {message}
             </p>
           )}

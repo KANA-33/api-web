@@ -60,16 +60,16 @@ export function ModelsPage() {
             <Card key={model}>
               <div className="flex items-start justify-between gap-4">
                 <h2 className="text-xl font-semibold">{model}</h2>
-                <span className="rounded-md bg-[#efe5d6] px-2.5 py-1 text-xs font-medium text-[#6d6256]">
+                <span className="rounded-[2px] bg-[#efeded] px-2.5 py-1 text-xs font-medium text-[#5f5958]">
                   {inferCapability(model)}
                 </span>
               </div>
-              <p className="mt-3 text-sm leading-6 text-[#655b50]">
+              <p className="mt-3 text-sm leading-6 text-[#5f5958]">
                 Available for your current backend group. Pricing and runtime limits should be shown
                 after the commercial model detail contract is defined.
               </p>
               <Link
-                className="mt-5 inline-flex h-10 items-center justify-center rounded-md border border-[#c9baa4] bg-[#efe5d6] px-4 text-sm font-medium text-[#2d2926] transition-colors hover:bg-[#e5d8c5]"
+                className="mt-5 inline-flex h-10 items-center justify-center rounded-[2px] border border-[#d4cece] bg-[#efeded] px-4 text-sm font-medium text-[#171717] transition-colors hover:bg-[#e3e2e2]"
                 params={{ modelId: encodeURIComponent(model) }}
                 to="/models/$modelId"
               >
