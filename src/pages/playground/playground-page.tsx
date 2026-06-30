@@ -5,7 +5,6 @@ import * as playgroundApi from "@features/playground/api";
 import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
-import { PageTitle } from "@shared/ui/page-title";
 import { ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 
 function getAssistantText(response: playgroundApi.PlaygroundChatResponse | null) {
@@ -87,11 +86,7 @@ export function PlaygroundPage() {
 
   return (
     <div className="space-y-8 pb-20 lg:pb-0">
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-        <PageTitle
-          description="A new testing surface for prompts, model options, and response inspection."
-          title="Playground"
-        />
+      <div className="flex justify-end">
         <Button className="gap-2" onClick={() => void reloadModels()} variant="secondary">
           <RefreshCw className="size-4" />
           Refresh models

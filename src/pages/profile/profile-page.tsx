@@ -24,7 +24,7 @@ import { ErrorBlock } from "@shared/ui/state-block";
 const fieldClass =
   "h-12 w-full rounded-lg border border-[#d7cec6] bg-[#fffdf8] px-4 text-sm font-semibold text-[#181614] outline-none transition-colors focus:border-[#4a433d] focus:ring-4 focus:ring-[#4a433d]/10";
 const panelClass =
-  "rounded-xl border border-[#ddd4ca]/88 bg-[#fffaf4]/78 text-[#181614] shadow-[0_18px_46px_rgb(74_58_42_/_0.08)] backdrop-blur-sm";
+  "console-panel rounded-xl border border-[#ddd4ca]/82 bg-[#fffaf4]/82 text-[#181614] shadow-[0_18px_42px_rgb(74_58_42_/_0.07),inset_0_1px_0_rgb(255_255_255_/_0.62)] backdrop-blur-md";
 const labelClass = "text-xs font-bold uppercase tracking-[0.14em] text-[#74695f]";
 
 function formatUserId(id?: number) {
@@ -160,7 +160,7 @@ export function ProfilePage() {
           <p className={labelClass}>
             Current Balance
           </p>
-          <strong className="mt-4 block text-[42px] font-semibold leading-none tracking-[-0.04em] text-[#1f1a16]">
+          <strong className="mt-4 block text-[36px] font-semibold leading-none tracking-[-0.04em] text-[#1f1a16]">
             {formatQuotaFixed(remainingQuota, platformStatus)}
           </strong>
           <div className="mt-8 flex items-center justify-between gap-4 text-sm font-semibold text-[#74695f]">
@@ -180,7 +180,7 @@ export function ProfilePage() {
           <p className={labelClass}>
             Total Usage Cost
           </p>
-          <strong className="mt-4 block text-[42px] font-semibold leading-none tracking-[-0.04em] text-[#1f1a16]">
+          <strong className="mt-4 block text-[36px] font-semibold leading-none tracking-[-0.04em] text-[#1f1a16]">
             {loading ? "..." : formatQuota(usageSummary?.quota, platformStatus)}
           </strong>
           <p className="mt-9 flex items-center gap-2 text-sm font-semibold text-[#9d514a]">
@@ -193,7 +193,7 @@ export function ProfilePage() {
           <p className={labelClass}>
             API Requests Count
           </p>
-          <strong className="mt-4 block text-[42px] font-semibold leading-none tracking-[-0.04em] text-[#1f1a16]">
+          <strong className="mt-4 block text-[36px] font-semibold leading-none tracking-[-0.04em] text-[#1f1a16]">
             {formatRawNumber(user?.request_count)}
           </strong>
           <p className="mt-9 flex items-center gap-2 text-sm font-semibold text-[#74695f]">
@@ -214,7 +214,7 @@ export function ProfilePage() {
 
       <section className={panelClass}>
         <div className="border-b border-[#ddd4ca]/80 bg-[#f8f4ee]/64 px-6 py-7 md:px-8">
-          <h2 className="text-2xl font-semibold tracking-[-0.03em] text-[#1f1a16]">General Settings</h2>
+          <h2 className="text-lg font-semibold tracking-[-0.02em] text-[#1f1a16]">General Settings</h2>
           <p className="mt-2 text-base text-[#74695f]">
             Manage your account identity and system preferences.
           </p>
@@ -276,7 +276,7 @@ export function ProfilePage() {
 
       <section className={panelClass}>
         <div className="border-b border-[#ddd4ca]/80 bg-[#f8f4ee]/64 px-6 py-7 md:px-8">
-          <h2 className="text-2xl font-semibold tracking-[-0.03em] text-[#1f1a16]">Security & Access</h2>
+          <h2 className="text-lg font-semibold tracking-[-0.02em] text-[#1f1a16]">Security & Access</h2>
           <p className="mt-2 text-base text-[#74695f]">
             Configure authentication layers and token management.
           </p>

@@ -10,7 +10,6 @@ import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
 import { Modal } from "@shared/ui/modal";
-import { PageTitle } from "@shared/ui/page-title";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 import { AccountMetricCards } from "./account-metric-cards";
 
@@ -185,11 +184,7 @@ export function WalletPage() {
 
   return (
     <div className="space-y-8 pb-20 lg:pb-0">
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
-        <PageTitle
-          description="Monitor balance, top-ups, invoices, and account-level spending controls."
-          title="Wallet"
-        />
+      <div className="flex justify-end">
         <Button className="gap-2" onClick={() => void reload()} variant="secondary">
           <RefreshCw className="size-4" />
           Refresh
@@ -223,9 +218,6 @@ export function WalletPage() {
             <div className="space-y-5">
               <Card>
                 <h2 className="text-xl font-semibold">Redeem code</h2>
-                <p className="mt-3 text-sm leading-6 text-[#5f5958]">
-                  Apply a redemption code to your account balance.
-                </p>
                 <Button
                   className="mt-5 w-full"
                   disabled={!data.topUpInfo.enable_redemption}
@@ -241,9 +233,6 @@ export function WalletPage() {
 
               <Card>
                 <h2 className="text-xl font-semibold">Online top-up</h2>
-                <p className="mt-3 text-sm leading-6 text-[#5f5958]">
-                  Choose a payment provider, quote the amount, then continue to payment.
-                </p>
                 <Button
                   className="mt-5 w-full"
                   disabled={
@@ -264,7 +253,7 @@ export function WalletPage() {
 
             {data.records.items.length === 0 ? (
               <EmptyBlock
-                description="Billing records will appear here after a successful payment or redemption."
+                description=""
                 title="No billing records"
               />
             ) : (
@@ -292,7 +281,7 @@ export function WalletPage() {
           </div>
 
           <Modal
-            description="Enter a redemption code issued for your account."
+            description={undefined}
             onClose={() => setWalletAction(null)}
             open={walletAction === "redeem"}
             title="Redeem code"
@@ -322,7 +311,7 @@ export function WalletPage() {
           </Modal>
 
           <Modal
-            description="Quote the amount before continuing to the provider payment page."
+            description={undefined}
             onClose={() => setWalletAction(null)}
             open={walletAction === "top-up"}
             title="Online top-up"

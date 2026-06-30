@@ -24,7 +24,7 @@ export function EmptyBlock({ title, description, actionLabel, onAction }: StateB
   return (
     <Card>
       <h2 className="text-lg font-semibold">{title}</h2>
-      <p className="mt-2 text-sm leading-6 text-[#74695f]">{description}</p>
+      {description && <p className="mt-2 text-sm leading-6 text-[#74695f]">{description}</p>}
       {actionLabel && onAction && (
         <Button className="mt-5" onClick={onAction} variant="secondary">
           {actionLabel}
@@ -38,7 +38,7 @@ export function ErrorBlock({ title, description, actionLabel, onAction }: StateB
   return (
     <Card className="border-[#d9c9bd] bg-[#f5eee7]/90">
       <h2 className="text-lg font-semibold text-[#181614]">{title}</h2>
-      <p className="mt-2 text-sm leading-6 text-[#4a433d]">{description}</p>
+      {description && <p className="mt-2 text-sm leading-6 text-[#4a433d]">{description}</p>}
       {actionLabel && onAction && (
         <Button className="mt-5" onClick={onAction} variant="secondary">
           {actionLabel}

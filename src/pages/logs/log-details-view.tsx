@@ -156,11 +156,13 @@ function DetailRow({
 
 export function LogDetailsView({
   activeTab,
+  embedded = false,
   onClose,
   platformStatus,
   record,
 }: {
   activeTab: LogTabId;
+  embedded?: boolean;
   onClose: () => void;
   platformStatus: PlatformStatus | null;
   record: Record<string, unknown>;
@@ -213,44 +215,19 @@ export function LogDetailsView({
     getStringFromSources(record, other, ["flow_status", "status"], "") ||
     (endError ? "error" : activeTab === "usage" ? "completed" : status);
 
-  return (
-    <div className="pb-20 lg:pb-0">
-      <header className="flex items-center justify-between gap-4 border-b border-[#d8d2d2] pb-8">
-        <div className="flex min-w-0 items-center gap-4">
-          <button
-            aria-label="Back to logs"
-            className="grid size-9 shrink-0 place-items-center rounded-[2px] border border-[#d4cece] bg-[#fffdfd] text-[#242121] hover:bg-[#efeded]"
-            onClick={onClose}
-            type="button"
-          >
-            <ArrowLeft className="size-5" />
-          </button>
-          <h2 className="truncate text-[34px] font-bold leading-none tracking-[-0.045em] text-black md:text-[42px]">
-            Log Details
-          </h2>
-          <span className="inline-flex h-8 shrink-0 items-center gap-2 border border-[#d4cece] bg-[#fbf9f9] px-3 text-sm font-medium text-[#242121]">
-            <span className="size-2 rounded-full bg-[#10b981]" />
-            {status}
-          </span>
-        </div>
-        <button
-          aria-label="Close log details"
-          className="grid size-10 shrink-0 place-items-center rounded-[2px] text-[#242121] hover:bg-[#efeded]"
-          onClick={onClose}
-          type="button"
-        >
-          <X className="size-5" />
-        </button>
-      </header>
-
-      <div className="mt-10 grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
+  const detailContent = (
+    <>
+      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-8">
           <DetailCard>
             <DetailRow label="Log ID" value={logId} />
             <DetailRow label="Request ID" value={requestId} />
             <DetailRow label="Upstream Request ID" value={upstreamRequestId} />
             <DetailRow label="Created At" value={formatTime(timestamp)} />
-            <DetailRow label="Channel" value={channelName === "-" ? channel || "-" : `${channel || "-"} (${channelName})`} />
+            <DetailRow
+              label="Channel"
+              value={channelName === "-" ? channel || "-" : `${channel || "-"} (${channelName})`}
+            />
             <DetailRow label="Model" value={model} />
             <DetailRow label="Retry Count" value={retryCount ?? "-"} />
             <DetailRow label="Token" value={token} />
@@ -429,6 +406,55 @@ export function LogDetailsView({
           </DetailCard>
         </aside>
       </div>
+    </>
+  );
+
+  if (embedded) {
+    return (
+      <div>
+        <div className="mb-6 flex flex-wrap items-center gap-3">
+          <span className="inline-flex h-8 items-center gap-2 border border-[#d4cece] bg-[#fbf9f9] px-3 text-sm font-medium text-[#242121]">
+            <span className="size-2 rounded-full bg-[#10b981]" />
+            {status}
+          </span>
+          <span className="text-sm font-semibold text-[#6c6a67]">{formatTime(timestamp)}</span>
+        </div>
+        {detailContent}
+      </div>
+    );
+  }
+
+  return (
+    <div className="pb-20 lg:pb-0">
+      <header className="flex items-center justify-between gap-4 border-b border-[#d8d2d2] pb-8">
+        <div className="flex min-w-0 items-center gap-4">
+          <button
+            aria-label="Back to logs"
+            className="grid size-9 shrink-0 place-items-center rounded-[2px] border border-[#d4cece] bg-[#fffdfd] text-[#242121] hover:bg-[#efeded]"
+            onClick={onClose}
+            type="button"
+          >
+            <ArrowLeft className="size-5" />
+          </button>
+          <h2 className="truncate text-[34px] font-bold leading-none tracking-[-0.045em] text-black md:text-[42px]">
+            Log Details
+          </h2>
+          <span className="inline-flex h-8 shrink-0 items-center gap-2 border border-[#d4cece] bg-[#fbf9f9] px-3 text-sm font-medium text-[#242121]">
+            <span className="size-2 rounded-full bg-[#10b981]" />
+            {status}
+          </span>
+        </div>
+        <button
+          aria-label="Close log details"
+          className="grid size-10 shrink-0 place-items-center rounded-[2px] text-[#242121] hover:bg-[#efeded]"
+          onClick={onClose}
+          type="button"
+        >
+          <X className="size-5" />
+        </button>
+      </header>
+
+      <div className="mt-10">{detailContent}</div>
     </div>
   );
 }

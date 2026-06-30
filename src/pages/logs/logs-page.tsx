@@ -15,6 +15,7 @@ import { useAsyncData } from "@shared/lib/use-async-data";
 import { formatQuota, formatRawNumber } from "@shared/lib/quota-format";
 import { cn } from "@shared/lib/cn";
 import { Card } from "@shared/ui/card";
+import { Modal } from "@shared/ui/modal";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 import { LogDetailsView } from "./log-details-view";
 
@@ -200,62 +201,48 @@ export function LogsPage() {
         }, 0) / records.length
       : 0;
 
-  if (selectedLog) {
-    return (
-      <LogDetailsView
-        activeTab={selectedLog.activeTab}
-        onClose={() => setSelectedLog(null)}
-        platformStatus={platformStatus}
-        record={selectedLog.record}
-      />
-    );
-  }
-
   return (
-    <div className="space-y-8 pb-20 lg:pb-0">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-        <h2 className="text-[46px] font-bold leading-none tracking-[-0.045em] md:text-[56px]">
-          {tabs.find((tab) => tab.id === activeTab)?.label}
-        </h2>
-        <button
-          className="inline-flex h-10 w-fit items-center gap-2 rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#242121] hover:bg-[#efeded]"
-          onClick={() => void reload()}
-          type="button"
-        >
-          <RefreshCw className="size-4" />
-          Refresh
-        </button>
-      </div>
+    <>
+      <div className="space-y-8 pb-20 lg:pb-0">
+        <div className="mt-9 grid gap-7 md:grid-cols-3">
+          <StatPlate label="Total usage" value={formatQuota(usageTotal, platformStatus)} />
+          <StatPlate label="Avg latency" value={formatSeconds(avgLatency)} />
+          <StatPlate label="Tokens" value={formatRawNumber(totalTokens)} />
+        </div>
 
-      <div className="mt-9 grid gap-7 md:grid-cols-3">
-        <StatPlate label="Total usage" value={formatQuota(usageTotal, platformStatus)} />
-        <StatPlate label="Avg latency" value={formatSeconds(avgLatency)} />
-        <StatPlate label="Tokens" value={formatRawNumber(totalTokens)} />
-      </div>
-
-      <div className="mt-8 flex flex-wrap gap-2">
-        {tabs.map((tab) => (
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-2">
+            {tabs.map((tab) => (
+              <button
+                className={cn(
+                  "h-10 rounded-[2px] border px-4 text-sm font-bold uppercase tracking-[0.08em]",
+                  activeTab === tab.id
+                    ? "border-black bg-black text-white"
+                    : "border-[#d4cece] bg-[#fffdfd] text-[#5f5958] hover:bg-[#efeded]",
+                )}
+                key={tab.id}
+                onClick={() => changeTab(tab.id)}
+                type="button"
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
           <button
-            className={cn(
-              "h-10 rounded-[2px] border px-4 text-sm font-bold uppercase tracking-[0.08em]",
-              activeTab === tab.id
-                ? "border-black bg-black text-white"
-                : "border-[#d4cece] bg-[#fffdfd] text-[#5f5958] hover:bg-[#efeded]",
-            )}
-            key={tab.id}
-            onClick={() => changeTab(tab.id)}
+            className="inline-flex h-10 w-fit items-center gap-2 rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#242121] hover:bg-[#efeded]"
+            onClick={() => void reload()}
             type="button"
           >
-            {tab.label}
+            <RefreshCw className="size-4" />
+            Refresh
           </button>
-        ))}
-      </div>
+        </div>
 
-      <Card>
-        <form
-          className="flex flex-col gap-4 border border-[#d8d2d2] bg-[#fbf9f9] p-5 lg:flex-row lg:items-center lg:justify-between"
-          onSubmit={applyFilters}
-        >
+        <Card>
+          <form
+            className="flex flex-col gap-4 border border-[#d8d2d2] bg-[#fbf9f9] p-5 lg:flex-row lg:items-center lg:justify-between"
+            onSubmit={applyFilters}
+          >
           <div className="flex flex-1 flex-wrap gap-4">
             <label className="relative w-full sm:w-[374px]">
               <CalendarDays className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[#5f5958]" />
@@ -309,56 +296,56 @@ export function LogsPage() {
               Search
             </button>
           </div>
-        </form>
+          </form>
 
-        <div className="mt-8">
-          <div
-            className={`${logGridClass} hidden border-b border-[#d8d2d2] px-5 pb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#6c6a67] xl:grid`}
-          >
-            <span>Time</span>
-            <span>Channel</span>
-            <span>User</span>
-            <span>Token</span>
-            <span>Model</span>
-            <span>Timing</span>
-            <span>Tokens</span>
-            <span>Cost</span>
-            <span>Details</span>
-          </div>
+          <div className="mt-8">
+            <div
+              className={`${logGridClass} hidden border-b border-[#d8d2d2] px-5 pb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#6c6a67] xl:grid`}
+            >
+              <span>Time</span>
+              <span>Channel</span>
+              <span>User</span>
+              <span>Token</span>
+              <span>Model</span>
+              <span>Timing</span>
+              <span>Tokens</span>
+              <span>Cost</span>
+              <span>Details</span>
+            </div>
 
-        {loading && <LoadingBlock title="Loading logs" />}
+            {loading && <LoadingBlock title="Loading logs" />}
 
-        {error && (
-          <ErrorBlock
-            actionLabel="Retry"
-            description={error}
-            onAction={() => void reload()}
-            title="Logs unavailable"
-          />
-        )}
-
-        {!loading && !error && records.length === 0 && (
-          <EmptyBlock
-            description="Records will appear here once requests or tasks are processed."
-            title="No records"
-          />
-        )}
-
-        {!loading && !error && records.length > 0 && (
-          <div className="mt-3 space-y-3">
-            {records.map((record, index) => (
-              <LogRecord
-                activeTab={activeTab}
-                key={String((record as Record<string, unknown>).id ?? index)}
-                onOpen={() =>
-                  setSelectedLog({ activeTab, record: record as Record<string, unknown> })
-                }
-                platformStatus={platformStatus}
-                record={record as Record<string, unknown>}
+            {error && (
+              <ErrorBlock
+                actionLabel="Retry"
+                description={error}
+                onAction={() => void reload()}
+                title="Logs unavailable"
               />
-            ))}
-          </div>
-        )}
+            )}
+
+            {!loading && !error && records.length === 0 && (
+              <EmptyBlock
+                description="Records will appear here once requests or tasks are processed."
+                title="No records"
+              />
+            )}
+
+            {!loading && !error && records.length > 0 && (
+              <div className="mt-3 space-y-3">
+                {records.map((record, index) => (
+                  <LogRecord
+                    activeTab={activeTab}
+                    key={String((record as Record<string, unknown>).id ?? index)}
+                    onOpen={() =>
+                      setSelectedLog({ activeTab, record: record as Record<string, unknown> })
+                    }
+                    platformStatus={platformStatus}
+                    record={record as Record<string, unknown>}
+                  />
+                ))}
+              </div>
+            )}
 
           <div className="mt-7 flex flex-col gap-4 border-t border-[#d8d2d2] pt-5 text-sm font-medium text-[#5f5958] sm:flex-row sm:items-center sm:justify-end">
             <span>Total: {formatRawNumber(data?.total ?? 0)}</span>
@@ -387,17 +374,36 @@ export function LogsPage() {
               </PagerButton>
             </div>
           </div>
-        </div>
-      </Card>
-    </div>
+          </div>
+        </Card>
+      </div>
+
+      <Modal
+        className="max-w-6xl bg-[#f7f5f5]"
+        description="Inspect request metadata, token usage, billing, and flow status without leaving the logs table."
+        onClose={() => setSelectedLog(null)}
+        open={selectedLog !== null}
+        title="Log Details"
+      >
+        {selectedLog && (
+          <LogDetailsView
+            activeTab={selectedLog.activeTab}
+            embedded
+            onClose={() => setSelectedLog(null)}
+            platformStatus={platformStatus}
+            record={selectedLog.record}
+          />
+        )}
+      </Modal>
+    </>
   );
 }
 
 function StatPlate({ label, value }: { label: string; value: string }) {
   return (
-    <section className="border border-[#d8d2d2] bg-[#fbf9f9] px-7 py-8">
-      <p className="text-sm font-bold uppercase tracking-[0.14em] text-[#6c6a67]">{label}</p>
-      <p className="mt-3 text-[34px] font-bold leading-none tracking-[-0.03em] text-black">
+    <section className="console-panel rounded-xl border border-[#d8d2d2]/82 bg-[#fbf9f9]/82 px-6 py-7 shadow-[0_18px_42px_rgb(74_58_42_/_0.06),inset_0_1px_0_rgb(255_255_255_/_0.62)]">
+      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-[#6c6a67]">{label}</p>
+      <p className="mt-3 text-[30px] font-semibold leading-none tracking-[-0.03em] text-black">
         {value}
       </p>
     </section>

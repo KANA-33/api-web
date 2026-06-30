@@ -1,4 +1,7 @@
 import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import {
   Activity,
   Boxes,
@@ -27,6 +30,7 @@ const adminNavigation = [
 ];
 
 export function AdminShell() {
+  const routeSurfaceRef = useRef<HTMLElement | null>(null);
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const signOut = useAuthStore((state) => state.signOut);
@@ -38,6 +42,27 @@ export function AdminShell() {
     await signOut();
     await navigate({ to: "/login" });
   }
+
+  useGSAP(
+    () => {
+      if (!routeSurfaceRef.current) {
+        return;
+      }
+
+      gsap.fromTo(
+        routeSurfaceRef.current,
+        { autoAlpha: 0, y: 10 },
+        {
+          autoAlpha: 1,
+          clearProps: "opacity,visibility,transform",
+          duration: 0.32,
+          ease: "power3.out",
+          y: 0,
+        },
+      );
+    },
+    { dependencies: [pathname], scope: routeSurfaceRef },
+  );
 
   return (
     <div className="min-h-[100dvh] text-[#181614]">
@@ -61,7 +86,7 @@ export function AdminShell() {
               return (
                 <Link
                   className={cn(
-                    "flex h-11 items-center gap-4 rounded-lg px-4 text-sm font-semibold uppercase tracking-[0.1em] text-[#6d6258] transition-all duration-200 hover:bg-[#eee8e1] hover:text-[#181614]",
+                    "flex h-11 items-center gap-4 rounded-lg px-4 text-sm font-semibold uppercase tracking-[0.1em] text-[#6d6258] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[#eee8e1] hover:text-[#181614]",
                     active &&
                       "bg-[#211d19] !text-[#fffaf3] shadow-[0_10px_24px_rgb(59_45_34_/_0.16)] hover:bg-[#211d19] [&_svg]:!text-[#fffaf3]",
                   )}
@@ -124,7 +149,10 @@ export function AdminShell() {
             </nav>
           </header>
 
-          <main className="mx-auto max-w-[1520px] px-5 py-9 md:px-10 lg:py-12 xl:px-12">
+          <main
+            className="route-surface mx-auto max-w-[1520px] px-5 py-9 md:px-10 lg:py-12 xl:px-12"
+            ref={routeSurfaceRef}
+          >
             <Outlet />
           </main>
         </div>

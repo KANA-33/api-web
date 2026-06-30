@@ -8,7 +8,7 @@ import { ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 import { AccountMetricCards } from "@pages/wallet/account-metric-cards";
 
 const tileClass =
-  "min-h-[304px] rounded-lg border border-[#d7cec6] bg-[#fffdf8]/78 p-7 text-[#181614] shadow-[0_18px_46px_rgb(74_58_42_/_0.07)] backdrop-blur-sm";
+  "console-panel min-h-[304px] rounded-xl border border-[#d7cec6]/82 bg-[#fffdf8]/82 p-6 text-[#181614] shadow-[0_18px_42px_rgb(74_58_42_/_0.07),inset_0_1px_0_rgb(255_255_255_/_0.62)] backdrop-blur-md";
 
 function getLast24hSummaryQuery() {
   const end_timestamp = Math.floor(Date.now() / 1000);
@@ -95,7 +95,6 @@ export function OverviewPage() {
   if (loading) {
     return (
       <div className="space-y-8 pb-20 lg:pb-0">
-        <h1 className="text-[42px] font-semibold leading-none tracking-[-0.05em]">Overview</h1>
         <LoadingBlock title="Loading overview" />
       </div>
     );
@@ -104,7 +103,6 @@ export function OverviewPage() {
   if (error || !data) {
     return (
       <div className="space-y-8 pb-20 lg:pb-0">
-        <h1 className="text-[42px] font-semibold leading-none tracking-[-0.05em]">Overview</h1>
         <ErrorBlock
           actionLabel="Retry"
           description={error ?? "Overview data could not be loaded."}
@@ -120,10 +118,7 @@ export function OverviewPage() {
 
   return (
     <div className="space-y-10 pb-24 lg:pb-0">
-      <div className="flex items-center justify-between gap-4 border-b border-[#ddd4ca]/80 pb-7">
-        <h1 className="text-[42px] font-semibold leading-none tracking-[-0.05em] text-[#111111] md:text-[52px]">
-          Overview
-        </h1>
+      <div className="flex items-center justify-end gap-4">
         <button
           aria-label="Refresh overview"
           className="grid size-11 place-items-center rounded-xl border border-[#ddd4ca]/88 bg-[#fffaf4]/78 text-[#4a433d] shadow-[0_10px_28px_rgb(74_58_42_/_0.07)] transition-all hover:bg-[#f2ede7] active:translate-y-px"
@@ -145,7 +140,7 @@ export function OverviewPage() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <section className={tileClass}>
-          <h2 className="flex items-center gap-3 text-base font-semibold tracking-[0.04em]">
+          <h2 className="flex items-center gap-3 text-[0.95rem] font-semibold tracking-[0.01em]">
             <GitFork className="size-5" />
             API Information
           </h2>
@@ -175,7 +170,7 @@ export function OverviewPage() {
         </section>
 
         <section className={tileClass}>
-          <h2 className="flex items-center gap-3 text-base font-semibold tracking-[0.04em]">
+          <h2 className="flex items-center gap-3 text-[0.95rem] font-semibold tracking-[0.01em]">
             <Megaphone className="size-5" />
             Announcements
           </h2>
@@ -214,7 +209,7 @@ export function OverviewPage() {
         </section>
 
         <section className={tileClass}>
-          <h2 className="flex items-center gap-3 text-base font-semibold tracking-[0.04em]">
+          <h2 className="flex items-center gap-3 text-[0.95rem] font-semibold tracking-[0.01em]">
             <ServerCog className="size-5" />
             Runtime Status
           </h2>

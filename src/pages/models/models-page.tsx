@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import {
   BarChart3,
   Boxes,
@@ -10,7 +10,6 @@ import {
   Settings,
   TrendingUp,
   UsersRound,
-  Zap,
 } from "lucide-react";
 import * as adminLogsApi from "@features/admin/logs/api";
 import * as logsApi from "@features/logs/api";
@@ -120,6 +119,12 @@ const modelColors = [
   "#64748b",
   "#ec4899",
 ];
+const analyticsCardClass =
+  "console-panel rounded-xl border border-[#d7cec6]/82 bg-[#fffdf8]/82 text-[#181614] shadow-[0_18px_42px_rgb(74_58_42_/_0.07),inset_0_1px_0_rgb(255_255_255_/_0.62)] backdrop-blur-md";
+const analyticsHeaderClass =
+  "flex flex-wrap items-center justify-between gap-4 border-b border-[#ddd4ca]/82 bg-[#f8f4ee]/64 px-6 py-4";
+const analyticsControlButtonClass =
+  "inline-flex h-11 items-center gap-2 rounded-lg border border-[#d7cec6] bg-[#fffdf8] px-4 text-sm font-semibold text-[#303031] shadow-[0_8px_20px_rgb(72_56_42_/_0.05)] transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-[#c6b8aa] hover:bg-[#f3ede6] active:translate-y-px";
 
 function getRangeStart(rangeId: RangeId) {
   const range = ranges.find((item) => item.id === rangeId) ?? ranges[1];
@@ -505,11 +510,11 @@ function ChartPanel({
   total: string;
 }) {
   return (
-    <section className="border border-[#d8d2d2] bg-[#fffdfd]">
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#d8d2d2] bg-[#fbf9f9] px-6 py-4">
+    <section className={analyticsCardClass}>
+      <div className={analyticsHeaderClass}>
         <div className="flex items-center gap-3">
           {icon}
-          <h3 className="font-bold text-[#1b1c1c]">{title}</h3>
+          <h3 className="font-semibold tracking-[-0.01em] text-[#1b1c1c]">{title}</h3>
           <span className="text-sm font-semibold text-[#6c6a67]">Total: {total}</span>
         </div>
         {action}
@@ -529,12 +534,14 @@ function Segmented<T extends string | number>({
   value: T;
 }) {
   return (
-    <div className="inline-flex border border-[#d8d2d2] bg-[#fffdfd]">
+    <div className="inline-flex overflow-hidden rounded-lg border border-[#d7cec6] bg-[#fffdf8] shadow-[0_8px_20px_rgb(72_56_42_/_0.04)]">
       {items.map((item) => (
         <button
           className={cn(
-            "min-h-10 border-r border-[#d8d2d2] px-5 text-sm font-semibold last:border-r-0",
-            value === item.value ? "bg-black text-white" : "text-[#4c4546] hover:bg-[#efeded]",
+            "min-h-10 border-r border-[#d8d2d2] px-5 text-sm font-semibold transition-all duration-300 last:border-r-0 active:translate-y-px",
+            value === item.value
+              ? "bg-[#211d19] text-white"
+              : "text-[#4c4546] hover:bg-[#f3ede6]",
           )}
           key={String(item.value)}
           onClick={() => onChange(item.value)}
@@ -547,34 +554,71 @@ function Segmented<T extends string | number>({
   );
 }
 
-function MetricCard({
-  description,
-  label,
-  value,
-  icon,
+function MetricSummaryCard({
+  avgRpm,
+  avgTpm,
+  platformStatus,
+  totalQuota,
+  totalRequests,
+  totalTokens,
 }: {
-  description: string;
-  icon: React.ReactNode;
-  label: string;
-  value: string;
+  avgRpm: number;
+  avgTpm: number;
+  platformStatus: PlatformStatus | null;
+  totalQuota: number;
+  totalRequests: number;
+  totalTokens: number;
 }) {
+  const metrics = [
+    {
+      description: "Statistical count",
+      icon: <span className="text-lg">#</span>,
+      label: "Total Requests",
+      value: formatRawNumber(totalRequests),
+    },
+    {
+      description: "Statistical quota",
+      icon: <span className="text-lg">$</span>,
+      label: "Total Cost",
+      value: formatQuota(totalQuota, platformStatus),
+    },
+    {
+      description: "Token count",
+      icon: <Boxes className="size-4" />,
+      label: "Total Tokens",
+      value: formatRawNumber(totalTokens),
+    },
+    {
+      description: `Avg TPM ${avgTpm.toFixed(2)}`,
+      icon: <CircleGauge className="size-4" />,
+      label: "Avg RPM",
+      value: avgRpm.toFixed(2),
+    },
+  ];
+
   return (
-    <section className="min-h-[156px] border border-[#d8d2d2] bg-[#fffdfd] p-6">
-      <p className="flex items-center gap-2 text-sm font-bold text-[#6c6a67]">
-        {icon}
-        {label}
-      </p>
-      <strong className="mt-5 block text-[46px] font-bold leading-none tracking-[-0.04em] text-black">
-        {value}
-      </strong>
-      <p className="mt-4 text-sm font-semibold text-[#6c6a67]">{description}</p>
+    <section className={`${analyticsCardClass} p-0`}>
+      <div className="grid divide-y divide-[#d8d2d2] sm:grid-cols-2 sm:divide-x sm:divide-y-0 xl:grid-cols-4">
+        {metrics.map((metric) => (
+          <div className="min-h-[156px] p-6" key={metric.label}>
+            <p className="flex items-center gap-2 text-sm font-bold text-[#6c6a67]">
+              {metric.icon}
+              {metric.label}
+            </p>
+            <strong className="mt-5 block text-[34px] font-semibold leading-none tracking-[-0.04em] text-black">
+              {metric.value}
+            </strong>
+            <p className="mt-4 text-sm font-semibold text-[#6c6a67]">{metric.description}</p>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
 
 function EmptyChart({ label = "No data for the selected range." }: { label?: string }) {
   return (
-    <div className="grid min-h-[260px] place-items-center border border-dashed border-[#d8d2d2] bg-[#fbf9f9] text-sm font-semibold text-[#6c6a67]">
+    <div className="grid min-h-[260px] place-items-center rounded-xl border border-dashed border-[#d8d2d2] bg-[#fbf9f9]/82 text-sm font-semibold text-[#6c6a67]">
       {label}
     </div>
   );
@@ -1353,28 +1397,15 @@ export function ModelsPage() {
 
   return (
     <div className="space-y-8 pb-20 lg:pb-0">
-      <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-        <div>
-          <h1 className="text-[42px] font-bold leading-none tracking-[-0.045em] text-black md:text-[48px]">
-            {activeTab === "model"
-              ? "Model Call Analysis"
-              : activeTab === "traffic"
-                ? "Traffic Flow"
-                : "User Statistics"}
-          </h1>
-          {activeTab === "traffic" && (
-            <p className="mt-5 text-lg text-[#303031]">
-              Visualize data routing and token consumption pathways.
-            </p>
-          )}
+      {activeTab !== "model" && (
+        <div className="flex justify-start">
+          <Segmented
+            items={tabs.map((tab) => ({ label: tab.label, value: tab.id }))}
+            onChange={setActiveTab}
+            value={activeTab}
+          />
         </div>
-
-        <Segmented
-          items={tabs.map((tab) => ({ label: tab.label, value: tab.id }))}
-          onChange={setActiveTab}
-          value={activeTab}
-        />
-      </div>
+      )}
 
       {loading && <LoadingBlock title="Loading analytics" />}
 
@@ -1408,6 +1439,13 @@ export function ModelsPage() {
               onTrendModeChange={setTrendMode}
               platformStatus={platformStatus}
               successRate={successRate}
+              tabSwitcher={
+                <Segmented
+                  items={tabs.map((tab) => ({ label: tab.label, value: tab.id }))}
+                  onChange={setActiveTab}
+                  value={activeTab}
+                />
+              }
               throughput={throughput}
               totalQuota={totalQuota}
               totalRequests={totalRequests}
@@ -1473,6 +1511,7 @@ function ModelAnalysisView({
   onTrendModeChange,
   platformStatus,
   successRate,
+  tabSwitcher,
   throughput,
   totalQuota,
   totalRequests,
@@ -1496,6 +1535,7 @@ function ModelAnalysisView({
   onTrendModeChange: (mode: TrendMode) => void;
   platformStatus: PlatformStatus | null;
   successRate: number;
+  tabSwitcher: ReactNode;
   throughput: number;
   totalQuota: number;
   totalRequests: number;
@@ -1527,23 +1567,26 @@ function ModelAnalysisView({
 
   return (
     <div className="space-y-8">
-      <div className="relative flex justify-end gap-3">
-        <button
-          className="inline-flex h-11 items-center gap-2 border border-[#d8d2d2] bg-[#fffdfd] px-4 text-sm font-bold text-[#303031]"
-          onClick={togglePreferences}
-          type="button"
-        >
-          <Settings className="size-4" />
-          Preferences
-        </button>
-        <button
-          className="inline-flex h-11 items-center gap-2 border border-[#d8d2d2] bg-[#fffdfd] px-4 text-sm font-bold text-[#303031]"
-          onClick={toggleFilters}
-          type="button"
-        >
-          <Filter className="size-4" />
-          Filter
-        </button>
+      <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>{tabSwitcher}</div>
+        <div className="flex flex-wrap gap-3">
+          <button
+            className={analyticsControlButtonClass}
+            onClick={togglePreferences}
+            type="button"
+          >
+            <Settings className="size-4" />
+            Preferences
+          </button>
+          <button
+            className={analyticsControlButtonClass}
+            onClick={toggleFilters}
+            type="button"
+          >
+            <Filter className="size-4" />
+            Filter
+          </button>
+        </div>
       </div>
 
       <Modal
@@ -1651,44 +1694,16 @@ function ModelAnalysisView({
         </form>
       </Modal>
 
-      <div className="grid gap-0 lg:grid-cols-[1fr_1fr_1fr_1fr]">
-        <MetricCard
-          description="Statistical count"
-          icon={<span className="text-lg">#</span>}
-          label="Total Requests"
-          value={formatRawNumber(totalRequests)}
-        />
-        <MetricCard
-          description="Statistical quota"
-          icon={<span className="text-lg">$</span>}
-          label="Total Cost"
-          value={formatQuota(totalQuota, platformStatus)}
-        />
-        <MetricCard
-          description="Token count"
-          icon={<Boxes className="size-4" />}
-          label="Total Tokens"
-          value={formatRawNumber(totalTokens)}
-        />
-        <section className="min-h-[156px] border border-[#d8d2d2] bg-[#fffdfd] p-6">
-          <p className="flex items-center gap-2 text-sm font-bold text-[#6c6a67]">
-            <CircleGauge className="size-4" />
-            Avg RPM
-          </p>
-          <strong className="mt-4 block text-[32px] font-bold leading-none tracking-[-0.04em]">
-            {avgRpm.toFixed(2)}
-          </strong>
-          <p className="mt-6 flex items-center gap-2 text-sm font-bold text-[#6c6a67]">
-            <Zap className="size-4" />
-            Avg TPM
-          </p>
-          <strong className="mt-4 block text-[32px] font-bold leading-none tracking-[-0.04em]">
-            {avgTpm.toFixed(2)}
-          </strong>
-        </section>
-      </div>
+      <MetricSummaryCard
+        avgRpm={avgRpm}
+        avgTpm={avgTpm}
+        platformStatus={platformStatus}
+        totalQuota={totalQuota}
+        totalRequests={totalRequests}
+        totalTokens={totalTokens}
+      />
 
-      <section className="flex flex-wrap items-center gap-5 border border-[#d8d2d2] bg-[#fffdfd] px-5 py-4 text-sm font-bold text-[#4c4546]">
+      <section className={`${analyticsCardClass} flex flex-wrap items-center gap-5 px-5 py-4 text-sm font-bold text-[#4c4546]`}>
         <span className="inline-flex items-center gap-2">
           <Heart className="size-5" />
           Performance Health
@@ -1787,7 +1802,7 @@ function TrafficView({
 }) {
   return (
     <div className="space-y-8">
-      <section className="space-y-5 border border-[#d8d2d2] bg-[#fffdfd] p-5">
+      <section className={`${analyticsCardClass} space-y-5 p-5`}>
         <div className="flex flex-wrap items-center gap-4">
           <span className="text-xs font-bold uppercase tracking-[0.16em]">Detail Level</span>
           <Segmented
@@ -1817,7 +1832,7 @@ function TrafficView({
             onChange={(value) => onMergeOtherChange(value === "merge")}
             value={mergeOther ? "merge" : "hide"}
           />
-          <button className="inline-flex h-10 items-center gap-2 border border-[#d8d2d2] bg-[#fffdfd] px-5 text-sm font-semibold" type="button">
+          <button className={analyticsControlButtonClass} type="button">
             <Filter className="size-4" />
             All Nodes
           </button>
@@ -1875,7 +1890,7 @@ function UserStatsView({
 }) {
   return (
     <div className="space-y-8">
-      <div className="flex flex-wrap items-center gap-8 border-t border-[#d8d2d2] pt-8">
+      <div className={`${analyticsCardClass} flex flex-wrap items-center gap-8 p-5`}>
         <Segmented
           items={ranges.map((item) => ({ label: item.label, value: item.id }))}
           onChange={onRangeChange}

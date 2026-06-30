@@ -19,7 +19,7 @@ interface AccountMetricCardsProps {
 }
 
 const cardClass =
-  "min-h-[252px] rounded-lg border border-[#d7cec6] bg-[#fffdf8]/78 p-7 text-[#181614] shadow-[0_18px_46px_rgb(74_58_42_/_0.07)] backdrop-blur-sm";
+  "console-panel min-h-[252px] rounded-xl border border-[#d7cec6]/82 bg-[#fffdf8]/82 p-6 text-[#181614] shadow-[0_18px_42px_rgb(74_58_42_/_0.07),inset_0_1px_0_rgb(255_255_255_/_0.62)] backdrop-blur-md";
 
 interface ActivityBucket {
   count: number;
@@ -152,11 +152,11 @@ export function AccountMetricCards({
             Healthy
           </span>
         </div>
-        <strong className="mt-5 block text-[50px] font-semibold leading-none tracking-[-0.055em] text-[#090909] md:text-[56px]">
+        <strong className="mt-5 block text-[42px] font-semibold leading-none tracking-[-0.05em] text-[#090909] md:text-[48px]">
           {formatQuotaFixed(currentBalance, platformStatus)}
         </strong>
         <Link
-          className="mt-11 inline-flex h-15 w-full items-center justify-between rounded-[2px] bg-black px-6 text-base font-bold text-white transition-all hover:bg-[#2b2621] active:translate-y-px"
+          className="mt-11 inline-flex h-15 w-full items-center justify-between rounded-[2px] bg-white px-6 text-base font-bold text-white transition-all hover:bg-[#2b2621] active:translate-y-px"
           to="/wallet"
         >
           Wallet
@@ -169,7 +169,7 @@ export function AccountMetricCards({
           <TrendingUp className="size-5" />
           Last 24h Consumption
         </p>
-        <strong className="mt-5 block text-[42px] font-semibold leading-none tracking-[-0.045em] text-[#090909]">
+        <strong className="mt-5 block text-[36px] font-semibold leading-none tracking-[-0.04em] text-[#090909]">
           {summaryLoading ? "..." : formatQuota(summary?.quota, platformStatus)}
         </strong>
         <p className="mt-4 text-base text-[#5e5751]">Total spend</p>
@@ -181,7 +181,7 @@ export function AccountMetricCards({
           <Zap className="size-5" />
           Request Count
         </p>
-        <strong className="mt-5 block text-[42px] font-semibold leading-none tracking-[-0.045em] text-[#090909]">
+        <strong className="mt-5 block text-[36px] font-semibold leading-none tracking-[-0.04em] text-[#090909]">
           {formatRawNumber(requestCount)}
         </strong>
         <p className="mt-4 text-base text-[#5e5751]">Total requests (24h)</p>
