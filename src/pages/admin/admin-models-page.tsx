@@ -11,13 +11,13 @@ import {
   RefreshCw,
   Rocket,
   Trash2,
-  X,
 } from "lucide-react";
 import * as modelsApi from "@features/admin/models/api";
 import type { AdminModel, AdminVendor } from "@features/admin/models/api";
 import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
+import { Modal } from "@shared/ui/modal";
 import { PageTitle } from "@shared/ui/page-title";
 import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
@@ -1205,8 +1205,16 @@ export function AdminModelsPage() {
         </Card>
       )}
 
-      {vendorPanelOpen && (
-        <Card>
+      <Modal
+        className="max-w-6xl"
+        description="Manage provider metadata used by model assignment and filtering."
+        onClose={() => {
+          setVendorPanelOpen(false);
+          closeVendorForm();
+        }}
+        open={vendorPanelOpen}
+        title="Vendors"
+      >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Vendors</h2>
@@ -1364,11 +1372,18 @@ export function AdminModelsPage() {
               </tbody>
             </table>
           </div>
-        </Card>
-      )}
+      </Modal>
 
-      {prefillPanelOpen && (
-        <Card>
+      <Modal
+        className="max-w-6xl"
+        description="Manage reusable model, tag, and endpoint presets used by admin metadata workflows."
+        onClose={() => {
+          setPrefillPanelOpen(false);
+          closePrefillForm();
+        }}
+        open={prefillPanelOpen}
+        title="Prefill groups"
+      >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Prefill groups</h2>
@@ -1517,11 +1532,19 @@ export function AdminModelsPage() {
               </tbody>
             </table>
           </div>
-        </Card>
-      )}
+      </Modal>
 
-      {deploymentPanelOpen && (
-        <Card>
+      <Modal
+        className="max-w-6xl"
+        description="Operate model deployments, containers, and lifecycle actions from the confirmed backend contract."
+        onClose={() => {
+          setDeploymentPanelOpen(false);
+          setDeploymentFormOpen(false);
+          setSelectedDeployment(null);
+        }}
+        open={deploymentPanelOpen}
+        title="Deployments"
+      >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <h2 className="text-xl font-semibold">Deployments</h2>
@@ -1750,36 +1773,24 @@ export function AdminModelsPage() {
               </div>
             </div>
           )}
-        </Card>
-      )}
+      </Modal>
 
-      {(formMode || actionMessage) && (
-        <Card className="border-[#d4cece]">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-semibold">
-                {formMode === "create"
-                  ? "Add model"
-                  : formMode === "edit"
-                    ? `Edit ${editingModel?.model_name}`
-                    : "Model action"}
-              </h2>
-              {actionMessage && (
-                <p className="mt-2 text-sm leading-6 text-[#5f5958]">{actionMessage}</p>
-              )}
-            </div>
-            <button
-              aria-label="Close"
-              className="rounded-[2px] p-2 text-[#5f5958] hover:bg-[#efeded]"
-              onClick={closePanel}
-              type="button"
-            >
-              <X className="size-4" />
-            </button>
-          </div>
+      <Modal
+        className="max-w-5xl"
+        description={actionMessage}
+        onClose={closePanel}
+        open={Boolean(formMode || actionMessage)}
+        title={
+          formMode === "create"
+            ? "Add model"
+            : formMode === "edit"
+              ? `Edit ${editingModel?.model_name}`
+              : "Model action"
+        }
+      >
 
           {formMode && (
-            <form className="mt-6 grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
+            <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
               <label className="grid gap-2 text-sm font-medium">
                 Model name
                 <input
@@ -1894,8 +1905,7 @@ export function AdminModelsPage() {
               </Button>
             </form>
           )}
-        </Card>
-      )}
+      </Modal>
 
       {loading && <LoadingBlock title="Loading models" />}
 

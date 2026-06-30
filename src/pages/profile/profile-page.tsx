@@ -1,101 +1,370 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { Link } from "@tanstack/react-router";
+import {
+  Activity,
+  BarChart3,
+  ChevronDown,
+  IdCard,
+  KeyRound,
+  Mail,
+  RotateCcw,
+  Trash2,
+  UserRound,
+} from "lucide-react";
+import { useState, type FormEvent } from "react";
 import * as authApi from "@features/auth/api";
 import { useAuthStore } from "@features/auth/store";
+import * as overviewApi from "@features/overview/api";
+import { usePlatformStore } from "@features/platform/store";
+import { formatQuota, formatQuotaFixed, formatRawNumber } from "@shared/lib/quota-format";
+import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
-import { Card } from "@shared/ui/card";
-import { PageTitle } from "@shared/ui/page-title";
+import { Modal } from "@shared/ui/modal";
+import { ErrorBlock } from "@shared/ui/state-block";
+
+const fieldClass =
+  "h-12 w-full rounded-lg border border-[#d7cec6] bg-[#fffdf8] px-4 text-sm font-semibold text-[#181614] outline-none transition-colors focus:border-[#4a433d] focus:ring-4 focus:ring-[#4a433d]/10";
+const panelClass =
+  "rounded-xl border border-[#ddd4ca]/88 bg-[#fffaf4]/78 text-[#181614] shadow-[0_18px_46px_rgb(74_58_42_/_0.08)] backdrop-blur-sm";
+const labelClass = "text-xs font-bold uppercase tracking-[0.14em] text-[#74695f]";
+
+function formatUserId(id?: number) {
+  return `USR-${String(id ?? 0).padStart(4, "0")}`;
+}
+
+function getRoleLabel(role?: number) {
+  if ((role ?? 0) >= 100) {
+    return "ROOT AGENT";
+  }
+
+  if ((role ?? 0) >= 10) {
+    return "VERIFIED AGENT";
+  }
+
+  return "STANDARD AGENT";
+}
+
+function getInitials(value: string) {
+  return value
+    .split(/[\s_-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("");
+}
 
 export function ProfilePage() {
   const user = useAuthStore((state) => state.user);
   const refresh = useAuthStore((state) => state.refresh);
-  const [username, setUsername] = useState(user?.username ?? "");
-  const [displayName, setDisplayName] = useState(user?.display_name ?? "");
+  const platformStatus = usePlatformStore((state) => state.status);
   const [language, setLanguage] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordOpen, setPasswordOpen] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
-  const [saving, setSaving] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [savingPassword, setSavingPassword] = useState(false);
 
-  useEffect(() => {
-    setUsername(user?.username ?? "");
-    setDisplayName(user?.display_name ?? "");
-  }, [user]);
+  const {
+    data: usageSummary,
+    error,
+    loading,
+    reload,
+  } = useAsyncData(async () => {
+    const response = await overviewApi.getUsageSummary();
+    return response.data;
+  }, []);
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleProfileSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSaving(true);
+    setSavingProfile(true);
+    setMessage(null);
+
+    try {
+      if (!language) {
+        setMessage("No account setting changes to save.");
+        return;
+      }
+
+      await authApi.updateCurrentUser({ language });
+      await refresh();
+      setMessage("Language setting saved.");
+    } catch (caught) {
+      setMessage(caught instanceof Error ? caught.message : "Profile update failed");
+    } finally {
+      setSavingProfile(false);
+    }
+  }
+
+  async function handlePasswordSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSavingPassword(true);
     setMessage(null);
 
     try {
       await authApi.updateCurrentUser({
-        username,
-        display_name: displayName,
-        ...(language ? { language } : {}),
+        original_password: currentPassword,
+        password: newPassword,
       });
-      await refresh();
-      setMessage("Profile saved.");
-    } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Profile update failed");
+      setCurrentPassword("");
+      setNewPassword("");
+      setPasswordOpen(false);
+      setMessage("Password updated.");
+    } catch (caught) {
+      setMessage(caught instanceof Error ? caught.message : "Password update failed");
     } finally {
-      setSaving(false);
+      setSavingPassword(false);
     }
   }
 
+  const accountName = user?.display_name || user?.username || "Account";
+  const email = user?.email || "No email on file";
+  const remainingQuota = Math.max((user?.quota ?? 0) - (user?.used_quota ?? 0), 0);
+  const roleLabel = getRoleLabel(user?.role);
+
   return (
-    <div className="space-y-8 pb-20 lg:pb-0">
-      <PageTitle
-        description="Manage identity, preferences, security posture, and workspace language."
-        title="Profile"
-      />
-      <Card className="max-w-2xl">
-        <form className="grid gap-4" onSubmit={handleSubmit}>
-          <label className="grid gap-2 text-sm font-medium">
-            Username
-            <input
-              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
-              onChange={(event) => setUsername(event.target.value)}
-              required
-              value={username}
-            />
-          </label>
-          <label className="grid gap-2 text-sm font-medium">
-            Display name
-            <input
-              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
-              onChange={(event) => setDisplayName(event.target.value)}
-              value={displayName}
-            />
-          </label>
-          <label className="grid gap-2 text-sm font-medium">
-            Email
-            <input
-              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#efeded] px-3 text-[#5f5958] outline-none"
-              readOnly
-              value={user?.email ?? ""}
-            />
-          </label>
-          <label className="grid gap-2 text-sm font-medium">
-            Language
-            <select
-              className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 outline-none focus:border-[#000000]"
-              onChange={(event) => setLanguage(event.target.value)}
-              value={language}
+    <div className="mx-auto max-w-[1180px] space-y-6 pb-20 text-[#181614] lg:pb-0">
+      <section className={`${panelClass} relative overflow-hidden px-6 py-8 md:px-8 lg:px-10`}>
+        <div className="pointer-events-none absolute -right-4 -top-8 hidden rotate-[-8deg] text-[#e7ded4]/72 md:block">
+          <IdCard className="size-40" strokeWidth={1.2} />
+        </div>
+        <div className="relative z-10 flex flex-col gap-8 md:flex-row md:items-center">
+          <div className="grid size-28 shrink-0 place-items-center rounded-2xl border border-[#ddd4ca] bg-[#f8f4ee] text-3xl font-bold tracking-[-0.04em] text-[#6d6258] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.72)]">
+            {getInitials(accountName) || <UserRound className="size-10" />}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-4">
+              <h1 className="truncate text-[38px] font-semibold leading-none tracking-[-0.045em] text-[#1f1a16]">
+                {accountName}
+              </h1>
+              <span className="inline-flex h-9 min-w-28 items-center justify-center rounded-lg border border-[#ddd4ca] bg-[#f1ebe4] px-3 text-left text-xs font-bold uppercase tracking-[0.08em] text-[#6d6258]">
+                {roleLabel}
+              </span>
+            </div>
+            <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-base font-medium text-[#74695f]">
+              <span>
+                User ID: <strong className="text-[#2b2621]">{formatUserId(user?.id)}</strong>
+              </span>
+              <span>
+                Email: <strong className="text-[#2b2621]">{email}</strong>
+              </span>
+              <span>
+                Group: <strong className="text-[#2b2621]">{user?.group || "default"}</strong>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        <section className={`${panelClass} p-6`}>
+          <p className={labelClass}>
+            Current Balance
+          </p>
+          <strong className="mt-4 block text-[42px] font-semibold leading-none tracking-[-0.04em] text-[#1f1a16]">
+            {formatQuotaFixed(remainingQuota, platformStatus)}
+          </strong>
+          <div className="mt-8 flex items-center justify-between gap-4 text-sm font-semibold text-[#74695f]">
+            <span>Wallet available</span>
+            <Link
+              className="inline-flex min-h-10 w-32 items-center justify-center rounded-lg border border-[#211d19] bg-[#211d19] px-4 text-center text-sm font-bold uppercase leading-tight text-[#fffaf3] shadow-[0_12px_28px_rgb(61_47_35_/_0.14)] transition-all hover:bg-[#332d27] active:translate-y-px"
+              to="/wallet"
             >
-              <option value="">Keep current</option>
-              <option value="zh_CN">Chinese</option>
-              <option value="en_US">English</option>
-            </select>
+              Add
+              <br />
+              Funds
+            </Link>
+          </div>
+        </section>
+
+        <section className={`${panelClass} p-6`}>
+          <p className={labelClass}>
+            Total Usage Cost
+          </p>
+          <strong className="mt-4 block text-[42px] font-semibold leading-none tracking-[-0.04em] text-[#1f1a16]">
+            {loading ? "..." : formatQuota(usageSummary?.quota, platformStatus)}
+          </strong>
+          <p className="mt-9 flex items-center gap-2 text-sm font-semibold text-[#9d514a]">
+            <BarChart3 className="size-4" />
+            Current account usage
+          </p>
+        </section>
+
+        <section className={`${panelClass} p-6`}>
+          <p className={labelClass}>
+            API Requests Count
+          </p>
+          <strong className="mt-4 block text-[42px] font-semibold leading-none tracking-[-0.04em] text-[#1f1a16]">
+            {formatRawNumber(user?.request_count)}
+          </strong>
+          <p className="mt-9 flex items-center gap-2 text-sm font-semibold text-[#74695f]">
+            <Activity className="size-4" />
+            Total request count
+          </p>
+        </section>
+      </div>
+
+      {error && (
+        <ErrorBlock
+          actionLabel="Retry"
+          description={error}
+          onAction={() => void reload()}
+          title="Usage summary unavailable"
+        />
+      )}
+
+      <section className={panelClass}>
+        <div className="border-b border-[#ddd4ca]/80 bg-[#f8f4ee]/64 px-6 py-7 md:px-8">
+          <h2 className="text-2xl font-semibold tracking-[-0.03em] text-[#1f1a16]">General Settings</h2>
+          <p className="mt-2 text-base text-[#74695f]">
+            Manage your account identity and system preferences.
+          </p>
+        </div>
+
+        <form className="space-y-7 px-6 py-7 md:px-8" onSubmit={handleProfileSubmit}>
+          <div className="flex flex-col gap-5 rounded-xl border border-[#ddd4ca]/88 bg-[#fffdf8]/72 px-5 py-5 shadow-[0_8px_20px_rgb(74_58_42_/_0.04)] md:flex-row md:items-center md:justify-between">
+            <div className="flex items-center gap-5">
+              <span className="grid size-12 place-items-center rounded-lg bg-[#eee8e1] text-[#6d6258]">
+                <Mail className="size-6" />
+              </span>
+              <div>
+                <p className="font-semibold text-[#1f1a16]">Email Authentication</p>
+                <p className="mt-1 text-sm font-medium text-[#74695f]">{email} (Verified)</p>
+              </div>
+            </div>
+            <button
+              className="min-h-11 rounded-lg border border-[#d7cec6] bg-[#fffdf8] px-6 text-sm font-bold uppercase text-[#3b3736] shadow-[0_8px_18px_rgb(72_56_42_/_0.05)] transition-all hover:border-[#c9beb3] hover:bg-[#f2ede7] active:translate-y-px"
+              onClick={() => setMessage("Email updates are not exposed by the current backend protocol.")}
+              type="button"
+            >
+              Update
+              <br />
+              Email
+            </button>
+          </div>
+
+          <label className={`grid gap-3 ${labelClass}`}>
+            System Language
+            <span className="relative block">
+              <select
+                className={`${fieldClass} appearance-none text-base normal-case tracking-normal`}
+                onChange={(event) => setLanguage(event.target.value)}
+                value={language}
+              >
+                <option value="">Keep current language</option>
+                <option value="en_US">English (US)</option>
+                <option value="zh_CN">Chinese (Simplified)</option>
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-4 top-1/2 size-5 -translate-y-1/2 text-[#74695f]" />
+            </span>
           </label>
+          <p className="-mt-3 text-sm italic text-[#74695f]">
+            Interface language will be synced across connected terminals and API logs.
+          </p>
 
-          {message && (
-            <p className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] px-3 py-2 text-sm text-[#5f5958]">
-              {message}
-            </p>
-          )}
-
-          <Button className="justify-self-start" disabled={saving} type="submit">
-            {saving ? "Saving..." : "Save profile"}
-          </Button>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            {message && <p className="rounded-lg bg-[#f8f4ee] px-4 py-2 text-sm font-semibold text-[#3b3736]">{message}</p>}
+            <button
+              className="ml-auto min-h-11 rounded-lg border border-[#211d19] bg-[#211d19] px-7 text-sm font-bold uppercase text-[#fffaf3] shadow-[0_12px_28px_rgb(61_47_35_/_0.16)] transition-all hover:bg-[#332d27] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={savingProfile}
+              type="submit"
+            >
+              {savingProfile ? "Saving..." : "Save Settings"}
+            </button>
+          </div>
         </form>
-      </Card>
+      </section>
+
+      <section className={panelClass}>
+        <div className="border-b border-[#ddd4ca]/80 bg-[#f8f4ee]/64 px-6 py-7 md:px-8">
+          <h2 className="text-2xl font-semibold tracking-[-0.03em] text-[#1f1a16]">Security & Access</h2>
+          <p className="mt-2 text-base text-[#74695f]">
+            Configure authentication layers and token management.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3">
+          <button
+            className="group min-h-36 border-b border-[#ddd4ca]/80 px-6 py-8 text-center transition-all hover:bg-[#f8f4ee]/72 md:border-b-0 md:border-r"
+            onClick={() => setPasswordOpen(true)}
+            type="button"
+          >
+            <RotateCcw className="mx-auto size-8 text-[#74695f] transition-colors group-hover:text-[#1f1a16]" />
+            <span className="mt-5 block text-sm font-bold uppercase tracking-[0.08em] text-[#1f1a16]">
+              Reset Password
+            </span>
+          </button>
+          <Link
+            className="group min-h-36 border-b border-[#ddd4ca]/80 px-6 py-8 text-center transition-all hover:bg-[#f8f4ee]/72 md:border-b-0 md:border-r"
+            to="/api-keys"
+          >
+            <KeyRound className="mx-auto size-8 text-[#74695f] transition-colors group-hover:text-[#1f1a16]" />
+            <span className="mt-5 block text-sm font-bold uppercase tracking-[0.08em] text-[#1f1a16]">
+              API Tokens
+            </span>
+          </Link>
+          <button
+            className="group min-h-36 px-6 py-8 text-center transition-all hover:bg-[#f8f4ee]/72"
+            onClick={() => setMessage("Account purge is not exposed by the current backend protocol.")}
+            type="button"
+          >
+            <Trash2 className="mx-auto size-8 text-[#74695f] transition-colors group-hover:text-[#7f1d1d]" />
+            <span className="mt-5 block text-sm font-bold uppercase tracking-[0.08em] text-[#1f1a16]">
+              Purge Account
+            </span>
+          </button>
+        </div>
+
+      </section>
+
+      <Modal
+        description="Update your account password using the current credential."
+        onClose={() => setPasswordOpen(false)}
+        open={passwordOpen}
+        title="Reset password"
+      >
+        <form className="grid gap-4" onSubmit={handlePasswordSubmit}>
+          <input
+            className={fieldClass}
+            onChange={(event) => setCurrentPassword(event.target.value)}
+            placeholder="Current password"
+            required
+            type="password"
+            value={currentPassword}
+          />
+          <input
+            className={fieldClass}
+            minLength={6}
+            onChange={(event) => setNewPassword(event.target.value)}
+            placeholder="New password"
+            required
+            type="password"
+            value={newPassword}
+          />
+          <div className="flex justify-end gap-3 pt-2">
+            <Button onClick={() => setPasswordOpen(false)} type="button" variant="secondary">
+              Cancel
+            </Button>
+            <Button disabled={savingPassword} type="submit">
+              {savingPassword ? "Updating..." : "Update password"}
+            </Button>
+          </div>
+        </form>
+      </Modal>
+
+      <footer className="flex flex-col gap-4 border-t border-[#ddd4ca]/80 py-7 text-sm font-medium text-[#74695f] md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-wrap items-center gap-6">
+          <span className="inline-flex items-center gap-2">
+            <span className="size-3 rounded-full bg-[#00ee1b]" />
+            All Systems Operational
+          </span>
+          <span className="hidden text-[#b7aaa0] md:inline">|</span>
+          <span>Last Sync: {new Date().toLocaleString()}</span>
+        </div>
+        <div className="flex gap-6 text-xs font-bold uppercase text-[#8a8078]">
+          <span>Privacy Policy</span>
+          <span>Terms of Service</span>
+        </div>
+      </footer>
     </div>
   );
 }

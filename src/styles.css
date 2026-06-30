@@ -81,3 +81,32 @@ select:focus {
 html {
   scroll-behavior: smooth;
 }
+
+@keyframes modalOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="modalOverlayIn"],
+  [class*="modalPanelIn"] {
+    animation: none !important;
+  }
+}

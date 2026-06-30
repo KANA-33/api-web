@@ -18,6 +18,7 @@ import { isRootUser } from "@shared/lib/roles";
 import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
+import { Modal } from "@shared/ui/modal";
 import { PageTitle } from "@shared/ui/page-title";
 import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
@@ -187,6 +188,7 @@ export function AdminBillingPage() {
   const [tradeNo, setTradeNo] = useState("");
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [planDraft, setPlanDraft] = useState<SubscriptionPlan>(emptyPlan);
+  const [planEditorOpen, setPlanEditorOpen] = useState(false);
   const [savingPlan, setSavingPlan] = useState(false);
   const [localOptions, setLocalOptions] = useState<Record<string, string>>({});
   const [savingOptionKey, setSavingOptionKey] = useState<string | null>(null);
@@ -293,6 +295,7 @@ export function AdminBillingPage() {
         setPlanDraft(response.data);
         setActionMessage("Subscription plan created.");
       }
+      setPlanEditorOpen(false);
       await reloadPlans();
     } catch (caught) {
       setActionMessage(caught instanceof Error ? caught.message : "Plan save failed.");
@@ -571,14 +574,21 @@ export function AdminBillingPage() {
         </Card>
       )}
 
-      <div className="grid gap-4 xl:grid-cols-[0.95fr_1.05fr]">
+      <div>
         <Card>
           <div className="flex items-center justify-between gap-3">
             <div>
               <h2 className="text-xl font-semibold">Subscription plans</h2>
               <p className="mt-2 text-sm text-[#5f5958]">Create and revise paid access plans.</p>
             </div>
-            <Button onClick={() => setPlanDraft(emptyPlan)} type="button" variant="secondary">
+            <Button
+              onClick={() => {
+                setPlanDraft(emptyPlan);
+                setPlanEditorOpen(true);
+              }}
+              type="button"
+              variant="secondary"
+            >
               <PackagePlus className="mr-2 size-4" />
               New
             </Button>
@@ -592,7 +602,10 @@ export function AdminBillingPage() {
               <button
                 className="rounded-[2px] border border-[#efeded] bg-[#fbf9f9] p-4 text-left transition-colors hover:border-[#c9b89f]"
                 key={plan.id}
-                onClick={() => setPlanDraft(normalizePlan(plan))}
+                onClick={() => {
+                  setPlanDraft(normalizePlan(plan));
+                  setPlanEditorOpen(true);
+                }}
                 type="button"
               >
                 <div className="flex items-start justify-between gap-3">
@@ -616,7 +629,15 @@ export function AdminBillingPage() {
           </div>
         </Card>
 
-        <Card>
+      </div>
+
+      <Modal
+        className="max-w-5xl"
+        description="Create and revise paid access plans."
+        onClose={() => setPlanEditorOpen(false)}
+        open={planEditorOpen}
+        title={planDraft.id > 0 ? `Edit plan #${planDraft.id}` : "Create plan"}
+      >
           <form className="grid gap-4" onSubmit={savePlan}>
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-xl font-semibold">
@@ -796,8 +817,7 @@ export function AdminBillingPage() {
               {savingPlan ? "Saving" : "Save plan"}
             </Button>
           </form>
-        </Card>
-      </div>
+      </Modal>
 
       <Card>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">

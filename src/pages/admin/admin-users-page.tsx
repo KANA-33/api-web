@@ -10,7 +10,6 @@ import {
   Sparkles,
   Trash2,
   UserPlus,
-  X,
 } from "lucide-react";
 import * as usersApi from "@features/admin/users/api";
 import type { AdminUser } from "@features/admin/users/api";
@@ -20,6 +19,7 @@ import { ROLE_ADMIN, ROLE_ROOT } from "@shared/lib/roles";
 import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
+import { Modal } from "@shared/ui/modal";
 import { PageTitle } from "@shared/ui/page-title";
 import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
@@ -657,39 +657,28 @@ export function AdminUsersPage() {
         </form>
       </Card>
 
-      {(formMode || quotaUser || securityUser || subscriptionUser || actionMessage) && (
-        <Card className="border-[#d4cece]">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-semibold">
-                {formMode === "create"
-                  ? "Create user"
-                  : formMode === "edit"
-                    ? `Edit ${editingUser?.username}`
-                    : quotaUser
-                      ? `Adjust quota for ${quotaUser.username}`
-                      : securityUser
-                        ? `Security for ${securityUser.username}`
-                        : subscriptionUser
-                          ? `Subscriptions for ${subscriptionUser.username}`
-                          : "User action"}
-              </h2>
-              {actionMessage && (
-                <p className="mt-2 text-sm leading-6 text-[#5f5958]">{actionMessage}</p>
-              )}
-            </div>
-            <button
-              aria-label="Close"
-              className="rounded-[2px] p-2 text-[#5f5958] hover:bg-[#efeded]"
-              onClick={closePanels}
-              type="button"
-            >
-              <X className="size-4" />
-            </button>
-          </div>
+      <Modal
+        className="max-w-5xl"
+        description={actionMessage}
+        onClose={closePanels}
+        open={Boolean(formMode || quotaUser || securityUser || subscriptionUser || actionMessage)}
+        title={
+          formMode === "create"
+            ? "Create user"
+            : formMode === "edit"
+              ? `Edit ${editingUser?.username}`
+              : quotaUser
+                ? `Adjust quota for ${quotaUser.username}`
+                : securityUser
+                  ? `Security for ${securityUser.username}`
+                  : subscriptionUser
+                    ? `Subscriptions for ${subscriptionUser.username}`
+                    : "User action"
+        }
+      >
 
           {formMode && (
-            <form className="mt-6 grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
+            <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
               <label className="grid gap-2 text-sm font-medium">
                 Username
                 <input
@@ -776,7 +765,7 @@ export function AdminUsersPage() {
           )}
 
           {quotaUser && (
-            <form className="mt-6 grid gap-4 md:grid-cols-[1fr_1fr_auto]" onSubmit={handleQuota}>
+            <form className="grid gap-4 md:grid-cols-[1fr_1fr_auto]" onSubmit={handleQuota}>
               <select
                 className="h-11 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm outline-none focus:border-[#000000]"
                 onChange={(event) =>
@@ -802,7 +791,7 @@ export function AdminUsersPage() {
           )}
 
           {securityUser && (
-            <div className="mt-6 grid gap-5 xl:grid-cols-[0.38fr_0.62fr]">
+            <div className="grid gap-5 xl:grid-cols-[0.38fr_0.62fr]">
               <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
                 <p className="text-sm font-semibold text-[#171717]">2FA coverage</p>
                 <p className="mt-2 text-3xl font-semibold">
@@ -897,7 +886,7 @@ export function AdminUsersPage() {
           )}
 
           {subscriptionUser && (
-            <div className="mt-6 grid gap-5 xl:grid-cols-[0.42fr_0.58fr]">
+            <div className="grid gap-5 xl:grid-cols-[0.42fr_0.58fr]">
               <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
                 <p className="text-sm font-semibold text-[#171717]">Bind plan</p>
                 <p className="mt-1 text-xs text-[#6c6a67]">
@@ -1020,8 +1009,7 @@ export function AdminUsersPage() {
               </div>
             </div>
           )}
-        </Card>
-      )}
+      </Modal>
 
       {loading && <LoadingBlock title="Loading users" />}
 

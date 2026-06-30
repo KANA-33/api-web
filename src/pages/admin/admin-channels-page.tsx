@@ -10,7 +10,6 @@ import {
   Tags,
   Trash2,
   Wifi,
-  X,
 } from "lucide-react";
 import { useAuthStore } from "@features/auth/store";
 import * as channelsApi from "@features/admin/channels/api";
@@ -20,6 +19,7 @@ import { formatRawNumber } from "@shared/lib/quota-format";
 import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
+import { Modal } from "@shared/ui/modal";
 import { PageTitle } from "@shared/ui/page-title";
 import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
@@ -959,38 +959,22 @@ export function AdminChannelsPage() {
         </div>
       </Card>
 
-      {(formMode ||
-        actionMessage ||
-        revealedSecret ||
-        operationResult ||
-        multiKeyStatus ||
-        multiKeyStatus) && (
-        <Card className="border-[#d4cece]">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-semibold">
-                {formMode === "create"
-                  ? "Add channel"
-                  : formMode === "edit"
-                    ? `Edit ${editingChannel?.name}`
-                    : "Channel action"}
-              </h2>
-              {actionMessage && (
-                <p className="mt-2 text-sm leading-6 text-[#5f5958]">{actionMessage}</p>
-              )}
-            </div>
-            <button
-              aria-label="Close"
-              className="rounded-[2px] p-2 text-[#5f5958] hover:bg-[#efeded]"
-              onClick={closePanel}
-              type="button"
-            >
-              <X className="size-4" />
-            </button>
-          </div>
+      <Modal
+        className="max-w-6xl"
+        description={actionMessage}
+        onClose={closePanel}
+        open={Boolean(formMode || actionMessage || revealedSecret || operationResult || multiKeyStatus)}
+        title={
+          formMode === "create"
+            ? "Add channel"
+            : formMode === "edit"
+              ? `Edit ${editingChannel?.name}`
+              : "Channel action"
+        }
+      >
 
           {formMode && (
-            <form className="mt-6 grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
+            <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
               <label className="grid gap-2 text-sm font-medium">
                 Name
                 <input
@@ -1160,7 +1144,7 @@ export function AdminChannelsPage() {
           )}
 
           {revealedSecret && (
-            <div className="mt-6 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-sm font-semibold text-[#171717]">
@@ -1189,7 +1173,7 @@ export function AdminChannelsPage() {
           )}
 
           {operationResult && (
-            <div className="mt-6 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-sm font-semibold text-[#171717]">{operationResult.title}</p>
@@ -1275,7 +1259,7 @@ export function AdminChannelsPage() {
           )}
 
           {multiKeyStatus && (
-            <div className="mt-6 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-sm font-semibold text-[#171717]">
@@ -1366,8 +1350,7 @@ export function AdminChannelsPage() {
               </div>
             </div>
           )}
-        </Card>
-      )}
+      </Modal>
 
       {loading && <LoadingBlock title="Loading channels" />}
 

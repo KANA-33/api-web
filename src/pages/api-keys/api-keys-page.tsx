@@ -1,5 +1,5 @@
-import { useState, type FormEvent } from "react";
-import { Eye, Pencil, RefreshCw, Trash2, X } from "lucide-react";
+import { useState, type FormEvent, type ReactNode } from "react";
+import { Eye, KeyRound, Pencil, RefreshCw, ShieldCheck, Trash2 } from "lucide-react";
 import * as apiKeysApi from "@features/api-keys/api";
 import { usePlatformStore } from "@features/platform/store";
 import type { ApiKeyRecord } from "@shared/api/contracts";
@@ -7,6 +7,7 @@ import { formatQuota } from "@shared/lib/quota-format";
 import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
+import { Modal } from "@shared/ui/modal";
 import { PageTitle } from "@shared/ui/page-title";
 import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
@@ -26,6 +27,9 @@ const defaultFormState: ApiKeyFormState = {
   expiredTime: "-1",
   group: "",
 };
+
+const apiKeyGridClass =
+  "grid gap-4 xl:grid-cols-[1.05fr_1.6fr_1fr_0.95fr_0.75fr_0.8fr]";
 
 function formatTime(timestamp: number) {
   if (timestamp <= 0) {
@@ -53,6 +57,17 @@ function toSearchPattern(value: string) {
   }
 
   return `%${trimmed.replaceAll("%", "")}%`;
+}
+
+function ApiKeyCell({ children, label }: { children: ReactNode; label: string }) {
+  return (
+    <div className="min-w-0">
+      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.14em] text-[#6c6a67] xl:hidden">
+        {label}
+      </span>
+      {children}
+    </div>
+  );
 }
 
 export function ApiKeysPage() {
@@ -202,39 +217,24 @@ export function ApiKeysPage() {
         </form>
       </Card>
 
-      {(formOpen || actionMessage || revealedKey) && (
-        <Card className="border-[#d4cece]">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h2 className="text-xl font-semibold">
-                {formOpen ? (editingKey ? "Edit key" : "Create key") : "Key action"}
-              </h2>
-              {actionMessage && (
-                <p className="mt-2 text-sm leading-6 text-[#5f5958]">{actionMessage}</p>
-              )}
-            </div>
-            <button
-              aria-label="Close"
-              className="rounded-[2px] p-2 text-[#5f5958] hover:bg-[#efeded]"
-              onClick={() => {
-                setFormOpen(false);
-                setActionMessage(null);
-                setRevealedKey(null);
-              }}
-              type="button"
-            >
-              <X className="size-4" />
-            </button>
-          </div>
-
+      <Modal
+        description={actionMessage}
+        onClose={() => {
+          setFormOpen(false);
+          setActionMessage(null);
+          setRevealedKey(null);
+        }}
+        open={formOpen || Boolean(actionMessage) || Boolean(revealedKey)}
+        title={formOpen ? (editingKey ? "Edit key" : "Create key") : "Key action"}
+      >
           {revealedKey && (
-            <div className="mt-5 rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-4 font-mono text-xs text-[#242121]">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fbf9f9] p-4 font-mono text-xs text-[#242121]">
               {revealedKey}
             </div>
           )}
 
           {formOpen && (
-            <form className="mt-6 grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
+            <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
               <label className="grid gap-2 text-sm font-medium">
                 Name
                 <input
@@ -294,8 +294,7 @@ export function ApiKeysPage() {
               </Button>
             </form>
           )}
-        </Card>
-      )}
+      </Modal>
 
       {loading && <LoadingBlock title="Loading API keys" />}
 
@@ -327,68 +326,111 @@ export function ApiKeysPage() {
               </p>
             </div>
           </div>
-          <div className="mt-6 overflow-x-auto">
-            <table className="w-full min-w-[860px] border-collapse text-left text-sm">
-              <thead className="text-xs uppercase tracking-[0.18em] text-[#6c6a67]">
-                <tr>
-                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Name</th>
-                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Key</th>
-                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Quota</th>
-                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Last used</th>
-                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Status</th>
-                  <th className="border-b border-[#d8d2d2] py-3 pr-4">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.items.map((key) => (
-                  <tr key={key.id}>
-                    <td className="border-b border-[#efeded] py-4 pr-4 font-medium">{key.name}</td>
-                    <td className="border-b border-[#efeded] py-4 pr-4 font-mono text-xs text-[#5f5958]">
-                      {key.key}
-                    </td>
-                    <td className="border-b border-[#efeded] py-4 pr-4">
+          <div className="mt-6">
+            <div
+              className={`${apiKeyGridClass} hidden border-b border-[#d8d2d2] px-5 pb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#6c6a67] xl:grid`}
+            >
+              <span>Name</span>
+              <span>Key</span>
+              <span>Quota</span>
+              <span>Last used</span>
+              <span>Status</span>
+              <span>Actions</span>
+            </div>
+
+            <div className="mt-3 space-y-3">
+              {data.items.map((key) => (
+                <article
+                  className={`${apiKeyGridClass} border border-[#d8d2d2] bg-[#fbf9f9] px-5 py-5 text-sm transition-colors hover:bg-[#f3f1f1]`}
+                  key={key.id}
+                >
+                  <ApiKeyCell label="Name">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-black text-xs font-bold text-white">
+                        {key.name.trim().charAt(0).toUpperCase() || "K"}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate font-bold text-[#242121]">{key.name}</p>
+                        <p className="mt-1 text-xs font-semibold text-[#6c6a67]">
+                          Group {key.group || "default"}
+                        </p>
+                      </div>
+                    </div>
+                  </ApiKeyCell>
+
+                  <ApiKeyCell label="Key">
+                    <p className="flex min-w-0 items-center gap-2 font-mono text-xs font-semibold text-[#3b3736]">
+                      <KeyRound className="size-4 shrink-0 text-[#6c6a67]" />
+                      <span className="truncate">{key.key}</span>
+                    </p>
+                    <p className="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-[#10b981]">
+                      <span className="size-1.5 rounded-full bg-[#10b981]" />
+                      Credential
+                    </p>
+                  </ApiKeyCell>
+
+                  <ApiKeyCell label="Quota">
+                    <p className="font-bold text-black">
                       {key.unlimited_quota
                         ? "Unlimited"
                         : formatQuota(key.remain_quota, platformStatus)}
-                    </td>
-                    <td className="border-b border-[#efeded] py-4 pr-4">
-                      {formatTime(key.accessed_time)}
-                    </td>
-                    <td className="border-b border-[#efeded] py-4 pr-4">
+                    </p>
+                    <p className="mt-1 text-xs font-semibold text-[#6c6a67]">
+                      {key.unlimited_quota ? "No quota ceiling" : "Remaining quota"}
+                    </p>
+                  </ApiKeyCell>
+
+                  <ApiKeyCell label="Last used">
+                    <p className="font-semibold text-[#3b3736]">{formatTime(key.accessed_time)}</p>
+                    <p className="mt-1 text-xs font-semibold text-[#6c6a67]">
+                      Expires {formatTime(key.expired_time)}
+                    </p>
+                  </ApiKeyCell>
+
+                  <ApiKeyCell label="Status">
+                    <span
+                      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-bold ${
+                        key.status === 1
+                          ? "border-[#a7dfc7] bg-[#ecfdf5] text-[#047857]"
+                          : "border-[#e7c6c6] bg-[#fff1f1] text-[#7f1d1d]"
+                      }`}
+                    >
+                      <ShieldCheck className="size-4" />
                       {key.status === 1 ? "Active" : "Inactive"}
-                    </td>
-                    <td className="border-b border-[#efeded] py-4 pr-4">
-                      <div className="flex gap-1">
-                        <button
-                          aria-label="Reveal key"
-                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
-                          onClick={() => void handleReveal(key.id)}
-                          type="button"
-                        >
-                          <Eye className="size-4" />
-                        </button>
-                        <button
-                          aria-label="Edit key"
-                          className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
-                          onClick={() => openEditForm(key)}
-                          type="button"
-                        >
-                          <Pencil className="size-4" />
-                        </button>
-                        <button
-                          aria-label="Delete key"
-                          className="rounded-[2px] p-2 text-[#7f1d1d] hover:bg-[#efeded]"
-                          onClick={() => void handleDelete(key)}
-                          type="button"
-                        >
-                          <Trash2 className="size-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </span>
+                  </ApiKeyCell>
+
+                  <ApiKeyCell label="Actions">
+                    <div className="flex gap-1 xl:justify-end">
+                      <button
+                        aria-label="Reveal key"
+                        className="grid size-9 place-items-center rounded-[2px] border border-[#d4cece] bg-[#fffdfd] text-[#3b3736] hover:bg-[#efeded]"
+                        onClick={() => void handleReveal(key.id)}
+                        type="button"
+                      >
+                        <Eye className="size-4" />
+                      </button>
+                      <button
+                        aria-label="Edit key"
+                        className="grid size-9 place-items-center rounded-[2px] border border-[#d4cece] bg-[#fffdfd] text-[#3b3736] hover:bg-[#efeded]"
+                        onClick={() => openEditForm(key)}
+                        type="button"
+                      >
+                        <Pencil className="size-4" />
+                      </button>
+                      <button
+                        aria-label="Delete key"
+                        className="grid size-9 place-items-center rounded-[2px] border border-[#e4caca] bg-[#fffdfd] text-[#7f1d1d] hover:bg-[#fff1f1]"
+                        onClick={() => void handleDelete(key)}
+                        type="button"
+                      >
+                        <Trash2 className="size-4" />
+                      </button>
+                    </div>
+                  </ApiKeyCell>
+                </article>
+              ))}
+            </div>
           </div>
           <div className="mt-5 flex items-center justify-between text-sm text-[#5f5958]">
             <Button

@@ -22,6 +22,7 @@ import { cn } from "@shared/lib/cn";
 import { formatQuota, formatRawNumber } from "@shared/lib/quota-format";
 import { isAdminUser } from "@shared/lib/roles";
 import { useAsyncData } from "@shared/lib/use-async-data";
+import { Modal } from "@shared/ui/modal";
 import { ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
 
 type AnalyticsTab = "model" | "traffic" | "user";
@@ -1543,110 +1544,112 @@ function ModelAnalysisView({
           <Filter className="size-4" />
           Filter
         </button>
-        {preferencesOpen && (
-          <div className="absolute right-24 top-14 z-30 w-[320px] border border-[#d8d2d2] bg-[#fffdfd] p-4 shadow-[0_18px_40px_rgb(0_0_0_/_0.12)]">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#6c6a67]">
-              Consumption grouping
-            </p>
-            <div className="mt-4">
-              <Segmented
-                items={[
-                  { label: "Hourly", value: "hour" },
-                  { label: "Daily", value: "day" },
-                  { label: "Weekly", value: "week" },
-                ]}
-                onChange={onDistributionIntervalChange}
-                value={distributionInterval}
+      </div>
+
+      <Modal
+        description="Choose how consumption charts group the latest seven record units."
+        onClose={() => setPreferencesOpen(false)}
+        open={preferencesOpen}
+        title="Consumption grouping"
+      >
+        <div>
+          <Segmented
+            items={[
+              { label: "Hourly", value: "hour" },
+              { label: "Daily", value: "day" },
+              { label: "Weekly", value: "week" },
+            ]}
+            onChange={onDistributionIntervalChange}
+            value={distributionInterval}
+          />
+          <p className="mt-4 text-sm font-semibold leading-6 text-[#6c6a67]">
+            Charts show the latest 7 units for the selected grouping. Each stacked color
+            represents one model in that period.
+          </p>
+        </div>
+      </Modal>
+
+      <Modal
+        description="Limit model analysis by a custom time range. Admin users can also filter by username."
+        onClose={() => setFiltersOpen(false)}
+        open={filtersOpen}
+        title="Model analysis filters"
+      >
+        <form
+          className="space-y-4"
+          onSubmit={(event) => {
+            onApplyFilters(event);
+            setFiltersOpen(false);
+          }}
+        >
+          <div>
+            <label
+              className="text-xs font-bold uppercase tracking-[0.14em] text-[#6c6a67]"
+              htmlFor="model-filter-start"
+            >
+              Start time
+            </label>
+            <input
+              className="mt-2 h-11 w-full border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm font-semibold text-[#1b1c1c] outline-none focus:border-black"
+              id="model-filter-start"
+              onChange={(event) =>
+                onFilterChange({ ...filters, startDateTime: event.target.value })
+              }
+              type="datetime-local"
+              value={filters.startDateTime}
+            />
+          </div>
+
+          <div>
+            <label
+              className="text-xs font-bold uppercase tracking-[0.14em] text-[#6c6a67]"
+              htmlFor="model-filter-end"
+            >
+              End time
+            </label>
+            <input
+              className="mt-2 h-11 w-full border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm font-semibold text-[#1b1c1c] outline-none focus:border-black"
+              id="model-filter-end"
+              onChange={(event) =>
+                onFilterChange({ ...filters, endDateTime: event.target.value })
+              }
+              type="datetime-local"
+              value={filters.endDateTime}
+            />
+          </div>
+
+          {canFilterByUsername && (
+            <div>
+              <label
+                className="text-xs font-bold uppercase tracking-[0.14em] text-[#6c6a67]"
+                htmlFor="model-filter-username"
+              >
+                Username
+              </label>
+              <input
+                className="mt-2 h-11 w-full border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm font-semibold text-[#1b1c1c] outline-none focus:border-black"
+                id="model-filter-username"
+                onChange={(event) => onFilterChange({ ...filters, username: event.target.value })}
+                placeholder="Admin only"
+                value={filters.username}
               />
             </div>
-            <p className="mt-4 text-xs font-semibold leading-5 text-[#6c6a67]">
-              Charts show the latest 7 units for the selected grouping. Each stacked color
-              represents one model in that period.
-            </p>
+          )}
+
+          <div className="flex justify-end gap-2 pt-2">
+            <button
+              className="h-10 border border-[#d8d2d2] bg-[#fffdfd] px-4 text-sm font-bold text-[#303031]"
+              onClick={onResetFilters}
+              type="button"
+            >
+              Reset
+            </button>
+            <button className="h-10 bg-black px-4 text-sm font-bold text-white" type="submit">
+              Apply
+            </button>
           </div>
-        )}
-        {filtersOpen && (
-          <form
-            className="absolute right-0 top-14 z-30 w-[380px] border border-[#d8d2d2] bg-[#fffdfd] p-4 shadow-[0_18px_40px_rgb(0_0_0_/_0.12)]"
-            onSubmit={onApplyFilters}
-          >
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#6c6a67]">
-              Model analysis filters
-            </p>
-
-            <div className="mt-4 space-y-3">
-              <div>
-                <label
-                  className="text-xs font-bold uppercase tracking-[0.14em] text-[#6c6a67]"
-                  htmlFor="model-filter-start"
-                >
-                  Start time
-                </label>
-                <input
-                  className="mt-2 h-11 w-full border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm font-semibold text-[#1b1c1c] outline-none focus:border-black"
-                  id="model-filter-start"
-                  onChange={(event) =>
-                    onFilterChange({ ...filters, startDateTime: event.target.value })
-                  }
-                  type="datetime-local"
-                  value={filters.startDateTime}
-                />
-              </div>
-
-              <div>
-                <label
-                  className="text-xs font-bold uppercase tracking-[0.14em] text-[#6c6a67]"
-                  htmlFor="model-filter-end"
-                >
-                  End time
-                </label>
-                <input
-                  className="mt-2 h-11 w-full border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm font-semibold text-[#1b1c1c] outline-none focus:border-black"
-                  id="model-filter-end"
-                  onChange={(event) =>
-                    onFilterChange({ ...filters, endDateTime: event.target.value })
-                  }
-                  type="datetime-local"
-                  value={filters.endDateTime}
-                />
-              </div>
-
-              {canFilterByUsername && (
-                <div>
-                  <label
-                    className="text-xs font-bold uppercase tracking-[0.14em] text-[#6c6a67]"
-                    htmlFor="model-filter-username"
-                  >
-                    Username
-                  </label>
-                  <input
-                    className="mt-2 h-11 w-full border border-[#d8d2d2] bg-[#fffdfd] px-3 text-sm font-semibold text-[#1b1c1c] outline-none focus:border-black"
-                    id="model-filter-username"
-                    onChange={(event) =>
-                      onFilterChange({ ...filters, username: event.target.value })
-                    }
-                    placeholder="Admin only"
-                    value={filters.username}
-                  />
-                </div>
-              )}
-            </div>
-
-            <div className="mt-5 flex justify-end gap-2">
-              <button
-                className="h-10 border border-[#d8d2d2] bg-[#fffdfd] px-4 text-sm font-bold text-[#303031]"
-                onClick={onResetFilters}
-                type="button"
-              >
-                Reset
-              </button>
-              <button className="h-10 bg-black px-4 text-sm font-bold text-white" type="submit">
-                Apply
-              </button>
-            </div>
-          </form>
-        )}
-      </div>
+        </form>
+      </Modal>
 
       <div className="grid gap-0 lg:grid-cols-[1fr_1fr_1fr_1fr]">
         <MetricCard

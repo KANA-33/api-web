@@ -24,7 +24,7 @@ const navigation = [
   { label: "Playground", to: "/playground", icon: Code2 },
   { label: "API Keys", to: "/api-keys", icon: KeyRound },
   { label: "Wallet", to: "/wallet", icon: CreditCard },
-  { label: "Profile", to: "/profile", icon: UserRound },
+  { label: "Account", to: "/profile", icon: UserRound },
 ];
 
 export function AppShell() {

@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { BadgeCheck, BadgeX, CalendarClock, KeyRound, Pencil, Plus, Trash2, X } from "lucide-react";
+import { BadgeCheck, BadgeX, CalendarClock, KeyRound, Pencil, Plus, Trash2 } from "lucide-react";
 import * as redemptionsApi from "@features/admin/redemptions/api";
 import type { AdminRedemption } from "@features/admin/redemptions/api";
 import { usePlatformStore } from "@features/platform/store";
@@ -7,6 +7,7 @@ import { formatQuota } from "@shared/lib/quota-format";
 import { useAsyncData } from "@shared/lib/use-async-data";
 import { Button } from "@shared/ui/button";
 import { Card } from "@shared/ui/card";
+import { Modal } from "@shared/ui/modal";
 import { PageTitle } from "@shared/ui/page-title";
 import { useSensitiveConfirmation } from "@shared/ui/sensitive-confirmation";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
@@ -309,35 +310,22 @@ export function AdminRedemptionsPage() {
         </form>
       </Card>
 
-      {(formMode || generatedKeys.length > 0 || actionMessage) && (
-        <Card className="border-[#d4cece]">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h2 className="text-xl font-semibold">
-                {formMode === "edit" ? "Edit redemption" : "Redemption action"}
-              </h2>
-              <p className="mt-2 text-sm text-[#5f5958]">
-                Quota values are submitted as raw backend quota units.
-              </p>
-            </div>
-            {formMode && (
-              <button
-                aria-label="Close redemption panel"
-                className="rounded-[2px] p-2 text-[#3b3736] hover:bg-[#efeded]"
-                onClick={closePanel}
-                type="button"
-              >
-                <X className="size-4" />
-              </button>
-            )}
-          </div>
+      <Modal
+        description={
+          actionMessage ??
+          "Quota values are submitted as raw backend quota units."
+        }
+        onClose={closePanel}
+        open={Boolean(formMode || generatedKeys.length > 0 || actionMessage)}
+        title={formMode === "edit" ? "Edit redemption" : "Redemption action"}
+      >
 
           {actionMessage && (
-            <p className="mt-4 text-sm font-medium text-[#3b3736]">{actionMessage}</p>
+            <p className="text-sm font-medium text-[#3b3736]">{actionMessage}</p>
           )}
 
           {generatedKeys.length > 0 && (
-            <div className="mt-4 rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
+            <div className="rounded-[2px] border border-[#d8d2d2] bg-[#fffdfd] p-4">
               <div className="mb-3 flex items-center gap-2 text-sm font-semibold">
                 <KeyRound className="size-4" />
                 Generated keys
@@ -351,7 +339,7 @@ export function AdminRedemptionsPage() {
           )}
 
           {formMode && (
-            <form className="mt-5 grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
+            <form className="grid gap-4 md:grid-cols-2" onSubmit={handleSubmit}>
               <label className="grid gap-2 text-sm font-medium">
                 Name
                 <input
@@ -407,8 +395,7 @@ export function AdminRedemptionsPage() {
               </Button>
             </form>
           )}
-        </Card>
-      )}
+      </Modal>
 
       {loading && <LoadingBlock title="Loading redemption codes" />}
 

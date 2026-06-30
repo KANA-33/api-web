@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState, type FormEvent, type ReactNode } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import {
   CalendarDays,
   ChevronLeft,
@@ -14,7 +14,9 @@ import type { PlatformStatus } from "@shared/api/contracts";
 import { useAsyncData } from "@shared/lib/use-async-data";
 import { formatQuota, formatRawNumber } from "@shared/lib/quota-format";
 import { cn } from "@shared/lib/cn";
+import { Card } from "@shared/ui/card";
 import { EmptyBlock, ErrorBlock, LoadingBlock } from "@shared/ui/state-block";
+import { LogDetailsView } from "./log-details-view";
 
 const tabs = [
   { id: "usage", label: "Usage Logs" },
@@ -47,10 +49,6 @@ const emptyFilters: LogFilters = {
 
 const logGridClass =
   "grid gap-4 xl:grid-cols-[1.15fr_0.75fr_1.35fr_1.05fr_1.5fr_1.15fr_1.35fr_1fr_1.45fr]";
-
-const LogDetailsView = lazy(() =>
-  import("./log-details-view").then((module) => ({ default: module.LogDetailsView })),
-);
 
 function formatTime(timestamp?: number) {
   if (!timestamp) {
@@ -204,14 +202,12 @@ export function LogsPage() {
 
   if (selectedLog) {
     return (
-      <Suspense fallback={<LoadingBlock title="Loading log details" />}>
-        <LogDetailsView
-          activeTab={selectedLog.activeTab}
-          onClose={() => setSelectedLog(null)}
-          platformStatus={platformStatus}
-          record={selectedLog.record}
-        />
-      </Suspense>
+      <LogDetailsView
+        activeTab={selectedLog.activeTab}
+        onClose={() => setSelectedLog(null)}
+        platformStatus={platformStatus}
+        record={selectedLog.record}
+      />
     );
   }
 
@@ -255,75 +251,80 @@ export function LogsPage() {
         ))}
       </div>
 
-      <form
-        className="mt-8 flex flex-col gap-4 border border-[#d8d2d2] bg-[#fbf9f9] p-5 lg:flex-row lg:items-center lg:justify-between"
-        onSubmit={applyFilters}
-      >
-        <div className="flex flex-1 flex-wrap gap-4">
-          <label className="relative w-full sm:w-[374px]">
-            <CalendarDays className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[#5f5958]" />
-            <span className="sr-only">Start date</span>
+      <Card>
+        <form
+          className="flex flex-col gap-4 border border-[#d8d2d2] bg-[#fbf9f9] p-5 lg:flex-row lg:items-center lg:justify-between"
+          onSubmit={applyFilters}
+        >
+          <div className="flex flex-1 flex-wrap gap-4">
+            <label className="relative w-full sm:w-[374px]">
+              <CalendarDays className="absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[#5f5958]" />
+              <span className="sr-only">Start date</span>
+              <input
+                className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] pl-12 pr-3 text-sm font-semibold text-[#3b3736] outline-none focus:border-black"
+                onChange={(event) =>
+                  setFilters((value) => ({ ...value, startDate: event.target.value }))
+                }
+                type="date"
+                value={filters.startDate}
+              />
+            </label>
             <input
-              className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] pl-12 pr-3 text-sm font-semibold text-[#3b3736] outline-none focus:border-black"
+              className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[168px]"
               onChange={(event) =>
-                setFilters((value) => ({ ...value, startDate: event.target.value }))
+                setFilters((value) => ({ ...value, modelName: event.target.value }))
+              }
+              placeholder={activeTab === "task" ? "All Actions" : "All Models"}
+              value={filters.modelName}
+            />
+            <input
+              className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[150px]"
+              onChange={(event) =>
+                setFilters((value) => ({ ...value, status: event.target.value }))
+              }
+              placeholder={activeTab === "task" ? "All Status" : "All Groups"}
+              value={filters.status}
+            />
+            <input
+              className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[150px]"
+              onChange={(event) =>
+                setFilters((value) => ({ ...value, endDate: event.target.value }))
               }
               type="date"
-              value={filters.startDate}
+              value={filters.endDate}
             />
-          </label>
-          <input
-            className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[168px]"
-            onChange={(event) =>
-              setFilters((value) => ({ ...value, modelName: event.target.value }))
-            }
-            placeholder={activeTab === "task" ? "All Actions" : "All Models"}
-            value={filters.modelName}
-          />
-          <input
-            className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[150px]"
-            onChange={(event) => setFilters((value) => ({ ...value, status: event.target.value }))}
-            placeholder={activeTab === "task" ? "All Status" : "All Groups"}
-            value={filters.status}
-          />
-          <input
-            className="h-11 w-full rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-4 text-sm font-semibold text-[#3b3736] outline-none focus:border-black sm:w-[150px]"
-            onChange={(event) => setFilters((value) => ({ ...value, endDate: event.target.value }))}
-            type="date"
-            value={filters.endDate}
-          />
-        </div>
-        <div className="flex gap-2">
-          <button
-            className="h-11 rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-5 text-sm font-semibold text-[#3b3736] hover:bg-[#efeded]"
-            onClick={clearFilters}
-            type="button"
-          >
-            Reset
-          </button>
-          <button
-            className="h-11 rounded-[2px] border border-black bg-black px-6 text-sm font-bold text-white hover:bg-[#303031]"
-            type="submit"
-          >
-            Search
-          </button>
-        </div>
-      </form>
+          </div>
+          <div className="flex gap-2">
+            <button
+              className="h-11 rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-5 text-sm font-semibold text-[#3b3736] hover:bg-[#efeded]"
+              onClick={clearFilters}
+              type="button"
+            >
+              Reset
+            </button>
+            <button
+              className="h-11 rounded-[2px] border border-black bg-black px-6 text-sm font-bold text-white hover:bg-[#303031]"
+              type="submit"
+            >
+              Search
+            </button>
+          </div>
+        </form>
 
-      <div className="mt-8">
-        <div
-          className={`${logGridClass} hidden border-b border-[#d8d2d2] px-5 pb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#6c6a67] xl:grid`}
-        >
-          <span>Time</span>
-          <span>Channel</span>
-          <span>User</span>
-          <span>Token</span>
-          <span>Model</span>
-          <span>Timing</span>
-          <span>Tokens</span>
-          <span>Cost</span>
-          <span>Details</span>
-        </div>
+        <div className="mt-8">
+          <div
+            className={`${logGridClass} hidden border-b border-[#d8d2d2] px-5 pb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#6c6a67] xl:grid`}
+          >
+            <span>Time</span>
+            <span>Channel</span>
+            <span>User</span>
+            <span>Token</span>
+            <span>Model</span>
+            <span>Timing</span>
+            <span>Tokens</span>
+            <span>Cost</span>
+            <span>Details</span>
+          </div>
 
         {loading && <LoadingBlock title="Loading logs" />}
 
@@ -359,34 +360,35 @@ export function LogsPage() {
           </div>
         )}
 
-        <div className="mt-7 flex flex-col gap-4 border-t border-[#d8d2d2] pt-5 text-sm font-medium text-[#5f5958] sm:flex-row sm:items-center sm:justify-end">
-          <span>Total: {formatRawNumber(data?.total ?? 0)}</span>
-          <span>Rows per page</span>
-          <span className="grid h-9 min-w-12 place-items-center rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-3 text-[#242121]">
-            {pageSize}
-          </span>
-          <div className="flex gap-1">
-            <PagerButton disabled={page <= 1} onClick={() => setPage(1)}>
-              <ChevronsLeft className="size-4" />
-            </PagerButton>
-            <PagerButton
-              disabled={page <= 1}
-              onClick={() => setPage((value) => Math.max(1, value - 1))}
-            >
-              <ChevronLeft className="size-4" />
-            </PagerButton>
-            <span className="grid size-9 place-items-center rounded-[2px] bg-black text-sm font-bold text-white">
-              {page}
+          <div className="mt-7 flex flex-col gap-4 border-t border-[#d8d2d2] pt-5 text-sm font-medium text-[#5f5958] sm:flex-row sm:items-center sm:justify-end">
+            <span>Total: {formatRawNumber(data?.total ?? 0)}</span>
+            <span>Rows per page</span>
+            <span className="grid h-9 min-w-12 place-items-center rounded-[2px] border border-[#d4cece] bg-[#fffdfd] px-3 text-[#242121]">
+              {pageSize}
             </span>
-            <PagerButton
-              disabled={page >= totalPages}
-              onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
-            >
-              <ChevronRight className="size-4" />
-            </PagerButton>
+            <div className="flex gap-1">
+              <PagerButton disabled={page <= 1} onClick={() => setPage(1)}>
+                <ChevronsLeft className="size-4" />
+              </PagerButton>
+              <PagerButton
+                disabled={page <= 1}
+                onClick={() => setPage((value) => Math.max(1, value - 1))}
+              >
+                <ChevronLeft className="size-4" />
+              </PagerButton>
+              <span className="grid size-9 place-items-center rounded-[2px] bg-black text-sm font-bold text-white">
+                {page}
+              </span>
+              <PagerButton
+                disabled={page >= totalPages}
+                onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
+              >
+                <ChevronRight className="size-4" />
+              </PagerButton>
+            </div>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
