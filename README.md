@@ -63,7 +63,7 @@ Create `.env` from `.env.example` when connecting to a real backend:
 ```bash
 PUBLIC_API_BASE_URL=
 DEV_BACKEND_ORIGIN=http://localhost:3000
-PUBLIC_LEGACY_ADMIN_URL=http://localhost:3000/admin
+PUBLIC_LEGACY_ADMIN_URL=http://localhost:3000/channels
 ```
 
 Common local backend examples:
@@ -72,8 +72,12 @@ Common local backend examples:
   `DEV_BACKEND_ORIGIN=http://localhost:3000`
 - Frontend deployed separately with a fixed API origin:
   `PUBLIC_API_BASE_URL=https://api.example.com`
-- Admin button should open the original backend admin UI:
-  `PUBLIC_LEGACY_ADMIN_URL=https://api.example.com/admin`
+- Admin button opens the original default admin UI at the API origin:
+  `https://api.example.com/channels`
+- Override the original admin UI only for special deployments:
+  `PUBLIC_LEGACY_ADMIN_URL=https://api.example.com/channels`
+- Do not set `PUBLIC_LEGACY_ADMIN_URL` to a `localhost` URL for production
+  builds, because public environment values are baked into the built assets.
 
 ## Commands
 

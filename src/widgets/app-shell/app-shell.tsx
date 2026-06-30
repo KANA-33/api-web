@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useAuthStore } from "@features/auth/store";
 import { cn } from "@shared/lib/cn";
+import { resolveLegacyAdminUrl } from "@shared/lib/legacy-admin-url";
 import { isAdminUser } from "@shared/lib/roles";
 
 const navigation = [
@@ -27,22 +28,6 @@ const navigation = [
   { label: "Wallet", to: "/wallet", icon: CreditCard },
   { label: "Account", to: "/profile", icon: UserRound },
 ];
-
-function getLegacyAdminUrl() {
-  const configuredUrl = import.meta.env.PUBLIC_LEGACY_ADMIN_URL?.trim();
-
-  if (configuredUrl) {
-    return configuredUrl;
-  }
-
-  const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL?.trim();
-
-  if (apiBaseUrl) {
-    return new URL("/admin", apiBaseUrl).toString();
-  }
-
-  return "/admin";
-}
 
 function getPageTitle(pathname: string) {
   if (pathname.startsWith("/models/")) {
@@ -77,7 +62,10 @@ export function AppShell() {
   });
   const pageTitle = getPageTitle(pathname);
   const displayName = user?.display_name || user?.username || "Account";
-  const legacyAdminUrl = getLegacyAdminUrl();
+  const legacyAdminUrl = resolveLegacyAdminUrl({
+    apiBaseUrl: import.meta.env.PUBLIC_API_BASE_URL,
+    configuredUrl: import.meta.env.PUBLIC_LEGACY_ADMIN_URL,
+  });
 
   async function handleSignOut() {
     setProfileMenuOpen(false);

@@ -5,21 +5,28 @@ backend or as a separate origin.
 
 ## Environment
 
-| Variable              | Required | Description                                             |
-| --------------------- | -------- | ------------------------------------------------------- |
-| `PUBLIC_API_BASE_URL` | No       | Backend origin. Leave empty for same-origin deployment. |
-| `DEV_BACKEND_ORIGIN`  | No       | Dev-only backend origin used by Rsbuild proxy.          |
+| Variable                  | Required | Description                                                                    |
+| ------------------------- | -------- | ------------------------------------------------------------------------------ |
+| `PUBLIC_API_BASE_URL`     | No       | Backend origin. Leave empty for same-origin deployment.                        |
+| `PUBLIC_LEGACY_ADMIN_URL` | No       | Explicit original admin UI URL. Leave empty to use `PUBLIC_API_BASE_URL/admin`. |
+| `DEV_BACKEND_ORIGIN`      | No       | Dev-only backend origin used by Rsbuild proxy.                                 |
 
 Examples:
 
 ```env
 # Same-origin deployment
 PUBLIC_API_BASE_URL=
+PUBLIC_LEGACY_ADMIN_URL=
 DEV_BACKEND_ORIGIN=http://localhost:3000
 
 # Separate backend origin
 PUBLIC_API_BASE_URL=https://api.example.com
+PUBLIC_LEGACY_ADMIN_URL=
 ```
+
+With `PUBLIC_API_BASE_URL=https://api.example.com` and
+`PUBLIC_LEGACY_ADMIN_URL=` empty, the user-console Admin button opens
+`https://api.example.com/admin`.
 
 ## Local Dev Proxy
 
@@ -28,6 +35,7 @@ cross-site cookie issues.
 
 ```env
 PUBLIC_API_BASE_URL=
+PUBLIC_LEGACY_ADMIN_URL=
 DEV_BACKEND_ORIGIN=http://localhost:3000
 ```
 
@@ -41,6 +49,7 @@ Recommended when possible.
 - Frontend serves from the same origin as backend.
 - Session cookies work without special cross-site browser handling.
 - `PUBLIC_API_BASE_URL` can remain empty.
+- The Admin button falls back to same-origin `/admin`.
 
 ## Cross-Origin Deployment
 
@@ -51,6 +60,10 @@ When frontend and backend are on different origins:
   needed.
 - HTTPS is required for secure cross-site cookies.
 - The frontend uses `credentials: include` for dashboard requests.
+- The Admin button opens `PUBLIC_LEGACY_ADMIN_URL` when set; otherwise it opens
+  `/admin` on the `PUBLIC_API_BASE_URL` origin.
+- Do not set production `PUBLIC_LEGACY_ADMIN_URL` to a `localhost` URL because
+  public environment values are baked into the production assets.
 
 ## Build
 
