@@ -25,6 +25,11 @@ export interface UpdateCurrentUserRequest {
   sidebar_modules?: string;
 }
 
+export interface BindEmailRequest {
+  email: string;
+  code: string;
+}
+
 export function login(request: LoginRequest) {
   return apiClient<ApiEnvelope<LoginResponseData>, LoginRequest>({
     method: "POST",
@@ -49,6 +54,21 @@ export function updateCurrentUser(request: UpdateCurrentUserRequest) {
   return apiClient<ApiEnvelope<unknown>, UpdateCurrentUserRequest>({
     method: "PUT",
     path: "/api/user/self",
+    body: request,
+  });
+}
+
+export function sendEmailVerification(email: string) {
+  return apiClient<ApiEnvelope<null>>({
+    path: "/api/verification",
+    query: { email },
+  });
+}
+
+export function bindEmail(request: BindEmailRequest) {
+  return apiClient<ApiEnvelope<null>, BindEmailRequest>({
+    method: "POST",
+    path: "/api/oauth/email/bind",
     body: request,
   });
 }

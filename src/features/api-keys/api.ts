@@ -23,6 +23,11 @@ export interface UpdateApiKeyRequest extends Partial<CreateApiKeyRequest> {
   status?: number;
 }
 
+export interface UserGroupsData {
+  groups?: string[];
+  usable_groups?: string[];
+}
+
 export function listApiKeys(query?: PageQuery) {
   return apiClient<ApiEnvelope<PageInfo<ApiKeyRecord>>>({
     path: "/api/token/",
@@ -65,5 +70,11 @@ export function revealApiKey(id: number) {
   return apiClient<ApiEnvelope<{ key: string }>, undefined>({
     method: "POST",
     path: `/api/token/${id}/key`,
+  });
+}
+
+export function getUserGroups() {
+  return apiClient<ApiEnvelope<string[] | UserGroupsData>>({
+    path: "/api/user/self/groups",
   });
 }
