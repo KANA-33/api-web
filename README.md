@@ -27,21 +27,21 @@ status codes, and documented behavior.
 - Dynamic platform branding from `/api/status`, including system name, logo,
   and browser favicon.
 
-### Admin Console
+### ~~Admin Console~~
 
-- Admin overview with platform statistics.
-- User management: list, search, create, edit, delete, role/status/quota actions.
-- Channel management: list, search, create, edit, delete, copy, test, balance,
-  batch actions, tag actions, upstream model fetch/detect/apply, root-only secret
-  reveal, and multi-key management.
-- Model management: list, search, create, edit, delete, status update, missing
-  model review, sync preview, official upstream sync, vendor CRUD, prefill group
-  CRUD, and io.net deployment operations.
-- Logs: usage logs, drawing logs, task logs, audit logs, and usage statistics.
-- Redemptions: list, search, batch generation, edit, status update, delete, and
-  invalid-code cleanup.
-- Billing: top-up records and manual top-up completion.
-- Settings: root-only option management and console content editing.
+- ~~Admin overview with platform statistics.~~
+- ~~User management: list, search, create, edit, delete, role/status/quota actions.~~
+- ~~Channel management: list, search, create, edit, delete, copy, test, balance,~~
+  ~~batch actions, tag actions, upstream model fetch/detect/apply, root-only secret~~
+  ~~reveal, and multi-key management.~~
+- ~~Model management: list, search, create, edit, delete, status update, missing~~
+  ~~model review, sync preview, official upstream sync, vendor CRUD, prefill group~~
+  ~~CRUD, and io.net deployment operations.~~
+- ~~Logs: usage logs, drawing logs, task logs, audit logs, and usage statistics.~~
+- ~~Redemptions: list, search, batch generation, edit, status update, delete, and~~
+  ~~invalid-code cleanup.~~
+- ~~Billing: top-up records and manual top-up completion.~~
+- ~~Settings: root-only option management and console content editing.~~
 
 ## Stack
 
