@@ -81,6 +81,15 @@ select:focus {
   box-shadow: 0 10px 26px rgb(74 58 42 / 0.08);
 }
 
+.playground-composer-input,
+.playground-composer-input:focus,
+.playground-composer-input:focus-visible {
+  border: 0;
+  outline: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 ::placeholder {
   color: #6c6a67;
   opacity: 1;
