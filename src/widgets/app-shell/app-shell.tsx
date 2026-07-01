@@ -1,5 +1,5 @@
-import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { useRef, useState } from "react";
+import { Link, Outlet, useRouterState } from "@tanstack/react-router";
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import {
@@ -9,15 +9,14 @@ import {
   KeyRound,
   LayoutDashboard,
   ListTree,
-  LogOut,
   PenLine,
   UserRound,
-  WalletCards,
 } from "lucide-react";
 import { useAuthStore } from "@features/auth/store";
 import { cn } from "@shared/lib/cn";
 import { resolveLegacyAdminUrl } from "@shared/lib/legacy-admin-url";
 import { isAdminUser } from "@shared/lib/roles";
+import { UserAvatarMenu } from "@shared/ui/user-avatar-menu";
 
 const navigation = [
   { label: "Overview", to: "/overview", icon: BarChart3 },
@@ -42,37 +41,18 @@ function getPageTitle(pathname: string) {
   return matched?.label ?? "Overview";
 }
 
-function getInitials(value?: string) {
-  return (value || "U")
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((item) => item.charAt(0).toUpperCase())
-    .join("");
-}
-
 export function AppShell() {
   const routeSurfaceRef = useRef<HTMLDivElement | null>(null);
-  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
-  const signOut = useAuthStore((state) => state.signOut);
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   });
   const pageTitle = getPageTitle(pathname);
   const isPlaygroundPage = pathname === "/playground";
-  const displayName = user?.display_name || user?.username || "Account";
   const legacyAdminUrl = resolveLegacyAdminUrl({
     apiBaseUrl: import.meta.env.PUBLIC_API_BASE_URL,
     configuredUrl: import.meta.env.PUBLIC_LEGACY_ADMIN_URL,
   });
-
-  async function handleSignOut() {
-    setProfileMenuOpen(false);
-    await signOut();
-    await navigate({ to: "/login" });
-  }
 
   useGSAP(
     () => {
@@ -168,57 +148,7 @@ export function AppShell() {
                   Admin
                 </a>
               )}
-              <div className="relative">
-                <button
-                  aria-expanded={profileMenuOpen}
-                  aria-haspopup="menu"
-                  className="grid size-11 place-items-center rounded-full border border-[#ddd4ca] bg-[#211d19] text-sm font-bold text-[#fffaf3] shadow-[0_12px_26px_rgb(59_45_34_/_0.16)] transition-transform hover:scale-[1.03]"
-                  onClick={() => setProfileMenuOpen((value) => !value)}
-                  type="button"
-                >
-                  {getInitials(displayName)}
-                </button>
-                {profileMenuOpen && (
-                  <div
-                    className="absolute right-0 mt-3 w-56 rounded-xl border border-[#ddd4ca] bg-[#fffaf4] p-2 shadow-[0_24px_60px_rgb(49_39_28_/_0.18)]"
-                    role="menu"
-                  >
-                    <div className="border-b border-[#e4ddd5] px-3 py-3">
-                      <p className="truncate text-sm font-semibold text-[#181614]">{displayName}</p>
-                      <p className="mt-1 truncate text-xs font-medium text-[#74695f]">
-                        {user?.username}
-                      </p>
-                    </div>
-                    <Link
-                      className="mt-2 flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-semibold text-[#342d27] hover:bg-[#eee8e1]"
-                      onClick={() => setProfileMenuOpen(false)}
-                      role="menuitem"
-                      to="/wallet"
-                    >
-                      <WalletCards className="size-4" />
-                      Wallet
-                    </Link>
-                    <Link
-                      className="flex h-10 items-center gap-3 rounded-lg px-3 text-sm font-semibold text-[#342d27] hover:bg-[#eee8e1]"
-                      onClick={() => setProfileMenuOpen(false)}
-                      role="menuitem"
-                      to="/profile"
-                    >
-                      <UserRound className="size-4" />
-                      Account
-                    </Link>
-                    <button
-                      className="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-sm font-semibold text-[#7f1d1d] hover:bg-[#f7e8e4]"
-                      onClick={() => void handleSignOut()}
-                      role="menuitem"
-                      type="button"
-                    >
-                      <LogOut className="size-4" />
-                      Sign out
-                    </button>
-                  </div>
-                )}
-              </div>
+              <UserAvatarMenu />
             </div>
           </div>
         </header>
