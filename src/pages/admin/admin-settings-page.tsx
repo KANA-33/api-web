@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import * as settingsApi from "@features/admin/settings/api";
 import { useAuthStore } from "@features/auth/store";
+import { usePlatformStore } from "@features/platform/store";
 import { formatRawNumber } from "@shared/lib/quota-format";
 import { isRootUser } from "@shared/lib/roles";
 import { useAsyncData } from "@shared/lib/use-async-data";
@@ -228,6 +229,7 @@ function time(value?: string) {
 export function AdminSettingsPage() {
   const confirmSensitive = useSensitiveConfirmation();
   const user = useAuthStore((state) => state.user);
+  const reloadPlatformStatus = usePlatformStore((state) => state.load);
   const [localValues, setLocalValues] = useState<Record<string, string>>({});
   const [savingKey, setSavingKey] = useState<string | null>(null);
   const [savingGroup, setSavingGroup] = useState<string | null>(null);
@@ -320,6 +322,9 @@ export function AdminSettingsPage() {
       }
       setActionMessage(`${groupTitle} saved.`);
       await reload();
+      if (dirtyFields.some((field) => field.key === "SystemName" || field.key === "Logo")) {
+        await reloadPlatformStatus(true);
+      }
       await reloadPerformance();
     } catch (caught) {
       setActionMessage(caught instanceof Error ? caught.message : "Settings group update failed.");

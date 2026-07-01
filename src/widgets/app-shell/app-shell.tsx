@@ -13,9 +13,11 @@ import {
   UserRound,
 } from "lucide-react";
 import { useAuthStore } from "@features/auth/store";
+import { usePlatformStore } from "@features/platform/store";
 import { cn } from "@shared/lib/cn";
 import { resolveLegacyAdminUrl } from "@shared/lib/legacy-admin-url";
 import { isAdminUser } from "@shared/lib/roles";
+import { PlatformBrandHeader } from "@shared/ui/platform-brand";
 import { UserAvatarMenu } from "@shared/ui/user-avatar-menu";
 
 const navigation = [
@@ -44,6 +46,7 @@ function getPageTitle(pathname: string) {
 export function AppShell() {
   const routeSurfaceRef = useRef<HTMLDivElement | null>(null);
   const user = useAuthStore((state) => state.user);
+  const platformStatus = usePlatformStore((state) => state.status);
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   });
@@ -91,15 +94,7 @@ export function AppShell() {
     <div className="h-[125dvh] overflow-hidden text-[#181614]">
       <aside className="fixed inset-y-0 left-0 z-30 hidden w-[248px] flex-col border-r border-[#ddd4ca]/80 bg-[#f8f4ee]/88 px-4 py-7 shadow-[18px_0_48px_rgb(87_69_50_/_0.06)] backdrop-blur-xl md:flex">
         <Link className="flex items-center gap-3 rounded-xl px-2 py-2 hover:bg-[#eee8e1]" to="/overview">
-          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#211d19] text-base font-bold text-[#fffaf3]">
-            T
-          </span>
-          <span>
-            <span className="block text-lg font-semibold leading-none tracking-[-0.02em] text-[#1f1a16]">
-              Test API
-            </span>
-            <span className="mt-1 block text-xs font-semibold text-[#74695f]">v2.4.0-stable</span>
-          </span>
+          <PlatformBrandHeader status={platformStatus} />
         </Link>
 
         <nav className="mt-10 grid gap-1.5">

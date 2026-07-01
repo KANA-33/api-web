@@ -6,7 +6,7 @@ interface PlatformState {
   status: PlatformStatus | null;
   loading: boolean;
   error: string | null;
-  load: () => Promise<PlatformStatus | null>;
+  load: (force?: boolean) => Promise<PlatformStatus | null>;
 }
 
 export const usePlatformStore = create<PlatformState>((set, get) => ({
@@ -14,9 +14,9 @@ export const usePlatformStore = create<PlatformState>((set, get) => ({
   loading: false,
   error: null,
 
-  async load() {
+  async load(force = false) {
     const existing = get().status;
-    if (existing) {
+    if (existing && !force) {
       return existing;
     }
 

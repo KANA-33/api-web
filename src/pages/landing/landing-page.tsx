@@ -1,9 +1,11 @@
 import { useGSAP } from "@gsap/react";
 import { Link } from "@tanstack/react-router";
 import gsap from "gsap";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useEffect, useRef, type CSSProperties } from "react";
 import { useAuthStore } from "@features/auth/store";
+import { usePlatformStore } from "@features/platform/store";
+import { PlatformBrandHeader, PlatformBrandHero } from "@shared/ui/platform-brand";
 import { UserAvatarMenu } from "@shared/ui/user-avatar-menu";
 
 const landingMetalStyle = {
@@ -18,6 +20,12 @@ export function LandingPage() {
   const user = useAuthStore((state) => state.user);
   const authStatus = useAuthStore((state) => state.status);
   const refreshUser = useAuthStore((state) => state.refresh);
+  const platformStatus = usePlatformStore((state) => state.status);
+  const loadPlatform = usePlatformStore((state) => state.load);
+
+  useEffect(() => {
+    void loadPlatform(true);
+  }, [loadPlatform]);
 
   useEffect(() => {
     if (authStatus !== "idle" || !localStorage.getItem("commercial_console_user_id")) {
@@ -183,23 +191,15 @@ export function LandingPage() {
         data-animate="nav"
       >
         <div className="flex h-[72px] w-full items-center justify-between gap-4 px-5 md:px-8">
+          <div className="flex origin-left scale-80 items-center">
         <Link
           className="group flex min-w-0 items-center gap-3 rounded-xl px-2 py-2 text-[#111111] transition-colors hover:bg-[#eee8e1]"
           to="/"
         >
-          <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-[#211d19] text-[#fffaf3]">
-            <Sparkles className="size-4" strokeWidth={2.4} />
-          </span>
-          <span className="min-w-0">
-            <span className="block truncate text-lg font-semibold leading-none tracking-[-0.02em] text-[#1f1a16]">
-              Test API
-            </span>
-            <span className="mt-1 hidden text-xs font-semibold text-[#74695f] sm:block">
-              v2.4.0-stable
-            </span>
-          </span>
+          <PlatformBrandHeader status={platformStatus} />
         </Link>
-        <div className="ml-auto flex items-center">
+          </div>
+        <div className="flex origin-right scale-80 items-center">
           {user ? (
             <UserAvatarMenu />
           ) : (
@@ -221,81 +221,9 @@ export function LandingPage() {
         <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-5rem)] w-full max-w-7xl flex-col items-center justify-center px-6 py-14 sm:px-10 lg:py-18">
           <div className="flex w-full min-w-0 flex-col items-center">
             <div className="relative mx-auto w-full max-w-[62rem] -translate-y-10 sm:-translate-y-12 lg:-translate-y-16">
-              <svg
-                aria-label="Test API"
-                className="h-auto w-full"
-                data-animate="brand-mark"
-                role="img"
-                viewBox="0 0 800 400"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <mask id="landing-ring-mask">
-                    <circle
-                      cx="400"
-                      cy="200"
-                      fill="none"
-                      r="120"
-                      stroke="white"
-                      strokeWidth="40"
-                    />
-                  </mask>
-                </defs>
-                <circle
-                  cx="400"
-                  cy="200"
-                  fill="none"
-                  r="120"
-                  stroke="#020202"
-                  strokeWidth="40"
-                />
-                <text
-                  fill="#7f7c78"
-                  fontFamily="Hanken Grotesk, Inter, ui-sans-serif, system-ui, sans-serif"
-                  fontSize="110"
-                  fontWeight="900"
-                  letterSpacing="-2"
-                  x="460"
-                  y="235"
-                >
-                  API
-                </text>
-                <text
-                  fill="#8b8883"
-                  fontFamily="Hanken Grotesk, Inter, ui-sans-serif, system-ui, sans-serif"
-                  fontSize="110"
-                  fontWeight="900"
-                  letterSpacing="-2"
-                  mask="url(#landing-ring-mask)"
-                  x="460"
-                  y="235"
-                >
-                  API
-                </text>
-                <text
-                  fill="#050505"
-                  fontFamily="Hanken Grotesk, Inter, ui-sans-serif, system-ui, sans-serif"
-                  fontSize="110"
-                  fontWeight="900"
-                  letterSpacing="-2"
-                  x="120"
-                  y="235"
-                >
-                  TEST
-                </text>
-                <text
-                  fill="#ffffff"
-                  fontFamily="Hanken Grotesk, Inter, ui-sans-serif, system-ui, sans-serif"
-                  fontSize="110"
-                  fontWeight="900"
-                  letterSpacing="-2"
-                  mask="url(#landing-ring-mask)"
-                  x="120"
-                  y="235"
-                >
-                  TEST
-                </text>
-              </svg>
+              <div data-animate="brand-mark">
+                <PlatformBrandHero status={platformStatus} />
+              </div>
             </div>
 
             <div className="mt-2 flex flex-col items-stretch gap-3 sm:mt-4 sm:flex-row sm:items-center lg:mt-6">
