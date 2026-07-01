@@ -6,6 +6,7 @@ import {
   redirect,
   useRouterState,
 } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { ensureAuthenticated } from "@features/auth/store";
 import { usePlatformStore } from "@features/platform/store";
 import { isAdminUser } from "@shared/lib/roles";
@@ -40,10 +41,46 @@ const rootRoute = createRootRoute({
 });
 
 function RootLayout() {
+  const platformStatus = usePlatformStore((state) => state.status);
   const pathname = useRouterState({
     select: (state) => state.location.pathname,
   });
   const isHome = pathname === "/";
+
+  useEffect(() => {
+    const systemName = platformStatus?.system_name?.trim() || "Test API";
+    const logo = platformStatus?.logo?.trim();
+    const title = document.querySelector("title") ?? document.createElement("title");
+    title.textContent = systemName;
+    if (!title.parentElement) {
+      document.head.append(title);
+    }
+
+    const icon =
+      document.querySelector<HTMLLinkElement>("link[rel='icon']") ??
+      document.createElement("link");
+    icon.rel = "icon";
+
+    if (logo) {
+      icon.removeAttribute("type");
+      try {
+        const iconUrl = new URL(logo, window.location.href);
+        iconUrl.searchParams.set("favicon_v", String(Date.now()));
+        icon.href = iconUrl.toString();
+      } catch {
+        icon.href = logo;
+      }
+    } else {
+      const initial = systemName.charAt(0).toUpperCase() || "T";
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#211d19"/><text x="32" y="42" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="800" fill="#fffaf3">${initial}</text></svg>`;
+      icon.href = `data:image/svg+xml,${encodeURIComponent(svg)}`;
+      icon.type = "image/svg+xml";
+    }
+
+    if (!icon.parentElement) {
+      document.head.append(icon);
+    }
+  }, [platformStatus?.logo, platformStatus?.system_name]);
 
   return (
     <SensitiveConfirmationProvider>
