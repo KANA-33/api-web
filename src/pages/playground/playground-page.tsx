@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } 
 import {
   ArrowRight,
   ChevronDown,
+  Check,
   Copy,
   Edit3,
   Paperclip,
@@ -11,6 +12,7 @@ import {
 } from "lucide-react";
 import gsap from "gsap";
 import { create } from "zustand";
+import { useAuthStore } from "@features/auth/store";
 import * as modelsApi from "@features/models/api";
 import * as playgroundApi from "@features/playground/api";
 import { cn } from "@shared/lib/cn";
@@ -549,13 +551,19 @@ function TurnActions({
 
 export function PlaygroundPage() {
   const [model, setModel] = useState("");
+  const [modelMenuOpen, setModelMenuOpen] = useState(false);
+  const [groupMenuOpen, setGroupMenuOpen] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState("All groups");
   const [systemPrompt] = useState("You are a concise assistant.");
   const [prompt, setPrompt] = useState("");
   const [temperature] = useState("0.7");
   const [topP] = useState("1");
   const [maxTokens] = useState("1024");
+  const user = useAuthStore((state) => state.user);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const shellRef = useRef<HTMLDivElement | null>(null);
+  const modelMenuRef = useRef<HTMLDivElement | null>(null);
+  const groupMenuRef = useRef<HTMLDivElement | null>(null);
   const {
     appendTurn,
     deleteTurn,
@@ -579,7 +587,7 @@ export function PlaygroundPage() {
   );
 
   const {
-    data: models,
+    data: modelData,
     error: modelsError,
     loading: modelsLoading,
     reload: reloadModels,
@@ -587,8 +595,66 @@ export function PlaygroundPage() {
     const modelResponse = await modelsApi.getUserModels();
     const items = modelResponse.data;
     setModel((current) => current || items[0] || "");
-    return items;
+    return {
+      availableModels: items,
+    };
   }, []);
+
+  const availableModels = modelData?.availableModels ?? [];
+  const availableModelSet = useMemo(() => new Set(availableModels), [availableModels]);
+  const currentUserGroup = user?.group || "default";
+  const groupOptions = useMemo(() => ["All groups", currentUserGroup], [currentUserGroup]);
+  const visibleModels = useMemo(() => {
+    return Array.from(new Set(availableModels)).slice(0, 10);
+  }, [availableModels]);
+
+  useEffect(() => {
+    if (!groupOptions.includes(selectedGroup)) {
+      setSelectedGroup("All groups");
+    }
+  }, [groupOptions, selectedGroup]);
+
+  useEffect(() => {
+    function handlePointerDown(event: PointerEvent) {
+      if (!modelMenuRef.current?.contains(event.target as Node)) {
+        setModelMenuOpen(false);
+      }
+      if (!groupMenuRef.current?.contains(event.target as Node)) {
+        setGroupMenuOpen(false);
+      }
+    }
+
+    window.addEventListener("pointerdown", handlePointerDown);
+    return () => window.removeEventListener("pointerdown", handlePointerDown);
+  }, []);
+
+  useEffect(() => {
+    if ((!modelMenuOpen && !groupMenuOpen) || !shellRef.current) {
+      return;
+    }
+
+    const context = gsap.context(() => {
+      gsap.fromTo(
+        "[data-selector-menu]",
+        { autoAlpha: 0, scale: 0.96, y: -8 },
+        { autoAlpha: 1, duration: 0.22, ease: "power3.out", scale: 1, y: 0 },
+      );
+      gsap.fromTo(
+        "[data-selector-option]",
+        { autoAlpha: 0, x: -6 },
+        {
+          autoAlpha: 1,
+          clearProps: "opacity,visibility,transform",
+          duration: 0.2,
+          ease: "power3.out",
+          stagger: 0.025,
+          x: 0,
+        },
+      );
+    }, shellRef);
+
+    return () => context.revert();
+  }, [groupMenuOpen, modelMenuOpen]);
 
   useEffect(() => {
     const container = scrollRef.current;
@@ -751,33 +817,189 @@ export function PlaygroundPage() {
 
   return (
     <div
-      className="relative -mx-5 -my-9 flex h-[calc(100dvh-72px)] flex-col overflow-hidden bg-[#f8f6f3] text-[#242220] md:-mx-10 lg:-my-12 xl:-mx-12"
+      className="relative flex h-full min-h-0 flex-col overflow-hidden bg-[#f8f6f3] text-[#242220]"
       ref={shellRef}
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_-10%,rgba(255,255,255,0.95),transparent_34%),linear-gradient(120deg,rgba(255,255,255,0.5),rgba(226,220,214,0.34))]" />
       <div
-        className="relative z-10 flex h-14 shrink-0 items-center justify-center border-b border-[#ddd6cf]/80 bg-[#fbfaf8]/82 backdrop-blur-xl"
+        className="relative z-[100] flex h-14 shrink-0 items-center justify-center border-b border-[#ddd6cf]/80 bg-[#fbfaf8] shadow-[0_10px_34px_rgba(74,65,57,0.06)]"
         data-playground-chrome
       >
         <div className="flex min-w-0 items-center gap-3">
-          <div className="relative">
-            <label className="sr-only" htmlFor="playground-model">
+          <div className="relative" ref={groupMenuRef}>
+            <button
+              aria-controls="playground-group-listbox"
+              aria-expanded={groupMenuOpen}
+              aria-haspopup="listbox"
+              className="group inline-flex h-9 max-w-[220px] items-center gap-2 rounded-full border border-[#d8d2cc] bg-[#f1eeeb] pl-4 pr-3 text-sm font-semibold text-[#242220] shadow-[0_10px_24px_rgba(74,65,57,0.06)] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#bfb6ad] hover:bg-[#f7f3ef] focus-visible:ring-4 focus-visible:ring-[#4a433d]/10 active:translate-y-0"
+              onClick={() => {
+                setGroupMenuOpen((value) => !value);
+                setModelMenuOpen(false);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") {
+                  setGroupMenuOpen(false);
+                }
+              }}
+              type="button"
+            >
+              <span className="size-2 shrink-0 rounded-full bg-[#6b8bbf] shadow-[0_0_0_3px_rgba(107,139,191,0.12)]" />
+              <span className="truncate">{selectedGroup}</span>
+              <ChevronDown
+                className={cn(
+                  "size-4 shrink-0 text-[#74695f] transition-transform duration-200",
+                  groupMenuOpen && "rotate-180",
+                )}
+              />
+            </button>
+
+            {groupMenuOpen && (
+              <div
+                className="absolute left-1/2 top-[calc(100%+10px)] z-[110] w-[min(280px,calc(100vw-48px))] -translate-x-1/2 overflow-hidden rounded-2xl border border-[#d8d2cc] bg-[#fbfaf8] p-1.5 shadow-[0_28px_80px_rgba(74,65,57,0.24),inset_0_1px_0_rgba(255,255,255,0.72)]"
+                data-selector-menu
+                id="playground-group-listbox"
+                onMouseDown={(event) => event.stopPropagation()}
+                onPointerDown={(event) => event.stopPropagation()}
+                role="listbox"
+                style={{ backgroundColor: "#fbfaf8" }}
+              >
+                <div className="max-h-[320px] overflow-y-auto rounded-xl bg-[#fbfaf8] p-1 shell-scrollbar">
+                  {groupOptions.map((item) => {
+                    const selected = item === selectedGroup;
+
+                    return (
+                      <button
+                        aria-selected={selected}
+                        className={cn(
+                          "flex min-h-10 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-[#4b443d] transition-all duration-200 hover:bg-[#eee8e1] hover:text-[#181614] active:scale-[0.99]",
+                          selected &&
+                            "bg-[#211d19] !text-[#fffaf3] shadow-[0_10px_24px_rgba(59,45,34,0.14)]",
+                        )}
+                        data-selector-option
+                        key={item}
+                        onClick={() => {
+                          setSelectedGroup(item);
+                          setGroupMenuOpen(false);
+                          if (!availableModelSet.has(model) && availableModels[0]) {
+                            setModel(availableModels[0]);
+                          }
+                        }}
+                        role="option"
+                        type="button"
+                      >
+                        <span className="size-2 shrink-0 rounded-full bg-[#6b8bbf]" />
+                        <span className="min-w-0 flex-1 truncate">{item}</span>
+                        {selected && <Check className="size-4 shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="relative" ref={modelMenuRef}>
+            <label className="sr-only" htmlFor="playground-model-trigger">
               Model
             </label>
-            <span className="pointer-events-none absolute left-4 top-1/2 size-2 -translate-y-1/2 rounded-full bg-black" />
-            <select
-              className="h-9 max-w-[280px] rounded-full border border-[#d8d2cc] bg-[#f1eeeb] pl-8 pr-9 text-sm font-semibold text-[#242220] shadow-[0_10px_24px_rgba(74,65,57,0.06)] outline-none transition-colors focus:border-[#242220]"
-              id="playground-model"
-              onChange={(event) => setModel(event.target.value)}
-              value={model}
+            <button
+              aria-controls="playground-model-listbox"
+              aria-expanded={modelMenuOpen}
+              aria-haspopup="listbox"
+              className="group inline-flex h-9 max-w-[320px] items-center gap-2 rounded-full border border-[#d8d2cc] bg-[#f1eeeb] pl-4 pr-3 text-sm font-semibold text-[#242220] shadow-[0_10px_24px_rgba(74,65,57,0.06)] outline-none transition-all duration-200 hover:-translate-y-0.5 hover:border-[#bfb6ad] hover:bg-[#f7f3ef] focus-visible:ring-4 focus-visible:ring-[#4a433d]/10 active:translate-y-0"
+              id="playground-model-trigger"
+              onClick={() => {
+                setModelMenuOpen((value) => !value);
+                setGroupMenuOpen(false);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") {
+                  setModelMenuOpen(false);
+                }
+              }}
+              type="button"
             >
-              {(models ?? []).map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-              {(models ?? []).length === 0 && <option value="">No model loaded</option>}
-            </select>
+              <span
+                className={cn(
+                  "size-2 shrink-0 rounded-full shadow-[0_0_0_3px_rgba(0,0,0,0.06)]",
+                  availableModelSet.has(model) ? "bg-[#1f8f4d]" : "bg-[#3f74bd]",
+                )}
+              />
+              <span className="truncate">{model || "No model loaded"}</span>
+              <ChevronDown
+                className={cn(
+                  "size-4 shrink-0 text-[#74695f] transition-transform duration-200",
+                  modelMenuOpen && "rotate-180",
+                )}
+              />
+            </button>
+
+            {modelMenuOpen && (
+              <div
+                className="absolute left-1/2 top-[calc(100%+10px)] z-[110] w-[min(380px,calc(100vw-48px))] -translate-x-1/2 overflow-hidden rounded-2xl border border-[#d8d2cc] bg-[#fbfaf8] p-1.5 shadow-[0_28px_80px_rgba(74,65,57,0.24),inset_0_1px_0_rgba(255,255,255,0.72)]"
+                data-selector-menu
+                id="playground-model-listbox"
+                onMouseDown={(event) => event.stopPropagation()}
+                onPointerDown={(event) => event.stopPropagation()}
+                role="listbox"
+                style={{ backgroundColor: "#fbfaf8" }}
+              >
+                <div className="max-h-[320px] overflow-y-auto rounded-xl bg-[#fbfaf8] p-1 shell-scrollbar">
+                  {visibleModels.map((item) => {
+                    const selected = item === model;
+                    const available = availableModelSet.has(item);
+
+                    return (
+                      <button
+                        aria-selected={selected}
+                        disabled={!available}
+                        className={cn(
+                          "flex min-h-10 w-full items-center gap-3 rounded-xl px-3 text-left text-sm font-semibold text-[#4b443d] transition-all duration-200 hover:bg-[#eee8e1] hover:text-[#181614] active:scale-[0.99]",
+                          selected &&
+                            "bg-[#211d19] !text-[#fffaf3] shadow-[0_10px_24px_rgba(59,45,34,0.14)]",
+                          !available &&
+                            "cursor-not-allowed opacity-70 hover:bg-transparent hover:text-[#4b443d] active:scale-100",
+                        )}
+                        data-selector-option
+                        key={item}
+                        onClick={() => {
+                          if (!available) {
+                            return;
+                          }
+                          setModel(item);
+                          setModelMenuOpen(false);
+                        }}
+                        role="option"
+                        type="button"
+                      >
+                        <span
+                          className={cn(
+                            "size-2 shrink-0 rounded-full",
+                            available ? "bg-[#1f8f4d]" : "bg-[#3f74bd]",
+                            selected && "ring-2 ring-[#fffaf3]/50",
+                          )}
+                        />
+                        <span className="min-w-0 flex-1 truncate">{item}</span>
+                        {!available && (
+                          <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#6b8bbf]">
+                            unavailable
+                          </span>
+                        )}
+                        {selected && <Check className="size-4 shrink-0" />}
+                      </button>
+                    );
+                  })}
+                  {visibleModels.length === 0 && (
+                    <div
+                      className="px-3 py-4 text-center text-sm font-semibold text-[#74695f]"
+                      data-selector-option
+                    >
+                      No model loaded
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           <button
             aria-label="Refresh models"
@@ -791,7 +1013,7 @@ export function PlaygroundPage() {
       </div>
 
       <div className="relative z-10 min-h-0 flex-1 overflow-y-auto scroll-smooth" ref={scrollRef}>
-        <div className="mx-auto flex w-full max-w-[860px] flex-col gap-8 px-5 pb-40 pt-10 md:px-8">
+        <div className="mx-auto flex w-full max-w-[860px] flex-col gap-8 px-5 pb-8 pt-10 md:px-8">
         {modelsLoading && <LoadingBlock title="Loading model options" />}
 
         {modelsError && (
@@ -868,7 +1090,7 @@ export function PlaygroundPage() {
       </div>
 
       <form
-        className="absolute bottom-6 left-1/2 z-30 w-[min(860px,calc(100%-32px))] -translate-x-1/2"
+        className="relative z-30 mx-auto w-full max-w-[860px] shrink-0 px-4 pb-6"
         data-playground-composer
         onSubmit={handleRun}
       >

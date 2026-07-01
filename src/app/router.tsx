@@ -4,6 +4,7 @@ import {
   createRoute,
   createRouter,
   redirect,
+  useRouterState,
 } from "@tanstack/react-router";
 import { ensureAuthenticated } from "@features/auth/store";
 import { usePlatformStore } from "@features/platform/store";
@@ -33,14 +34,25 @@ import { WalletPage } from "@pages/wallet/wallet-page";
 import { NotFoundPage } from "@pages/not-found/not-found-page";
 
 const rootRoute = createRootRoute({
-  component: () => (
-    <SensitiveConfirmationProvider>
-      <Outlet />
-    </SensitiveConfirmationProvider>
-  ),
+  component: RootLayout,
   errorComponent: ({ error }) => <ErrorPage error={error} />,
   notFoundComponent: NotFoundPage,
 });
+
+function RootLayout() {
+  const pathname = useRouterState({
+    select: (state) => state.location.pathname,
+  });
+  const isHome = pathname === "/";
+
+  return (
+    <SensitiveConfirmationProvider>
+      <div className={isHome ? undefined : "non-home-page-scale"}>
+        <Outlet />
+      </div>
+    </SensitiveConfirmationProvider>
+  );
+}
 
 const appRoute = createRoute({
   getParentRoute: () => rootRoute,

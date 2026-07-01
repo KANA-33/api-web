@@ -30,7 +30,7 @@ const adminNavigation = [
 ];
 
 export function AdminShell() {
-  const routeSurfaceRef = useRef<HTMLElement | null>(null);
+  const routeSurfaceRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const signOut = useAuthStore((state) => state.signOut);
@@ -60,13 +60,25 @@ export function AdminShell() {
           y: 0,
         },
       );
+      gsap.fromTo(
+        "[data-admin-bar-item]",
+        { autoAlpha: 0, y: -8 },
+        {
+          autoAlpha: 1,
+          clearProps: "opacity,visibility,transform",
+          duration: 0.42,
+          ease: "power3.out",
+          stagger: 0.07,
+          y: 0,
+        },
+      );
     },
     { dependencies: [pathname], scope: routeSurfaceRef },
   );
 
   return (
-    <div className="min-h-[100dvh] text-[#181614]">
-      <div className="grid min-h-[100dvh] lg:grid-cols-[288px_1fr]">
+    <div className="h-[125dvh] overflow-hidden text-[#181614]">
+      <div className="grid h-full min-h-0 lg:grid-cols-[288px_1fr]">
         <aside className="hidden border-r border-[#ddd4ca]/80 bg-[#f8f4ee]/88 px-5 py-8 shadow-[18px_0_48px_rgb(87_69_50_/_0.06)] backdrop-blur-xl lg:block">
           <Link to="/admin">
             <h1 className="text-[34px] font-semibold leading-[1.08] tracking-[-0.03em] text-[#1f1a16]">
@@ -101,10 +113,10 @@ export function AdminShell() {
           </nav>
         </aside>
 
-        <div className="min-w-0">
-          <header className="sticky top-0 z-20 border-b border-[#ddd4ca]/80 bg-[#f8f4ee]/78 backdrop-blur-xl">
-            <div className="mx-auto flex h-[72px] max-w-[1520px] items-center justify-between gap-4 px-5 sm:px-8">
-              <div>
+        <div className="flex min-h-0 min-w-0 flex-col">
+          <header className="z-20 shrink-0 border-b border-[#ddd4ca]/80 bg-[#f8f4ee]/78 backdrop-blur-xl">
+            <div className="flex h-[72px] w-full items-center justify-between gap-4 px-5 sm:px-8">
+              <div data-admin-bar-item>
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#74695f]">
                   Administrative workspace
                 </p>
@@ -112,7 +124,7 @@ export function AdminShell() {
                   {user?.display_name || user?.username} · {isRootUser(user) ? "Root" : "Admin"}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2" data-admin-bar-item>
                 <Link
                   className="inline-flex h-10 items-center justify-center rounded-lg px-3 text-sm font-semibold uppercase tracking-[0.08em] text-[#2b2621] transition-colors hover:bg-[#eee8e1]"
                   to="/overview"
@@ -149,11 +161,13 @@ export function AdminShell() {
             </nav>
           </header>
 
-          <main
-            className="route-surface mx-auto max-w-[1520px] px-5 py-9 md:px-10 lg:py-12 xl:px-12"
-            ref={routeSurfaceRef}
-          >
-            <Outlet />
+          <main className="min-h-0 flex-1 overflow-y-auto shell-scrollbar">
+            <div
+              className="route-surface mx-auto w-full max-w-[1520px] px-5 py-9 md:px-10 lg:py-12 xl:px-12"
+              ref={routeSurfaceRef}
+            >
+              <Outlet />
+            </div>
           </main>
         </div>
       </div>

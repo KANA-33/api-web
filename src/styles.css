@@ -99,6 +99,17 @@ html {
   scroll-behavior: smooth;
 }
 
+.non-home-page-scale {
+  position: fixed;
+  inset: 0 auto auto 0;
+  width: 125%;
+  height: 125dvh;
+  margin-left: -12.5%;
+  overflow: hidden;
+  transform: scale(0.8);
+  transform-origin: top center;
+}
+
 .console-panel {
   position: relative;
 }
@@ -206,6 +217,33 @@ html {
 
 .route-surface {
   will-change: opacity, transform;
+}
+
+.shell-scrollbar {
+  scrollbar-color: rgb(130 119 108 / 0.58) rgb(239 234 228 / 0.6);
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+.shell-scrollbar::-webkit-scrollbar {
+  width: 12px;
+}
+
+.shell-scrollbar::-webkit-scrollbar-track {
+  background: rgb(239 234 228 / 0.64);
+  border-left: 1px solid rgb(221 212 202 / 0.72);
+}
+
+.shell-scrollbar::-webkit-scrollbar-thumb {
+  background:
+    linear-gradient(180deg, rgb(151 139 126 / 0.72), rgb(104 94 84 / 0.74));
+  border: 3px solid rgb(239 234 228 / 0.64);
+  border-radius: 999px;
+}
+
+.shell-scrollbar::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(180deg, rgb(111 101 91 / 0.82), rgb(75 67 59 / 0.84));
 }
 
 @keyframes modalOverlayIn {

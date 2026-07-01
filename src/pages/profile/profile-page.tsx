@@ -3,7 +3,6 @@ import {
   Activity,
   BarChart3,
   ChevronDown,
-  IdCard,
   KeyRound,
   Mail,
   RotateCcw,
@@ -123,11 +122,8 @@ export function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-[1180px] space-y-6 pb-20 text-[#181614] lg:pb-0">
-      <section className={`${panelClass} relative overflow-hidden px-6 py-8 md:px-8 lg:px-10`}>
-        <div className="pointer-events-none absolute -right-4 -top-8 hidden rotate-[-8deg] text-[#e7ded4]/72 md:block">
-          <IdCard className="size-40" strokeWidth={1.2} />
-        </div>
-        <div className="relative z-10 flex flex-col gap-8 md:flex-row md:items-center">
+      <section className={`${panelClass} relative overflow-hidden px-6 py-4 md:px-7 lg:px-8`}>
+        <div className="relative z-10 flex flex-col gap-4 md:flex-row md:items-center">
           <div className="grid size-28 shrink-0 place-items-center rounded-2xl border border-[#ddd4ca] bg-[#f8f4ee] text-3xl font-bold tracking-[-0.04em] text-[#6d6258] shadow-[inset_0_1px_0_rgb(255_255_255_/_0.72)]">
             {getInitials(accountName) || <UserRound className="size-10" />}
           </div>
@@ -140,7 +136,7 @@ export function ProfilePage() {
                 {roleLabel}
               </span>
             </div>
-            <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3 text-base font-medium text-[#74695f]">
+            <div className="mt-3 flex flex-wrap gap-x-8 gap-y-2 text-base font-medium text-[#74695f]">
               <span>
                 User ID: <strong className="text-[#2b2621]">{formatUserId(user?.id)}</strong>
               </span>
